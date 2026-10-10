@@ -94,7 +94,8 @@ button.wb:hover{background:var(--accent);color:var(--accent-ink)}
 .ref-list{list-style:none;margin:0;padding:0;max-height:260px;overflow:auto}
 .ref-list li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
 .ref-list li span{min-width:0;overflow-wrap:anywhere}
-.filters{display:grid;grid-template-columns:2fr 1fr 1.4fr 1fr 1fr;gap:10px;align-items:end}
+.filters{display:grid;grid-template-columns:2fr 1fr 1.4fr 1.2fr 1fr 1fr;gap:10px;align-items:end}
+body.role-staff .filters{grid-template-columns:2fr 1fr 1.4fr 1fr 1fr}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .chip{font-size:13px;padding:4px 11px;border-radius:99px;background:transparent}
 .chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
@@ -319,6 +320,16 @@ body.locked .kpis{grid-template-columns:repeat(2,1fr)}
 .money-btn:hover{background:rgba(255,255,255,.22);border-color:#fff}
 .money-btn.open{background:#f3c969;color:#3a2a00;border-color:#f3c969}
 @media (max-width:820px){ body.locked .line{grid-template-columns:1fr 1fr} .head-right{align-items:flex-start} }
+/* Parolni ko'rsatish (ko'z belgisi) */
+.pw-wrap{position:relative;display:block;flex:1 1 auto;min-width:0}
+.u-pw .pw-wrap{display:inline-block;width:170px}
+.pw-wrap input{padding-right:40px!important}
+.pw-eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:30px;padding:0;border:0;background:none;color:var(--muted);display:grid;place-items:center;border-radius:6px;cursor:pointer}
+.pw-eye:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent);border:0}
+.pw-eye svg{width:19px;height:19px}
+/* Kim yozgani */
+td .ship.by{display:inline-block;margin:0 0 4px;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);font-weight:600;font-size:12.5px}
+td .ship.by small{font-weight:400;opacity:.8}
 /* Kirish oynasi va rollar */
 .gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;
   background:repeating-linear-gradient(0deg,transparent 0 27px,rgba(255,255,255,.045) 27px 28px),repeating-linear-gradient(90deg,transparent 0 27px,rgba(255,255,255,.03) 27px 28px),linear-gradient(135deg,var(--band-1),var(--band-2))}
@@ -630,6 +641,7 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
       <div class="f"><label for="q">Qidirish</label><input id="q" type="search" placeholder="Firma, mahsulot, yuk xati, haydovchi, telefon, manzil"></div>
       <div class="f"><label for="qKind">Turi</label><select id="qKind"><option value="">Hammasi</option><option value="beton">Beton</option><option value="other">Temir-beton buyumlar</option></select></div>
       <div class="f"><label for="qFirm">Xaridor firma</label><select id="qFirm"><option value="">Barcha firmalar</option></select></div>
+      <div class="f priv-only"><label for="qBy">Kim yozgan</label><select id="qBy"><option value="">Hamma xodimlar</option></select></div>
       <div class="f"><label for="qFrom">Sanadan</label><input type="date" id="qFrom"></div>
       <div class="f"><label for="qTo">Sanagacha</label><input type="date" id="qTo"></div>
     </div>
@@ -2676,17 +2688,26 @@ function setPreset(p){
   render();
 }
 $$(".chip[data-p]").forEach(c => c.addEventListener("click", () => setPreset(c.dataset.p)));
-["#q","#qFirm","#qKind"].forEach(s => $(s).addEventListener("input", render));
+["#q","#qFirm","#qKind","#qBy"].forEach(s => $(s).addEventListener("input", render));
 ["#qFrom","#qTo"].forEach(s => $(s).addEventListener("input", () => { $$(".chip[data-p]").forEach(c=>c.classList.remove("on")); render(); }));
 
 function filtered(){
-  const q = $("#q").value.trim().toLowerCase(), f = $("#qFirm").value, from = $("#qFrom").value, to = $("#qTo").value, kd = $("#qKind").value;
+  const q = $("#q").value.trim().toLowerCase(), f = $("#qFirm").value, from = $("#qFrom").value, to = $("#qTo").value, kd = $("#qKind").value, by = PRIV() ? $("#qBy").value : "";
   return rows.filter(r =>
+    (!by || r.createdBy === by) &&
     (!kd || (kd === "beton" ? r.kind === "beton" : r.kind !== "beton")) &&
     (!f || (f===NO_FIRM ? !r.firm : r.firm===f)) &&
     (!from || (r.date && r.date>=from)) && (!to || (r.date && r.date<=to)) &&
     (!q || [r.firm,r.seller,r.product,r.note,r.waybill,r.driver,r.phone,r.car,r.giver,r.receiver,r.loadAddr,r.unloadAddr].join(" ").toLowerCase().includes(q))
   ).sort((a,b)=> sortKey(b).localeCompare(sortKey(a)));
+}
+
+// Rahbariyat uchun: yuk xatini kim yozgani (F.I.Sh, roli, qachon)
+function byBadge(r){
+  const p = profilesById[r.createdBy], name = p ? (p.full_name || p.login) : "o'chirilgan foydalanuvchi";
+  const at = r.created ? new Date(r.created) : null;
+  const when = at && !isNaN(at) ? `${String(at.getDate()).padStart(2, "0")}.${String(at.getMonth() + 1).padStart(2, "0")}.${at.getFullYear()} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}` : "";
+  return `<span class="ship by" title="${esc(when ? "Yozilgan vaqti: " + when : "")}">✍ Yozdi: ${esc(name)}${p ? ` <small>(${esc(ROLE_NAMES[p.role] || "")})</small>` : ""}</span>`;
 }
 
 /* ---------- Chizish ---------- */
@@ -2714,6 +2735,11 @@ function render(){
     firms.map(x=>`<option${x===cur?" selected":""} value="${esc(x)}">${esc(x)}</option>`).join("") +
     (rows.some(r=>!r.firm) ? `<option value="${NO_FIRM}"${cur===NO_FIRM?" selected":""}>Firma ko'rsatilmagan</option>` : "");
 
+  if (PRIV()) {
+    const curBy = $("#qBy").value, ids = [...new Set(rows.map(r => r.createdBy).filter(Boolean))];
+    const people = ids.map(id => ({ id, name: profilesById[id] ? (profilesById[id].full_name || profilesById[id].login) : "o'chirilgan foydalanuvchi" })).sort((a, b) => a.name.localeCompare(b.name));
+    $("#qBy").innerHTML = `<option value="">Hamma xodimlar</option>` + people.map(p => `<option value="${esc(p.id)}"${p.id === curBy ? " selected" : ""}>${esc(p.name)}</option>`).join("");
+  }
   // Har bir yuk xati (bir martada kiritilgan mahsulotlar) bitta qator bo'lib ko'rinadi
   const matched = filtered(), keys = [], seen = new Set();
   matched.forEach(r => { const k = gk(r); if (!seen.has(k)) { seen.add(k); keys.push(k); } });
@@ -2737,7 +2763,7 @@ function render(){
       }
       const ship = [
         r.giver ? `<span class="ship dim">Topshirdi: ${esc(r.giver)}</span>` : "",
-        PRIV() && r.createdBy && profilesById[r.createdBy] ? `<span class="ship dim">Yozdi: ${esc(profilesById[r.createdBy].full_name || profilesById[r.createdBy].login)}</span>` : "",
+        PRIV() && r.createdBy ? byBadge(r) : "",
         r.receiver ? `<span class="ship dim">Qabul qildi: ${esc(r.receiver)}</span>` : "",
         r.driver ? `<span class="ship">${esc(r.driver)}</span>` : "",
         r.phone ? `<span class="ship num">${esc(r.phone)}</span>` : "",
@@ -3511,7 +3537,7 @@ async function checkMyPassword(pw){
 function askPassword({ title, text, mode, okLabel, danger }){
   return new Promise(resolve => {
     $("#pwTitle").textContent = title; $("#pwText").innerHTML = text || ""; $("#pwErr").textContent = "";
-    $("#pwOld").value = $("#pwNew").value = $("#pwNew2").value = "";
+    $("#pwOld").value = $("#pwNew").value = $("#pwNew2").value = ""; if (typeof hideAllPw === "function") hideAllPw();
     $("#pwOldBox").hidden = false;
     $("#pwNewBox").hidden = $("#pwNew2Box").hidden = mode === "check";
     $("#pwOldLabel").textContent = mode === "change" ? "Hozirgi parol" : "Parolingiz";
@@ -4369,12 +4395,35 @@ function bumpLock(){ if (!M()) return; clearTimeout(lockT); lockT = setTimeout((
 ["click","keydown"].forEach(ev => document.addEventListener(ev, bumpLock, true));
 $("#moneyBtn").addEventListener("click", () => M() ? (lockMoney(), toast("Hisob-kitob yopildi")) : unlockMoney());
 
+/* ---------- Parolni ko'rsatish (ko'z belgisi) ---------- */
+const EYE_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.9 17.9A10.4 10.4 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.1-5.9M9.9 5.2A9.6 9.6 0 0 1 12 5c6.5 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M2 2l20 20"/></svg>';
+function addEyes(root){
+  (root || document).querySelectorAll('input[type="password"]:not([data-eye])').forEach(inp => {
+    inp.dataset.eye = "1";
+    const w = document.createElement("span"); w.className = "pw-wrap";
+    inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
+    const b = document.createElement("button"); b.type = "button"; b.className = "pw-eye"; b.tabIndex = -1;
+    b.setAttribute("aria-label", "Parolni ko'rsatish"); b.title = "Parolni ko'rsatish"; b.innerHTML = EYE_ON;
+    b.addEventListener("mousedown", e => e.preventDefault());
+    b.addEventListener("click", () => {
+      const show = inp.type === "password"; inp.type = show ? "text" : "password";
+      b.innerHTML = show ? EYE_OFF : EYE_ON; const t = show ? "Parolni yashirish" : "Parolni ko'rsatish"; b.title = t; b.setAttribute("aria-label", t);
+    });
+    w.appendChild(b);
+  });
+}
+// Oyna yopilib qayta ochilganda parol yana yashirin holatda bo'lsin
+function hideAllPw(){ document.querySelectorAll('.pw-wrap input').forEach(i => { if (i.type === "text") { i.type = "password"; const b = i.parentNode.querySelector(".pw-eye"); if (b) { b.innerHTML = EYE_ON; b.title = "Parolni ko'rsatish"; } } }); }
+addEyes();
+new MutationObserver(() => addEyes()).observe(document.body, { childList: true, subtree: true });
+
 
 /* ---------- Kirish (login), rollar, foydalanuvchilar ---------- */
 // Supabase manzili va ochiq kaliti. O'rnatishda shu ikki qatorni o'zingiznikiga almashtiring
 // (Supabase → Project Settings → API). Bo'sh qolsa, dastur birinchi ochilganda so'raydi.
-const SUPABASE_URL = "";
-const SUPABASE_ANON_KEY = "";
+const SUPABASE_URL = "https://yirqgogohztnmwupktvv.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlpcnFnb2dvaHp0bm13dXBrdHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MzEwNDEsImV4cCI6MjEwNzIwNzA0MX0.krpSphMdp9sbYfAuhiNBcOAtTIhytbyyZ0K9vqnqks8";
 
 const loginEmail = l => `${String(l).trim().toLowerCase()}@${LOGIN_DOMAIN}`;
 function cfgGet(){ return { url: SUPABASE_URL || local.load("savdo-sb-url", ""), key: SUPABASE_ANON_KEY || local.load("savdo-sb-key", "") }; }
