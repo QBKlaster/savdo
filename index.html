@@ -3660,6 +3660,12 @@ function buildFirmSheet(firm, items, opts = {}){
     put(3, photoCol, { t: "s", v: "Tasdiqlangan yuk xati", s: XS.head });
     if (twoRow) { put(4, photoCol, { t: "s", v: "", s: XS.head }); merges.push({ s: { r: 3, c: photoCol }, e: { r: 4, c: photoCol } }); }
   }
+  // Haydovchi yo'lkirasi — kiritilgan bo'lsa, eng oxirgi ustun
+  const anyFare = PRIV() && items.some(x => fares[x.batch] > 0), fareCol = (anyPhoto ? photoCol : last) + 1;
+  if (anyFare) {
+    put(3, fareCol, { t: "s", v: "Yo'lkira, so'm", s: XS.head });
+    if (twoRow) { put(4, fareCol, { t: "s", v: "", s: XS.head }); merges.push({ s: { r: 3, c: fareCol }, e: { r: 4, c: fareCol } }); }
+  }
 
   const groups = [...new Set(items.map(gk))].map(k => groupItems(k).filter(r => same(r.firm, firm)))
     .filter(g => g.length)
@@ -3678,6 +3684,7 @@ function buildFirmSheet(firm, items, opts = {}){
       put(r, photoCol, { t: "s", v: h.hasPhoto ? "" : "tasdiqlanmagan", s: h.hasPhoto ? XS.text : { ...XS.text, font: { name: "Times New Roman", sz: 10, italic: true, color: { rgb: "8A8A8A" } } } });
       if (h.hasPhoto) { rowH[r] = { hpt: PHOTO_ROW_PT }; anchors.push({ r, c: photoCol, key: photoKey(h) }); }
     }
+    if (anyFare) put(r, fareCol, fares[h.batch] > 0 ? { t: "n", v: fares[h.batch], s: { ...XS.text, numFmt: "#,##0" } } : { t: "s", v: "", s: XS.text });
     r++;
   });
   const lastData = Math.max(r - 1, firstData);
@@ -3692,6 +3699,7 @@ function buildFirmSheet(firm, items, opts = {}){
   const rTot = r++;
   labelRow(rTot, "Jami soni");
   prods.forEach((p, j) => put(rTot, P0 + j, { t: "n", f: `SUM(${addr(firstData, P0 + j)}:${addr(lastData, P0 + j)})`, v: totals[j], s: XS.totQty }));
+  if (anyFare) put(rTot, fareCol, { t: "n", f: `SUM(${addr(firstData, fareCol)}:${addr(lastData, fareCol)})`, v: groups.reduce((s, g) => s + (fares[g[0].batch] || 0), 0), s: XS.money });
 
   let rAll = -1, all = 0;
   if (priceSets.some(ps => ps.length)) {
@@ -3735,9 +3743,9 @@ function buildFirmSheet(firm, items, opts = {}){
     });
   }
 
-  ws["!ref"] = `A1:${addr(r, Math.max(last + (anyPhoto ? 1 : 0), 6))}`;
+  ws["!ref"] = `A1:${addr(r, Math.max(anyFare ? fareCol : last + (anyPhoto ? 1 : 0), 6))}`;
   ws["!merges"] = merges;
-  ws["!cols"] = [{ wch: 3.9 }, { wch: 6.4 }, { wch: 19.6 }, { wch: 12 }, { wch: 21 }, { wch: 22 }, ...(hasPhone ? [{ wch: 17 }] : []), ...prods.map(p => ({ wch: Math.max(14, Math.min(28, (ch(p) ? ch(p).sub : p).length + 4)) })), ...(anyPhoto ? [{ wch: PHOTO_COL_CH }] : [])];
+  ws["!cols"] = [{ wch: 3.9 }, { wch: 6.4 }, { wch: 19.6 }, { wch: 12 }, { wch: 21 }, { wch: 22 }, ...(hasPhone ? [{ wch: 17 }] : []), ...prods.map(p => ({ wch: Math.max(14, Math.min(28, (ch(p) ? ch(p).sub : p).length + 4)) })), ...(anyPhoto ? [{ wch: PHOTO_COL_CH }] : []), ...(anyFare ? [{ wch: 16 }] : [])];
   // Rasmli varaqda barcha qator balandligi aniq beriladi — shunda rasm har qanday dasturda o'z qatorida turadi
   if (anyPhoto) for (let i = 0; i <= r; i++) if (!rowH[i]) rowH[i] = { hpt: i >= firstData && i < firstData + groups.length ? 18 : 20 };
   ws["!rows"] = rowH;
