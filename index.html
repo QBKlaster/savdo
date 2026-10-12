@@ -547,10 +547,14 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
             <div class="f"><label for="prPrice">Yangi narx, so'm</label><input id="prPrice" class="num" inputmode="decimal" placeholder="0"></div>
             <div class="f"><label for="prFrom">Qaysi sanadan</label><input type="date" id="prFrom"></div>
             <button type="submit" class="primary">Narxni saqlash</button>
-            <label class="chk"><input type="checkbox" id="prApply"> Shu sanadan keyingi <b>narxi yozilmagan</b> yuk xatlariga ham qo'yilsin</label>
+            <div class="f" style="flex-basis:100%"><label for="prMode">Qaysi yuk xatlariga qo'llansin</label><select id="prMode">
+              <option value="new">Faqat bundan keyin yoziladigan yangi yuk xatlariga</option>
+              <option value="empty">Shu sanadan keyingi narxi yozilmagan eski yuk xatlariga ham</option>
+              <option value="all">Shu sanadan keyingi BARCHA eski yuk xatlariga ham (eski narx almashtiriladi)</option>
+            </select></div>
           </form>
           <ul class="price-list" id="priceList"></ul>
-          <p class="hint">Yangi narx faqat ko'rsatilgan sanadan keyingi yangi yuk xatlariga qo'llanadi. Avval saqlangan yuk xatlari o'z narxida qoladi.</p>
+          <p class="hint">Odatda yangi narx faqat yangi yuk xatlariga qo'llanadi, eskilari o'z narxida qoladi. Eski yuk xatlarini ham yangi narxga o'tkazish kerak bo'lsa — «Qaysi sanadan»ni o'sha sanaga qo'yib, «BARCHA eski yuk xatlariga ham»ni tanlang.</p>
         </div>
       </div>
     </div>
@@ -3215,14 +3219,26 @@ $("#prForm").addEventListener("submit", async e => {
   setFirmPrice(accFirm, prod, price, from);
   rememberProduct(prod, "", null, false);
   let fixed = 0;
-  await saveRef();
-  if ($("#prApply").checked) {
-    const ids = rows.filter(r => same(r.firm, accFirm) && same(r.product, prod) && !hasPrice(r) && (r.date || "") >= from).map(r => r.id);
-    for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from("sales").update({ price_hint: price }).in("id", ids.slice(i, i + 200)); if (error) toast(error.message); }
-    fixed = ids.length; if (fixed) await reloadAll(true);
+  const mode = $("#prMode").value;
+  // qaysi eski yuk xatlari yangi narxga o'tkaziladi
+  const targets = mode === "new" ? [] : rows.filter(r => same(r.firm, accFirm) && same(r.product, prod) && (r.date || "") >= from && (mode === "all" ? r.price !== price : !hasPrice(r)));
+  if (mode === "all" && targets.length) {
+    const delta = targets.reduce((s, r) => s + Math.round(r.qty * price * 100) / 100 - (r.total || 0), 0);
+    const olds = [...new Set(targets.filter(hasPrice).map(r => fmt(r.price)))].join(", ");
+    if (!confirm(`${accFirm} — «${prod}»
+${fmtDate(from)} va undan keyingi ${new Set(targets.map(gk)).size} ta yuk xatida narx ${olds ? olds + " → " : ""}${fmt(price)} so'm bo'ladi.
+Firmaning jami summasi ${delta >= 0 ? "+" : "−"}${fmt(Math.abs(delta))} so'mga o'zgaradi.
+
+Davom etilsinmi?`)) return;
   }
-  $("#prPrice").value = ""; $("#prApply").checked = false;
-  render(); toast(fixed ? `Narx saqlandi, ${fixed} ta narxsiz yozuvga qo'yildi` : `Narx saqlandi: ${fmtDate(from)} dan boshlab`);
+  await saveRef();
+  if (targets.length) {
+    const ids = targets.map(r => r.id);
+    for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from("sales").update({ price_hint: price }).in("id", ids.slice(i, i + 200)); if (error) { toast(error.message); break; } }
+    fixed = new Set(targets.map(gk)).size; await reloadAll(true);
+  }
+  $("#prPrice").value = ""; $("#prMode").value = "new";
+  render(); toast(fixed ? `Narx saqlandi va ${fixed} ta yuk xatiga yangi narx qo'yildi` : `Narx saqlandi: ${fmtDate(from)} dan boshlab`);
 });
 document.addEventListener("click", e => {
   const t = e.target.closest("button"); if (!t) return;
