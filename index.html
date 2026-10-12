@@ -444,7 +444,7 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
     <div><h1>Savdo daftari</h1><span class="tag">Sotuvlar va yuk xatlari arxivi</span></div>
     <div class="head-right">
       <div class="me-box"><span class="me-ico" aria-hidden="true">👤</span><b id="meName"></b><span class="me-role" id="meRole"></span>
-        <button type="button" class="me-link" id="myPassBtn">Parolim</button><button type="button" class="me-link" id="logoutBtn">Chiqish</button></div>
+        <button type="button" class="me-link" id="myAiBtn" title="Beton rasmlarini o'qish uchun o'z Gemini kalitingiz">AI kalitim</button><button type="button" class="me-link" id="myPassBtn">Parolim</button><button type="button" class="me-link" id="logoutBtn">Chiqish</button></div>
       <button type="button" class="money-btn priv-only" id="moneyBtn">🔒 Hisob-kitob yopiq · <b>Ochish</b></button>
       <div class="status" id="status">Yuklanmoqda…</div>
     </div>
@@ -515,7 +515,7 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
     <p class="hint" id="btEmpty">Bir nechta rasmni birdaniga tanlash mumkin — har biri uchun alohida forma chiqadi.</p>
     <div id="btCards" class="bt-cards"></div>
     <datalist id="gradeList"></datalist>
-    <p class="hint admin-only bt-admin-hint">Avtomatik o'qish uchun Claude API kaliti serverga qo'yiladi: Supabase → Edge Functions → Secrets → <b>ANTHROPIC_API_KEY</b>. Kalit qo'yilmagan bo'lsa, rasm yonida qo'lda kiritish formasi chiqadi.</p>
+    <p class="hint admin-only bt-admin-hint">Har bir foydalanuvchi o'z bepul Gemini kalitini tepadagi «AI kalitim» orqali qo'yadi — ularning rasmlari o'z kaliti hisobidan o'qiladi. Serverdagi umumiy kalit (Supabase → Edge Functions → Secrets → <b>GEMINI_API_KEY</b>) faqat bosh admin uchun ishlatiladi.</p>
   </section>
 
   <section class="panel money" id="accounts">
@@ -698,6 +698,19 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
     <div class="btns modal-btns">
       <button type="button" id="pwCancel">Bekor qilish</button>
       <button type="submit" class="primary" id="pwOk">Tasdiqlash</button>
+    </div>
+  </form>
+</div>
+<div class="modal" id="aiKey" hidden role="dialog" aria-modal="true" aria-labelledby="aiKeyTitle">
+  <form class="modal-card pw-card" id="aiKeyForm" autocomplete="off">
+    <h2 id="aiKeyTitle">Mening AI kalitim</h2>
+    <p class="pw-text" id="aiKeyState"></p>
+    <p class="pw-text">Beton yuk xati rasmlarini avtomatik o'qish uchun har kim o'z Google akkauntidan bepul Gemini kalitini oladi: <b>aistudio.google.com</b> → chap pastdagi 🔑 belgisi → <b>Create API key</b> → <b>Copy key</b>. Kalit serverda saqlanadi, uni hech kim (siz ham) ko'ra olmaydi — faqat sizning rasmlaringiz uchun ishlatiladi.</p>
+    <div class="f"><label for="aiKeyIn">Gemini API kalit</label><input id="aiKeyIn" type="password" placeholder="AQ... yoki AIza..." autocomplete="off"></div>
+    <p class="pw-err" id="aiKeyErr" role="alert"></p>
+    <div class="btns modal-btns" style="justify-content:space-between">
+      <button type="button" class="danger" id="aiKeyDel">Kalitni o'chirish</button>
+      <span class="btns"><button type="button" id="aiKeyCancel">Yopish</button><button type="submit" class="primary" id="aiKeyOk">Saqlash</button></span>
     </div>
   </form>
 </div>
@@ -4226,7 +4239,7 @@ function renderBeton(){
   const cfg = aiCfg();
   $("#btAiState").innerHTML = cfg.key
     ? `<span class="pill ok">Avtomatik o'qish yoqilgan</span> <span class="dim">Rasm yuklanishi bilan maydonlar o'zi to'ladi — saqlashdan oldin tekshiring.</span>`
-    : `<span class="pill warn">Avtomatik o'qish o'chiq</span> <span class="dim">Rasm yonida forma chiqadi, qiymatlarni qo'lda kiritasiz. Bosh admin serverga Claude API kalitini qo'ysa, rasm o'zi o'qiladi.</span>`;
+    : `<span class="pill warn">Avtomatik o'qish o'chiq</span> <span class="dim">Rasm yonida forma chiqadi, qiymatlarni qo'lda kiritasiz. Avtomatik o'qish uchun tepadagi «AI kalitim» tugmasi orqali o'z bepul Gemini kalitingizni qo'ying.</span>`;
   $("#btCards").innerHTML = btCards.map(c => {
     const wl = wbCache[String(c.f.firm).trim().toLowerCase()];
     const dup = c.f.waybill && (wl || rows.filter(r => same(r.firm, c.f.firm))).some(r => r.kind === "beton" && same(r.waybill, c.f.waybill));
@@ -4515,7 +4528,7 @@ async function afterLogin(user){
   $("#status").textContent = "Ma'lumotlar onlayn bazada";
   await reloadAll();
   resetForm();
-  sb.functions.invoke("read-waybill", { body: { action: "status" } }).then(({ data }) => { aiEnabled = !!data?.enabled; renderBeton(); }).catch(() => {});
+  aiStatus();
   sb.channel("savdo").on("postgres_changes", { event: "*", schema: "public", table: "sales" }, reloadSoon)
     .on("postgres_changes", { event: "*", schema: "public", table: "payments" }, reloadSoon).subscribe();
   if (CAN_USERS()) loadUsers();
@@ -4584,6 +4597,35 @@ $("#uList").addEventListener("click", async e => {
     if (b.dataset.uact) { const u = users.find(x => x.id === b.dataset.uact); await callUsers({ action: "update", id: u.id, active: !u.active }); toast(u.active ? "Foydalanuvchi o'chirildi — endi kira olmaydi" : "Foydalanuvchi faollashtirildi"); }
   } catch(err) { toast(err.message); }
   loadUsers();
+});
+
+/* ---------- Har bir foydalanuvchining o'z Gemini kaliti ---------- */
+let aiInfo = {};
+async function aiStatus(){
+  try { const { data } = await sb.functions.invoke("read-waybill", { body: { action: "status" } }); aiInfo = data || {}; aiEnabled = !!aiInfo.enabled; }
+  catch(e) { aiInfo = {}; aiEnabled = false; }
+  if (typeof renderBeton === "function") renderBeton();
+}
+function aiKeyRender(){
+  $("#aiKeyState").innerHTML = aiInfo.own ? `✅ Kalitingiz qo'yilgan (…${esc(aiInfo.last4 || "")}). Almashtirish uchun yangisini kiriting.`
+    : aiInfo.source === "server" ? "Hozir umumiy (server) kalit ishlatilmoqda. Xohlasangiz, o'zingiznikini qo'yishingiz mumkin."
+    : "Kalit qo'yilmagan — beton rasmlari avtomatik o'qilmaydi, qo'lda kiritasiz.";
+  $("#aiKeyDel").hidden = !aiInfo.own; $("#aiKeyIn").value = ""; $("#aiKeyErr").textContent = "";
+}
+$("#myAiBtn").addEventListener("click", async () => { $("#aiKey").hidden = false; aiKeyRender(); setTimeout(() => $("#aiKeyIn").focus(), 30); await aiStatus(); aiKeyRender(); });
+$("#aiKeyCancel").addEventListener("click", () => { $("#aiKey").hidden = true; });
+$("#aiKeyForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const k = $("#aiKeyIn").value.trim(); if (!k) { $("#aiKeyErr").textContent = "Kalitni kiriting"; return; }
+  busy($("#aiKeyOk"), true, "Tekshirilmoqda…");
+  const { data, error } = await sb.functions.invoke("read-waybill", { body: { action: "setkey", key: k } });
+  busy($("#aiKeyOk"), false, "Saqlash");
+  if (error || data?.error) { $("#aiKeyErr").textContent = data?.error || "Saqlab bo'lmadi — read-waybill funksiyasi yangilanganini tekshiring"; return; }
+  await aiStatus(); $("#aiKey").hidden = true; toast("Kalit saqlandi — beton rasmlari endi o'zi o'qiladi");
+});
+$("#aiKeyDel").addEventListener("click", async () => {
+  if (!confirm("Kalitingiz o'chirilsinmi?")) return;
+  await sb.functions.invoke("read-waybill", { body: { action: "delkey" } }); await aiStatus(); aiKeyRender(); toast("Kalit o'chirildi");
 });
 
 /* ---------- Ishga tushirish ---------- */
