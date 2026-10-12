@@ -400,6 +400,13 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
   h1{font-size:26px}
 }
 </style>
+td .ship.pm{display:inline-block;margin:0 0 4px 4px;padding:2px 8px;border-radius:99px;font-weight:600;font-size:12px}
+.pm-cash{background:color-mix(in srgb,#2e8b57 16%,transparent);color:#1f7a47}
+.pm-bank{background:color-mix(in srgb,#3b6fd8 14%,transparent);color:#2c5bbf}
+.pill.pm-cash,.pill.pm-bank{display:inline-block}
+.acc-row.acc-sub{padding-left:12px;font-size:12.5px}
+.acc-row.acc-sub b{font-weight:600}
+.acc-row.acc-sub b.neg{color:var(--danger)}
 
 </head>
 <body class="gated">
@@ -478,7 +485,8 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
       <div class="f c3"><label for="fPhone">Haydovchi telefoni</label><input id="fPhone" type="tel" list="phoneList" placeholder="+998 90 123 45 67"></div>
       <div class="f c3"><label for="fCar">Avtomobil raqami</label><input id="fCar" list="carList" placeholder="01 A 123 BC"></div>
       <div class="f c3 money priv-only"><label for="fFare">Haydovchi yo'lkirasi, so'm <span style="font-weight:400;opacity:.7">— ixtiyoriy</span></label><input id="fFare" class="num" inputmode="decimal" placeholder="yetkazish bizdan bo'lsa"></div>
-      <div class="f c6"><label for="fNote">Izoh</label><input id="fNote" placeholder="masalan, faktura № 45"></div>
+      <div class="f c3"><label for="fPay">Qaysi hisobdan ayiriladi *</label><select id="fPay"><option value="">— tanlang —</option><option value="bank">Hisob raqam (bank)</option><option value="cash">Naqd</option></select></div>
+      <div class="f c3"><label for="fNote">Izoh</label><input id="fNote" placeholder="masalan, faktura № 45"></div>
 
       <div class="c12 lines-box">
         <div class="lines-head"><h2>Mahsulotlar</h2><span class="hint"><span class="req">*</span> nomi va soni majburiy</span></div>
@@ -534,6 +542,7 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
           <h2>To'lovlar (firma bizga o'tkazgan pul)</h2>
           <form class="mini-form" id="payForm" autocomplete="off">
             <div class="f"><label for="payDate">Sana</label><input type="date" id="payDate"></div>
+            <div class="f"><label for="payMethod">Qanday to'landi</label><select id="payMethod"><option value="bank">Hisob raqamga (bank)</option><option value="cash">Naqd</option></select></div>
             <div class="f"><label for="payAmt">Summa, so'm</label><input id="payAmt" class="num" inputmode="decimal" placeholder="0"></div>
             <div class="f grow"><label for="payNote">Izoh</label><input id="payNote" placeholder="masalan, bank o'tkazmasi"></div>
             <button type="submit" class="primary">To'lov qo'shish</button>
@@ -705,8 +714,11 @@ body.role-staff .kpis{grid-template-columns:repeat(2,1fr)}
   <form class="modal-card pw-card" id="aiKeyForm" autocomplete="off">
     <h2 id="aiKeyTitle">Mening AI kalitim</h2>
     <p class="pw-text" id="aiKeyState"></p>
-    <p class="pw-text">Beton yuk xati rasmlarini avtomatik o'qish uchun har kim o'z Google akkauntidan bepul Gemini kalitini oladi: <b>aistudio.google.com</b> → chap pastdagi 🔑 belgisi → <b>Create API key</b> → <b>Copy key</b>. Kalit serverda saqlanadi, uni hech kim (siz ham) ko'ra olmaydi — faqat sizning rasmlaringiz uchun ishlatiladi.</p>
-    <div class="f"><label for="aiKeyIn">Gemini API kalit</label><input id="aiKeyIn" type="password" placeholder="AQ... yoki AIza..." autocomplete="off"></div>
+    <div class="f"><label for="aiProv">Qaysi AI</label><select id="aiProv"><option value="gemini">Gemini (Google) — bepul tarifi bor</option><option value="claude">Claude (Anthropic) — pullik, aniqroq</option></select></div>
+    <p class="pw-text" id="aiHowGemini">Kalit olish: <b>aistudio.google.com</b> → chap pastdagi 🔑 belgisi → <b>Create API key</b> → <b>Copy key</b>.</p>
+    <p class="pw-text" id="aiHowClaude" hidden>Kalit olish: <b>console.anthropic.com</b> → <b>Settings → Billing</b>da kredit sotib oling → <b>API Keys</b> → <b>Create Key</b> → nusxa oling (<code>sk-ant-...</code>). Claude Pro obunasi API'ga kirmaydi — kredit alohida olinadi.</p>
+    <p class="pw-text">Kalit serverda saqlanadi, uni hech kim (siz ham) ko'ra olmaydi — faqat sizning rasmlaringiz uchun ishlatiladi. Yangi kalit kiritsangiz, eskisining o'rniga yoziladi.</p>
+    <div class="f"><label for="aiKeyIn" id="aiKeyLbl">Gemini API kalit</label><input id="aiKeyIn" type="password" placeholder="AQ... yoki AIza..." autocomplete="off"></div>
     <p class="pw-err" id="aiKeyErr" role="alert"></p>
     <div class="btns modal-btns" style="justify-content:space-between">
       <button type="button" class="danger" id="aiKeyDel">Kalitni o'chirish</button>
@@ -2332,13 +2344,14 @@ const fromDb = s => {
   return { id: s.id, batch: s.batch, kind: s.kind || "", date: s.date || "", time: s.time || "", seller: s.seller || "", firm: s.firm || "",
     waybill: s.waybill || "", giver: s.giver || "", receiver: s.receiver || "", driver: s.driver || "", phone: s.phone || "", car: s.car || "", note: s.note || "",
     loadAddr: s.load_addr || "", unloadAddr: s.unload_addr || "", product: s.product, qty: Number(s.qty), unit: s.unit || "",
-    hasPhoto: !!s.has_photo, created: s.created_at, createdBy: s.created_by,
+    hasPhoto: !!s.has_photo, created: s.created_at, createdBy: s.created_by, payMethod: s.pay_method || "bank",
     price: m && m.price != null ? Number(m.price) : null, total: m ? Number(m.total || 0) : 0 };
 };
 const toDb = (r, withCreated) => {
   const d = { batch: r.batch || newId(), kind: r.kind || "", date: r.date || null, time: r.time || "", seller: r.seller || "", firm: r.firm || "",
     waybill: r.waybill || "", giver: r.giver || "", receiver: r.receiver || "", driver: r.driver || "", phone: r.phone || "", car: r.car || "", note: r.note || "",
-    load_addr: r.loadAddr || "", unload_addr: r.unloadAddr || "", product: r.product, qty: r.qty, unit: r.unit || "", has_photo: !!r.hasPhoto };
+    load_addr: r.loadAddr || "", unload_addr: r.unloadAddr || "", product: r.product, qty: r.qty, unit: r.unit || "", has_photo: !!r.hasPhoto,
+    pay_method: r.payMethod === "cash" ? "cash" : "bank" };
   // Narxni faqat rahbariyat yuboradi; xodim yuborsa ham server e'tiborsiz qoldiradi
   if (PRIV() && r.price != null && r.price !== "") d.price_hint = Number(r.price);
   if (withCreated && r.created) d.created_at = r.created;
@@ -2378,7 +2391,7 @@ async function reloadAll(silent){
       const [pr, py, pf, fr] = await Promise.all([fetchAll("firm_prices", "*", q => q.order("created_at")), fetchAll("payments", "*", q => q.order("created_at")), fetchAll("profiles", "*", q => q.order("created_at")), fetchAll("waybill_fares", "batch,fare", q => q.order("batch"))]);
       fares = Object.fromEntries(fr.map(f => [f.batch, Number(f.fare)]));
       ref.prices = pr.map(p => ({ id: p.id, firm: p.firm, product: p.product, price: Number(p.price), from: p.from_date, at: p.created_at }));
-      pays = py.map(p => ({ id: p.id, firm: p.firm, date: p.date || "", amount: Number(p.amount), note: p.note || "", at: p.created_at }));
+      pays = py.map(p => ({ id: p.id, firm: p.firm, date: p.date || "", amount: Number(p.amount), note: p.note || "", method: p.method || "bank", at: p.created_at }));
       profilesById = Object.fromEntries(pf.map(p => [p.id, p]));
     } else { ref.prices = []; pays = []; fares = {}; profilesById = { [me.id]: me }; }
     render(); if (typeof renderBeton === "function") renderBeton();
@@ -2448,7 +2461,7 @@ async function addRows(list){
 async function updateRow(id, r){
   // Formada yo'q maydonlar (tasdiqlangan rasm belgisi, beton turi) eski qiymatida qoladi
   const cur = rows.find(x => x.id === id) || {};
-  const d = toDb({ kind: cur.kind, hasPhoto: cur.hasPhoto, ...r }); delete d.batch;
+  const d = toDb({ kind: cur.kind, hasPhoto: cur.hasPhoto, payMethod: cur.payMethod, ...r }); delete d.batch;
   const { data, error } = await sb.from("sales").update(d).eq("id", id).select("*").single();
   if (error) throw error;
   const i = rows.findIndex(x => x.id === id); if (i > -1) rows[i] = await refetchRow(data);
@@ -2634,12 +2647,13 @@ $("#entry").addEventListener("submit", async e => {
     if (!l.product) { toast("Mahsulot nomini kiriting"); l.el.querySelector(".lp-name").focus(); return; }
     if (l.qty <= 0) { toast(`"${l.product}" sonini kiriting`); l.el.querySelector(".lp-qty").focus(); return; }
   }
+  if (!$("#fPay").value) { toast("Qaysi hisobdan ayirilishini tanlang: naqd yoki hisob raqam"); $("#fPay").focus(); return; }
   const oldItems = editId ? groupItems(editId) : [];
   const old = oldItems[0] || null;
   const head = {
     date: $("#fDate").value, time: $("#fTime").value || (old?.time ?? (editId ? "" : nowTime())), seller: $("#fSeller").value.trim(), firm: $("#fFirm").value.trim(), waybill: $("#fWaybill").value.trim(),
     giver: $("#fGiver").value.trim(), receiver: $("#fReceiver").value.trim(), driver: $("#fDriver").value.trim(), phone: $("#fPhone").value.trim(), loadAddr: $("#fLoad").value.trim(), unloadAddr: $("#fUnload").value.trim(), car: $("#fCar").value.trim().toUpperCase(),
-    note: $("#fNote").value.trim(), batch: old?.batch || newId()
+    note: $("#fNote").value.trim(), payMethod: $("#fPay").value, batch: old?.batch || newId()
   };
   const wantPrint = e.submitter && e.submitter.id === "savePrintBtn";
   const now = Date.now(), ids = [];
@@ -2668,7 +2682,7 @@ $("#entry").addEventListener("submit", async e => {
   savePrefs();
   if (refChanged) await saveRef(); else render();
   delete wbCache[head.firm.trim().toLowerCase()];
-  const st = head.firm ? await moneyState(head.firm) : "none";
+  const st = head.firm ? await moneyState(head.firm, null, null, head.payMethod) : "none";
   toast(st === "out" ? "Saqlandi. Diqqat: firmaning puli tugagan"
     : (editId ? "Yuk xati o'zgartirildi" : (lines.length>1 ? `Yuk xati saqlandi: ${lines.length} ta mahsulot` : "Saqlandi")));
   const savedKey = "b:" + head.batch;
@@ -2682,7 +2696,7 @@ function startEdit(key){
   const r = items[0];
   editId = key;
   $("#fDate").value=r.date||""; $("#fTime").value=r.time||""; timeTouched = true; $("#fFirm").value=r.firm||""; $("#fWaybill").value=r.waybill||"";
-  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||"";
+  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank";
   $("#fFare").value = fares[r.batch] != null ? fares[r.batch] : "";
   $("#lines").innerHTML = ""; items.forEach(it => addLine(it));
   updateBalance();
@@ -2779,6 +2793,7 @@ function render(){
         html += `<tr class="month"><td colspan="4">${label}</td><td class="r num nw money">${fmt(ms)}</td><td></td></tr>`;
       }
       const ship = [
+        `<span class="ship pm pm-${r.payMethod === "cash" ? "cash" : "bank"}">${PM[r.payMethod === "cash" ? "cash" : "bank"]}</span>`,
         r.giver ? `<span class="ship dim">Topshirdi: ${esc(r.giver)}</span>` : "",
         PRIV() && r.createdBy ? byBadge(r) : "",
         r.receiver ? `<span class="ship dim">Qabul qildi: ${esc(r.receiver)}</span>` : "",
@@ -3114,10 +3129,15 @@ function setFirmPrice(firm, product, price, from){
 const delivered = (firm, exceptKey) => rows.filter(r => same(r.firm, firm) && (!exceptKey || gk(r) !== exceptKey)).reduce((s, r) => s + (r.total || 0), 0);
 const paidOf = firm => pays.filter(p => same(p.firm, firm)).reduce((s, p) => s + (p.amount || 0), 0);
 const hasAccount = firm => pays.some(p => same(p.firm, firm));
+// Naqd va hisob raqam (bank) hisoblari alohida yuritiladi
+const PM = { cash: "Naqd", bank: "Hisob raqam" };
+const deliveredBy = (firm, m, exceptKey) => rows.filter(r => same(r.firm, firm) && (r.payMethod || "bank") === m && (!exceptKey || gk(r) !== exceptKey)).reduce((s, r) => s + (r.total || 0), 0);
+const paidBy = (firm, m) => pays.filter(p => same(p.firm, firm) && (p.method || "bank") === m).reduce((s, p) => s + (p.amount || 0), 0);
+const splitUsed = firm => rows.some(r => same(r.firm, firm) && r.payMethod === "cash") || pays.some(p => same(p.firm, firm) && p.method === "cash");
 // Firmaning puli holati serverdan (xodim ham biladi, lekin summasini emas)
-async function moneyState(firm, items, exceptBatch){
+async function moneyState(firm, items, exceptBatch, method){
   if (!firm || !sb) return "none";
-  const { data } = await sb.rpc("firm_money_state", { p_firm: firm, p_date: $("#fDate").value || null, p_items: items || [], p_except_batch: exceptBatch || null });
+  const { data } = await sb.rpc("firm_money_state", { p_firm: firm, p_date: $("#fDate").value || null, p_items: items || [], p_except_batch: exceptBatch || null, p_method: method || null });
   return data || "none";
 }
 let balT = null, balSeq = 0;
@@ -3130,16 +3150,18 @@ function updateBalance(){
     balT = setTimeout(async () => {
       const seq = ++balSeq, items = readLines().filter(l => l.product && l.qty > 0).map(l => ({ product: l.product, qty: l.qty }));
       const ex = editId ? groupItems(editId)[0]?.batch : null;
-      const st = await moneyState(firm, items, ex);
+      const pm = $("#fPay").value || null, st = await moneyState(firm, items, ex, pm), lb = pm ? ` ${PM[pm].toLowerCase()}` : "";
       if (seq !== balSeq) return;
       if (st === "out" || st === "short") { box.hidden = false; box.className = st === "out" ? "c12 bal bad" : "c12 bal warn";
-        box.innerHTML = st === "out" ? "<b>Diqqat: bu firmaning puli tugagan.</b> Yuk berishdan oldin rahbariyat bilan kelishing." : "<b>Diqqat: shu yuk bilan firmaning puli yetmaydi.</b>"; }
+        box.innerHTML = st === "out" ? `<b>Diqqat: bu firmaning${lb} puli tugagan.</b> Yuk berishdan oldin rahbariyat bilan kelishing.` : `<b>Diqqat: shu yuk bilan firmaning${lb} puli yetmaydi.</b>`; }
       else box.hidden = true;
     }, 400);
     return;
   }
   if (!firm || !hasAccount(firm)) { box.hidden = true; return; }
-  const before = paidOf(firm) - delivered(firm, editId);
+  const pm = $("#fPay").value, lbl = pm ? ` (${PM[pm].toLowerCase()})` : "", split = splitUsed(firm);
+  const before = pm ? paidBy(firm, pm) - deliveredBy(firm, pm, editId) : paidOf(firm) - delivered(firm, editId);
+  const both = !pm && split && M() ? ` <span class="dim">· Naqd: <span class="num">${fmt(paidBy(firm, "cash") - deliveredBy(firm, "cash", editId))}</span> · Hisob raqam: <span class="num">${fmt(paidBy(firm, "bank") - deliveredBy(firm, "bank", editId))}</span> — qaysi hisobdan ayirilishini tanlang</span>` : "";
   const cur = readLines().reduce((s, l) => s + (l.price !== null ? l.qty * l.price : 0), 0);
   const after = before - cur;
   if (!M()) {
@@ -3152,16 +3174,17 @@ function updateBalance(){
   box.hidden = false;
   if (before <= 0) {
     box.className = "c12 bal bad";
-    box.innerHTML = `<b>Puli tugagan.</b> ${before < 0 ? `Bu firmaning qarzi: <span class="num">${fmt(-before)}</span> so'm.` : "To'lov qoldig'i 0 so'm."}${cur ? ` Shu yuk xati bilan qarz <span class="num">${fmt(-after)}</span> so'm bo'ladi.` : ""}`;
+    box.innerHTML = `<b>Puli tugagan${lbl}.</b> ${before < 0 ? `Bu firmaning qarzi: <span class="num">${fmt(-before)}</span> so'm.` : "To'lov qoldig'i 0 so'm."}${cur ? ` Shu yuk xati bilan qarz <span class="num">${fmt(-after)}</span> so'm bo'ladi.` : ""}`;
   } else if (after < 0) {
     box.className = "c12 bal warn";
-    box.innerHTML = `<b>Pul yetmaydi.</b> To'lov qoldig'i <span class="num">${fmt(before)}</span> so'm, shu yuk xati <span class="num">${fmt(cur)}</span> so'm. Yetishmaydi: <span class="num">${fmt(-after)}</span> so'm.`;
+    box.innerHTML = `<b>Pul yetmaydi${lbl}.</b> To'lov qoldig'i <span class="num">${fmt(before)}</span> so'm, shu yuk xati <span class="num">${fmt(cur)}</span> so'm. Yetishmaydi: <span class="num">${fmt(-after)}</span> so'm.`;
   } else {
     box.className = "c12 bal ok";
-    box.innerHTML = `To'lov qoldig'i: <b class="num">${fmt(before)}</b> so'm${cur ? ` · shu yukdan keyin: <span class="num">${fmt(after)}</span> so'm` : ""}`;
+    box.innerHTML = `To'lov qoldig'i${lbl}: <b class="num">${fmt(before)}</b> so'm${cur ? ` · shu yukdan keyin: <span class="num">${fmt(after)}</span> so'm` : ""}${both}`;
   }
 }
 $("#fFirm").addEventListener("change", updateBalance);
+$("#fPay").addEventListener("change", updateBalance);
 $("#fFirm").addEventListener("input", updateBalance);
 
 let accFirm = "", pendingPayDel = null;
@@ -3178,6 +3201,7 @@ function renderAccounts(){
       <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(del)}</b></span>
       <span class="acc-row"><span>To'landi</span><b class="num">${fmt(paid)}</b></span>
       <span class="acc-row acc-bal ${acc ? (bal < 0 ? "neg" : "pos") : ""}"><span>${!acc ? "To'lov kiritilmagan" : bal < 0 ? "Qarz" : "Qoldiq"}</span><b class="num">${acc ? fmt(Math.abs(bal)) : ""}</b></span>
+      ${splitUsed(f) ? ["bank", "cash"].map(m => { const b = paidBy(f, m) - deliveredBy(f, m); return `<span class="acc-row acc-sub"><span>${PM[m]}: ${b < 0 ? "qarz" : "qoldiq"}</span><b class="num ${b < 0 ? "neg" : ""}">${fmt(Math.abs(b))}</b></span>`; }).join("") : ""}
       <span class="acc-foot"><span class="dim">${n} ta yuk xati</span>${state}</span>
     </button>`;
   }).join("") : `<p class="hint">Hali xaridor firma yo'q.</p>`;
@@ -3191,7 +3215,7 @@ function renderAccounts(){
   const ps = pays.filter(p => same(p.firm, accFirm)).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.at || "").localeCompare(a.at || ""));
   $("#payList").innerHTML = ps.length ? ps.map(p => `<li>
       <span class="num">${p.date ? fmtDate(p.date) : "—"}</span>
-      <span class="num pay-amt">${fmt(p.amount)} so'm</span>
+      <span class="num pay-amt">${fmt(p.amount)} so'm</span><span class="pill pm-${p.method === "cash" ? "cash" : "bank"}">${PM[p.method === "cash" ? "cash" : "bank"]}</span>
       <span class="dim pay-note">${esc(p.note || "")}</span>
       ${pendingPayDel === p.id ? `<span class="confirm">O'chirilsinmi? <button type="button" class="ghost danger" data-pay-yes="${p.id}">Ha</button><button type="button" class="ghost" data-pay-no>Yo'q</button></span>`
         : `<button type="button" class="ghost danger" data-pay-del="${p.id}">O'chirish</button>`}
@@ -3216,9 +3240,9 @@ $("#payForm").addEventListener("submit", e => {
   e.preventDefault();
   const amt = parseNum($("#payAmt").value);
   if (amt <= 0) { toast("To'lov summasini kiriting"); $("#payAmt").focus(); return; }
-  sb.from("payments").insert({ firm: accFirm, date: $("#payDate").value || null, amount: amt, note: $("#payNote").value.trim() }).select().single().then(({ data, error }) => {
+  sb.from("payments").insert({ firm: accFirm, date: $("#payDate").value || null, amount: amt, note: $("#payNote").value.trim(), method: $("#payMethod").value }).select().single().then(({ data, error }) => {
     if (error) { toast("To'lovni saqlab bo'lmadi: " + error.message); return; }
-    pays.push({ id: data.id, firm: data.firm, date: data.date || "", amount: Number(data.amount), note: data.note || "", at: data.created_at });
+    pays.push({ id: data.id, firm: data.firm, date: data.date || "", amount: Number(data.amount), note: data.note || "", method: data.method || "bank", at: data.created_at });
     rememberFirm(accFirm); saveRef();
     $("#payAmt").value = ""; $("#payNote").value = "";
     render(); scheduleSync(); toast("To'lov qo'shildi");
@@ -3659,7 +3683,8 @@ function buildFirmSheet(firm, items, opts = {}){
   const ws = {}, put = (r, c, cell) => { ws[addr(r, c)] = cell; };
   const prods = productOrder(firm, items);
   const hasPhone = items.some(x => x.phone);
-  const baseHeads = ["№", "Yuk xati raqami", "Sanasi", "Avtomobil raqami", "Haydovchi", ...(hasPhone ? ["Telefon raqami"] : [])];
+  const split = !opts.noPays && splitUsed(firm);
+  const baseHeads = ["№", "Yuk xati raqami", "Sanasi", "Avtomobil raqami", "Haydovchi", ...(hasPhone ? ["Telefon raqami"] : []), ...(split ? ["To'lov turi"] : [])];
   const P0 = 1 + baseHeads.length, last = P0 + prods.length - 1;   // B №, C yuk xati, D sana, E avto, F haydovchi, [G telefon], so'ng mahsulotlar
   const title = firm ? `${firm.trim().toUpperCase()}GA YUBORILGAN MATERIALLAR HISOBI` : "YUBORILGAN MATERIALLAR HISOBI";
   put(1, 1, { t: "s", v: title, s: XS.title });
@@ -3708,6 +3733,7 @@ function buildFirmSheet(firm, items, opts = {}){
     put(r, 4, { t: "s", v: h.car || "", s: XS.text });
     put(r, 5, { t: "s", v: h.driver || "", s: XS.text });
     if (hasPhone) put(r, 6, { t: "s", v: h.phone || "", s: XS.text });
+    if (split) put(r, hasPhone ? 7 : 6, { t: "s", v: PM[h.payMethod === "cash" ? "cash" : "bank"], s: XS.text });
     prods.forEach((p, j) => put(r, P0 + j, { t: "n", v: g.filter(x => same(x.product, p)).reduce((s, x) => s + (x.qty || 0), 0), s: XS.qty }));
     if (anyPhoto) {
       put(r, photoCol, { t: "s", v: h.hasPhoto ? "" : "tasdiqlanmagan", s: h.hasPhoto ? XS.text : { ...XS.text, font: { name: "Times New Roman", sz: 10, italic: true, color: { rgb: "8A8A8A" } } } });
@@ -3758,13 +3784,18 @@ function buildFirmSheet(firm, items, opts = {}){
     labelRow(rDebt, bal >= 0 ? "Qolgan qarzi" : "Avans qoldig'i");
     put(rDebt, P0, rAll >= 0 ? { t: "n", f: bal >= 0 ? `${addr(rAll, P0)}-${addr(rPaid, P0)}` : `${addr(rPaid, P0)}-${addr(rAll, P0)}`, v: Math.abs(bal), s: XS.money } : { t: "n", v: Math.abs(bal), s: XS.money });
     mergeVal(rDebt);
+    if (split) ["bank", "cash"].forEach(m => {   // har bir hisob alohida: yuk berildi − to'landi
+      const b = paidBy(firm, m) - deliveredBy(firm, m), rr = r++;
+      labelRow(rr, `${PM[m]}: ${b < 0 ? "qolgan qarzi" : "avans qoldig'i"} (yuk ${fmt(deliveredBy(firm, m))}, to'landi ${fmt(paidBy(firm, m))})`);
+      put(rr, P0, { t: "n", v: Math.abs(b), s: XS.money }); mergeVal(rr);
+    });
     r++;
     const rHead = r++;
     labelRow(rHead, "To'lovlar"); put(rHead, P0, { t: "s", v: "Summa", s: XS.label }); mergeVal(rHead);
     firmPays.forEach(p => {
       const rr = r++;
       put(rr, 2, p.date ? { t: "n", v: dateSerial(p.date), z: "dd.mm.yyyy", s: { ...XS.date, font: { ...XS.date.font, bold: false } } } : { t: "s", v: "sanasiz", s: XS.text });
-      for (let c = 3; c < P0; c++) put(rr, c, { t: "s", v: c === 3 ? (p.note || "") : "", s: XS.text });
+      for (let c = 3; c < P0; c++) put(rr, c, { t: "s", v: c === 3 ? [split ? PM[p.method === "cash" ? "cash" : "bank"] : "", p.note || ""].filter(Boolean).join(" — ") : "", s: XS.text });
       merges.push({ s: { r: rr, c: 3 }, e: { r: rr, c: P0 - 1 } });
       put(rr, P0, { t: "n", v: p.amount, s: { ...XS.money, font: { ...XS.money.font, bold: false, sz: 12 } } });
       for (let c = P0 + 1; c <= last; c++) put(rr, c, { t: "s", v: "", s: XS.text });
@@ -3774,7 +3805,7 @@ function buildFirmSheet(firm, items, opts = {}){
 
   ws["!ref"] = `A1:${addr(r, Math.max(anyFare ? fareCol : last + (anyPhoto ? 1 : 0), 6))}`;
   ws["!merges"] = merges;
-  ws["!cols"] = [{ wch: 3.9 }, { wch: 6.4 }, { wch: 19.6 }, { wch: 12 }, { wch: 21 }, { wch: 22 }, ...(hasPhone ? [{ wch: 17 }] : []), ...prods.map(p => ({ wch: Math.max(14, Math.min(28, (ch(p) ? ch(p).sub : p).length + 4)) })), ...(anyPhoto ? [{ wch: PHOTO_COL_CH }] : []), ...(anyFare ? [{ wch: 16 }] : [])];
+  ws["!cols"] = [{ wch: 3.9 }, { wch: 6.4 }, { wch: 19.6 }, { wch: 12 }, { wch: 21 }, { wch: 22 }, ...(hasPhone ? [{ wch: 17 }] : []), ...(split ? [{ wch: 14 }] : []), ...prods.map(p => ({ wch: Math.max(14, Math.min(28, (ch(p) ? ch(p).sub : p).length + 4)) })), ...(anyPhoto ? [{ wch: PHOTO_COL_CH }] : []), ...(anyFare ? [{ wch: 16 }] : [])];
   // Rasmli varaqda barcha qator balandligi aniq beriladi — shunda rasm har qanday dasturda o'z qatorida turadi
   if (anyPhoto) for (let i = 0; i <= r; i++) if (!rowH[i]) rowH[i] = { hpt: i >= firstData && i < firstData + groups.length ? 18 : 20 };
   ws["!rows"] = rowH;
@@ -3856,7 +3887,7 @@ $("#restoreFile").addEventListener("change", async e => {
     const pk = p => [String(p.firm).toLowerCase(), p.date || "", Number(p.amount)].join("|");
     const haveP = new Set(pays.map(pk));
     const np = data.pays.filter(p => p && p.firm && p.amount > 0 && !haveP.has(pk(p)));
-    if (np.length) { const { error } = await sb.from("payments").insert(np.map(p => ({ firm: p.firm, date: p.date || null, amount: p.amount, note: p.note || "" }))); if (error) toast(error.message); }
+    if (np.length) { const { error } = await sb.from("payments").insert(np.map(p => ({ firm: p.firm, date: p.date || null, amount: p.amount, note: p.note || "", method: p.method === "cash" ? "cash" : "bank" }))); if (error) toast(error.message); }
   }
   if (data.fares && typeof data.fares === "object") {
     const nf = Object.entries(data.fares).filter(([b, f]) => b && Number(f) > 0 && fares[b] == null).map(([batch, fare]) => ({ batch, fare: Number(fare) }));
@@ -4203,8 +4234,15 @@ async function readWithAI(card){
   if (!cfg.key) { card.status = "manual"; renderBeton(); return; }
   card.status = "reading"; card.err = ""; renderBeton();
   try {
-    const { data: res, error: fe } = await sb.functions.invoke("read-waybill", { body: { image: card.src.split(",")[1] } });
-    if (fe) throw new Error("Server bilan bog'lanib bo'lmadi");
+    // vaqtinchalik uzilishda (server uyg'onayotgan, tarmoq) — 2 marta qayta urinadi
+    let res = null, fe = null;
+    for (let i = 0; i < 3; i++) {
+      ({ data: res, error: fe } = await sb.functions.invoke("read-waybill", { body: { image: card.src.split(",")[1] } }));
+      const st = fe?.context?.status;
+      if (!fe || st === 401 || st === 403 || st === 400) break;
+      if (i < 2) { card.err = ""; await new Promise(r => setTimeout(r, i ? 5000 : 2000)); }
+    }
+    if (fe) { const st = fe.context?.status; throw new Error(st === 401 ? "Sessiya tugagan — sahifani yangilab, qayta kiring" : st === 546 || st === 504 ? "Server rasmni o'qishga ulgurmadi — «Qayta o'qish»ni bosing (rasm juda katta bo'lsa, kichikroq oling)" : `Server bilan bog'lanib bo'lmadi${st ? " (" + st + ")" : ""} — «Qayta o'qish»ni bosing`); }
     if (res?.error === "no-key") { aiEnabled = false; card.status = "manual"; renderBeton(); return; }
     if (res?.error) throw new Error(res.error);
     const text = res?.text || "";
@@ -4273,6 +4311,7 @@ function renderBeton(){
           <button type="button" class="add-line sm" data-bt-iadd="${c.id}">+ Marka qo'shish</button>
         </div>
         ${cardField(c, "note", "Izoh", { ph: "ixtiyoriy" })}
+        <div class="f"><label for="bt${c.id}pm">Qaysi hisobdan ayiriladi *</label><select id="bt${c.id}pm" data-c="${c.id}" data-k="payMethod">${[["", "— tanlang —"], ["bank", "Hisob raqam (bank)"], ["cash", "Naqd"]].map(([v, t]) => `<option value="${v}"${(c.f.payMethod || "") === v ? " selected" : ""}>${t}</option>`).join("")}</select></div>
         </fieldset>
         ${dup && !c.dupOk ? `<div class="bt-status bad">Bu firmaga № ${esc(c.f.waybill)} yuk xati avval kiritilgan. Takror bo'lmasligini tekshiring.</div>` : ""}
         <div class="bt-foot">
@@ -4320,6 +4359,7 @@ $("#btCards").addEventListener("click", async e => {
 async function saveBetonCard(c){
   const f = c.f, items = f.items.filter(it => it.grade || it.qty);
   if (!items.length) { toast("Beton markasi va miqdorini kiriting"); return; }
+  if (!f.payMethod) { toast("Qaysi hisobdan ayirilishini tanlang: naqd yoki hisob raqam"); const el = document.getElementById(`bt${c.id}pm`); if (el) el.focus(); return; }
   for (const it of items) {
     if (!String(it.grade).trim()) { toast("Beton markasini kiriting"); return; }
     if (parseNum(it.qty) <= 0) { toast(`${it.grade}: miqdorini kiriting`); return; }
@@ -4329,7 +4369,7 @@ async function saveBetonCard(c){
   const firm = f.firm.trim(), seller = f.seller.trim(), batch = newId(), base = Date.now();
   const head = { date: f.date, time: "", seller, firm, waybill: String(f.waybill).trim(), giver: "", driver: f.driver.trim(), phone: "",
     car: f.car.trim().toUpperCase(), note: f.note.trim(), loadAddr: seller ? lastAddr("seller", "loadAddr", seller) : "",
-    unloadAddr: firm ? lastAddr("firm", "unloadAddr", firm) : "", batch, kind: "beton", hasPhoto: true };
+    unloadAddr: firm ? lastAddr("firm", "unloadAddr", firm) : "", batch, kind: "beton", hasPhoto: true, payMethod: f.payMethod };
   try {
     for (let i = 0; i < items.length; i++) {
       const it = items[i], product = betonProduct(it.grade);
@@ -4348,7 +4388,7 @@ async function saveBetonCard(c){
   syncWaybills.add("b:" + batch);
   btCards = btCards.filter(x => x !== c);
   await saveRef(); renderBeton();
-  const st = await moneyState(firm);
+  const st = await moneyState(firm, null, null, f.payMethod);
   toast(st === "out" ? `Saqlandi. Diqqat: ${plainName(firm)} puli tugagan` : "Beton yuk xati saqlandi");
 }
 // Rasmni kattalashtirib ko'rish
@@ -4607,18 +4647,22 @@ async function aiStatus(){
   if (typeof renderBeton === "function") renderBeton();
 }
 function aiKeyRender(){
-  $("#aiKeyState").innerHTML = aiInfo.own ? `✅ Kalitingiz qo'yilgan (…${esc(aiInfo.last4 || "")}). Almashtirish uchun yangisini kiriting.`
+  $("#aiKeyState").innerHTML = aiInfo.own ? `✅ ${aiInfo.provider === "claude" ? "Claude" : "Gemini"} kalitingiz qo'yilgan (…${esc(aiInfo.last4 || "")}). Almashtirish uchun yangisini kiriting.`
     : aiInfo.source === "server" ? "Hozir umumiy (server) kalit ishlatilmoqda. Xohlasangiz, o'zingiznikini qo'yishingiz mumkin."
     : "Kalit qo'yilmagan — beton rasmlari avtomatik o'qilmaydi, qo'lda kiritasiz.";
   $("#aiKeyDel").hidden = !aiInfo.own; $("#aiKeyIn").value = ""; $("#aiKeyErr").textContent = "";
+  if (aiInfo.own && aiInfo.provider) $("#aiProv").value = aiInfo.provider;
+  aiProvUi();
 }
+function aiProvUi(){ const c = $("#aiProv").value === "claude"; $("#aiHowGemini").hidden = c; $("#aiHowClaude").hidden = !c; $("#aiKeyLbl").textContent = c ? "Claude API kalit" : "Gemini API kalit"; $("#aiKeyIn").placeholder = c ? "sk-ant-..." : "AQ... yoki AIza..."; }
+$("#aiProv").addEventListener("change", aiProvUi);
 $("#myAiBtn").addEventListener("click", async () => { $("#aiKey").hidden = false; aiKeyRender(); setTimeout(() => $("#aiKeyIn").focus(), 30); await aiStatus(); aiKeyRender(); });
 $("#aiKeyCancel").addEventListener("click", () => { $("#aiKey").hidden = true; });
 $("#aiKeyForm").addEventListener("submit", async e => {
   e.preventDefault();
   const k = $("#aiKeyIn").value.trim(); if (!k) { $("#aiKeyErr").textContent = "Kalitni kiriting"; return; }
   busy($("#aiKeyOk"), true, "Tekshirilmoqda…");
-  const { data, error } = await sb.functions.invoke("read-waybill", { body: { action: "setkey", key: k } });
+  const { data, error } = await sb.functions.invoke("read-waybill", { body: { action: "setkey", key: k, provider: $("#aiProv").value } });
   busy($("#aiKeyOk"), false, "Saqlash");
   if (error || data?.error) { $("#aiKeyErr").textContent = data?.error || "Saqlab bo'lmadi — read-waybill funksiyasi yangilanganini tekshiring"; return; }
   await aiStatus(); $("#aiKey").hidden = true; toast("Kalit saqlandi — beton rasmlari endi o'zi o'qiladi");
