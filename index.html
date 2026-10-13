@@ -407,6 +407,7 @@ td .ship.pm{display:inline-block;margin:0 0 4px 4px;padding:2px 8px;border-radiu
 .acc-row.acc-sub{padding-left:12px;font-size:12.5px}
 .acc-row.acc-sub b{font-weight:600}
 .acc-row.acc-sub b.neg{color:var(--danger)}
+.li-btns{display:inline-flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
 
 </head>
 <body class="gated">
@@ -2538,7 +2539,7 @@ function renderRef(){
   const buyers = [...new Map([...ref.firms, ...rows.map(r=>r.firm)].filter(Boolean).map(f=>[f.trim().toLowerCase(), f.trim()])).values()].sort((a,b)=>a.localeCompare(b));
   $("#rFirmList").innerHTML = buyers.length
     ? buyers.map(f => { const n = new Set(rows.filter(r=>same(r.firm,f)).map(gk)).size;
-        return `<li><span>${esc(f)}${n?` <span class="dim">· ${n} ta yuk xati</span>`:""}</span><button type="button" class="ghost danger" data-delfirm="${esc(f)}">O'chirish</button></li>`; }).join("")
+        return `<li><span>${esc(f)}${n?` <span class="dim">· ${n} ta yuk xati</span>`:""}</span><span class="li-btns">${ADMIN() && n ? `<button type="button" class="ghost" data-arcfirm="${esc(f)}" title="Ishimiz tugagan firma: hammasi kompyuterga saqlanadi va bazadan o'chiriladi">📦 Arxivga olish</button>` : ""}<button type="button" class="ghost danger" data-delfirm="${esc(f)}">O'chirish</button></span></li>`; }).join("")
     : `<li class="hint">Hali firma saqlanmagan</li>`;
   $("#rSellerList").innerHTML = firmItems("sellers");
   $("#rProdList").innerHTML = ref.products.length
@@ -2841,6 +2842,7 @@ document.addEventListener("click", async e => {
     catch(err){ toast("O'chirib bo'lmadi"); render(); }
   }
   else if (t.dataset.delfirm) deleteBuyerFirm(t.dataset.delfirm);
+  else if (t.dataset.arcfirm) archiveFirm(t.dataset.arcfirm);
   else if (t.dataset.rdel) {
     const k = t.dataset.rdel, item = ref[k][+t.dataset.i], name = typeof item === "string" ? item : item?.name;
     const kind = k === "products" ? "product" : k === "sellers" ? "seller" : "firm";
@@ -3627,16 +3629,67 @@ async function deleteBuyerFirm(name){
     text: `<b>${esc(name)}</b> firmasi ro'yxatdan o'chiriladi${groups ? ` va unga tegishli <b>${groups} ta yuk xati</b> butunlay o'chib ketadi` : ""}${pays.some(p=>same(p.firm,name)) ? `, to'lovlari va narxlari ham o'chadi` : ""}. Bu amalni ortga qaytarib bo'lmaydi. Davom etish uchun o'z parolingizni kiriting.`
   });
   if (!ok) return;
+  if (await purgeFirm(name, items)) toast(groups ? `Firma va uning ${groups} ta yuk xati o'chirildi` : "Firma o'chirildi");
+}
+async function purgeFirm(name, items){
   const photos = [...new Set(items.filter(r => r.hasPhoto).map(photoName))];
   if (photos.length) await sb.storage.from("waybills").remove(photos).catch(() => {});
   const { error } = await sb.rpc("delete_firm", { p_firm: name });
-  if (error) { toast("O'chirishda xato: " + error.message); return; }
+  if (error) { toast("O'chirishda xato: " + error.message); return false; }
   await reloadAll(true);
   if (same(accFirm, name)) accFirm = "";
   if ($("#qFirm").value && same($("#qFirm").value, name)) $("#qFirm").value = "";
   if (editId && !groupItems(editId).length) resetForm();
   scheduleSync();
-  toast(groups ? `Firma va uning ${groups} ta yuk xati o'chirildi` : "Firma o'chirildi");
+  return true;
+}
+const b64bytes = src => { const bin = atob(String(src).split(",")[1] || ""), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
+/* Ishimiz tugagan firma: Excel hisobot (rasmlar bilan), har bir yuk xati blankasi, tasdiqlangan rasmlar va
+   qayta tiklash uchun zaxira fayli kompyuterga saqlanadi — keyin firma bazadan o'chiriladi. */
+async function archiveFirm(name){
+  if (!ADMIN()) { toast("Arxivga olishni faqat bosh admin qila oladi"); return; }
+  const items = rows.filter(r => same(r.firm, name)), keys = [...new Set(items.map(gk))], fp = pays.filter(p => same(p.firm, name));
+  const toFolder = !!(FS.dir && FS.ok);
+  const ok = await requirePassword({ title: "Firmani arxivga olish", okLabel: "Arxivlash", danger: true,
+    text: `<b>${esc(name)}</b> — ${keys.length} ta yuk xati${fp.length ? `, ${fp.length} ta to'lov` : ""}.<br>Hammasi ${toFolder ? `kompyuterdagi <b>«${esc(FS.dir.name)}» papkasining «Arxiv» bo'limiga</b>` : `<b>zip fayl</b> qilib kompyuteringizga`} saqlanadi: Excel hisobot (rasmlar bilan), har bir yuk xati blankasi, tasdiqlangan rasmlar va qayta tiklash uchun zaxira fayli.<br>Saqlangandan keyin firma <b>bazadan o'chiriladi</b>. Davom etish uchun o'z parolingizni kiriting.` });
+  if (!ok) return;
+  if (!M()) { moneyOpen = true; applyMoney(); bumpLock(); }
+  toast("Arxiv tayyorlanmoqda… sahifani yopmang");
+  const stamp = today(), base = `${safeName(plainName(name) || name)} (${stamp})`, files = [];
+  let missing = 0; const photoData = {};
+  try {
+    files.push([`${safeName(plainName(name) || name)} hisobi.xlsx`, await bookBytes(workbookOf(items, { photos: true, fares: true }))]);
+    const used = new Set();
+    for (const k of keys) {
+      const h = groupItems(k)[0]; let nm = `${h.date || "sanasiz"}${h.waybill ? " № " + safeName(h.waybill) : ""}`;
+      for (let i = 2; used.has(nm); i++) nm = `${nm.replace(/ \(\d+\)$/, "")} (${i})`; used.add(nm);
+      files.push([`Yuk xatlari/${nm}.html`, waybillDoc(k)]);
+      if (h.hasPhoto) { const src = await photoGetRow(h).catch(() => null); if (src) { files.push([`Tasdiqlangan rasmlar/${nm}.jpg`, b64bytes(src)]); photoData[photoName(h)] = src; } else missing++; }
+    }
+    const fs2 = {}; items.forEach(r => { if (fares[r.batch] != null) fs2[r.batch] = fares[r.batch]; });
+    files.push(["Zaxira - qayta tiklash uchun.json", JSON.stringify({ app: "savdo-daftari", archived: name, saved: new Date().toISOString(), rows: items,
+      ref: { ...ref, firms: [name], prices: ref.prices.filter(p => same(p.firm, name)) }, pays: fp, fares: fs2, photos: photoData }, null, 1)]);
+    files.push(["O'QING.txt", `${name} — arxiv (${fmtDate(stamp)})\r\n\r\nYuk xatlari: ${keys.length} ta\r\nTo'lovlar: ${fp.length} ta\r\n\r\n` +
+      `«${safeName(plainName(name) || name)} hisobi.xlsx» — to'liq hisobot, rasmlar bilan.\r\n«Yuk xatlari» — har bir yuk xati blankasi (brauzerda ochib chop etiladi).\r\n«Tasdiqlangan rasmlar» — imzolangan nusxalar.\r\n\r\n` +
+      `Firmani bazaga qaytarish kerak bo'lsa: Savdo daftarida bosh admin «Tiklash» tugmasini bosib, «Zaxira - qayta tiklash uchun.json» faylini tanlaydi.\r\n`]);
+  } catch(e) { toast("Arxivni tayyorlab bo'lmadi: " + (e.message || "") + ". Hech narsa o'chirilmadi"); return; }
+  if (missing && !confirm(`${missing} ta tasdiqlangan rasmni serverdan olib bo'lmadi (internetni tekshiring).\nBaribir davom etilsinmi? Bekor qilsangiz, hech narsa o'chirilmaydi.`)) return;
+  if (toFolder) {
+    try {
+      for (const [p, d] of files) await writeTo(FS.dir, `Arxiv/${base}/${p}`, d);
+      // tekshiruv: zaxira fayli papkada to'liq turibdimi
+      let dir = await FS.dir.getDirectoryHandle("Arxiv"); dir = await dir.getDirectoryHandle(base);
+      const back = JSON.parse(await (await (await dir.getFileHandle("Zaxira - qayta tiklash uchun.json")).getFile()).text());
+      if (back.rows.length !== items.length) throw new Error("tekshiruvda farq chiqdi");
+    } catch(e) { toast("Papkaga to'liq yozib bo'lmadi: " + (e.message || "") + ". Firma bazada qoldi"); return; }
+  } else {
+    const zip = new JSZip(); files.forEach(([p, d]) => zip.file(`${base}/${p}`, d));
+    await saveFile(`${base} - arxiv.zip`, await zip.generateAsync({ type: "uint8array", compression: "DEFLATE" }), "application/zip");
+    if (!confirm(`«${base} - arxiv.zip» fayli yuklab olindi.\n\nU kompyuteringizdagi «Yuklanmalar» (Downloads) papkasida turganini tekshiring.\n\nOK — firma bazadan o'chiriladi.\nBekor qilish — firma bazada qoladi.`)) { toast("Arxiv yuklandi, firma bazada qoldi"); return; }
+  }
+  if (!(await purgeFirm(name, items))) return;
+  if (toFolder) await removePath(`Firmalar hisobi/${safeName(name)}.xlsx`);
+  toast(`${plainName(name) || name} arxivga olindi${toFolder ? ` — «${FS.dir.name}/Arxiv/${base}»` : ""}`);
 }
 
 /* ---------- Fayllar: CSV, zaxira nusxa ---------- */
@@ -3893,8 +3946,14 @@ $("#restoreFile").addEventListener("change", async e => {
     const nf = Object.entries(data.fares).filter(([b, f]) => b && Number(f) > 0 && fares[b] == null).map(([batch, fare]) => ({ batch, fare: Number(fare) }));
     if (nf.length) { const { error } = await sb.from("waybill_fares").upsert(nf, { onConflict: "batch" }); if (error) toast(error.message); }
   }
+  // arxivdan tiklanganda tasdiqlangan rasmlar ham serverga qaytariladi
+  let ph = 0;
+  if (data.photos && typeof data.photos === "object") for (const [name, src] of Object.entries(data.photos)) {
+    if (!/^data:image\//.test(String(src))) continue;
+    try { await photoPutRow({ batch: name.replace(/\.jpg$/, "") }, src); ph++; } catch(e) {}
+  }
   await reloadAll(true);
-  toast(added ? `${added} ta yuk xati tiklandi` : "Yangi yuk xati topilmadi, ro'yxatlar yangilandi");
+  toast(added ? `${added} ta yuk xati tiklandi${ph ? `, ${ph} ta rasm bilan` : ""}` : "Yangi yuk xati topilmadi, ro'yxatlar yangilandi");
 });
 
 
