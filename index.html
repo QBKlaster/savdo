@@ -531,6 +531,7 @@ body.sec-none .wrap,body.sec-none .band{display:none}
 body:not(.locked) .money-lock{display:none!important}
 .ml-in{text-align:center;padding:26px 10px}
 .ml-t{font-size:18px;margin:0 0 6px;font-weight:600}
+select.pm-set,input.pm-set{border-color:var(--danger)!important;color:var(--danger);font-weight:600;background-color:color-mix(in srgb,var(--danger) 8%,var(--surface))}
 </style>
 
 </head>
@@ -671,7 +672,7 @@ body:not(.locked) .money-lock{display:none!important}
       </div>
       <div class="hint c12">Firma va mahsulot nomini qo'lda yozishingiz yoki ro'yxatdan tanlashingiz mumkin. Yangi nom saqlanganda ro'yxatga o'zi qo'shiladi. Xaridor firma tanlansa yuk xati raqami shu firmaning oxirgi raqamidan keyingisiga qo'yiladi. Mahsulot tanlansa birligi va narxi, haydovchi tanlansa uning telefoni va avtomobil raqami o'zi to'ladi.</div>
     </form>
-    <datalist id="receiverList"></datalist><datalist id="firmList"></datalist><datalist id="sellerList"></datalist><datalist id="prodList"></datalist><datalist id="driverList"></datalist><datalist id="carList"></datalist><datalist id="phoneList"></datalist><datalist id="loadList"></datalist><datalist id="unloadList"></datalist><datalist id="giverList"></datalist>
+    <datalist id="receiverList"></datalist><datalist id="firmList"></datalist><datalist id="betonFirmList"></datalist><datalist id="sellerList"></datalist><datalist id="prodList"></datalist><datalist id="driverList"></datalist><datalist id="carList"></datalist><datalist id="phoneList"></datalist><datalist id="loadList"></datalist><datalist id="unloadList"></datalist><datalist id="giverList"></datalist>
     <datalist id="unitList"><option value="dona"><option value="kg"><option value="tonna"><option value="m³"><option value="m²"><option value="metr"><option value="litr"><option value="komplekt"></datalist>
   </section>
 
@@ -2827,6 +2828,28 @@ function calcTotal(){
 }
 
 /* ---------- Forma ---------- */
+// Avtomobil raqami yozilsa — shu mashinada oxirgi marta kelgan haydovchi o'zi yoziladi (boshqa bo'lsa qo'lda o'zgartiriladi)
+const carKey = s => String(s || "").replace(/[\s-]+/g, "").toUpperCase();
+function driverForCar(car){
+  const k = carKey(car); if (k.length < 4) return null;
+  const hist = [...rows].sort((a,b)=>sortKey(b).localeCompare(sortKey(a)));
+  return hist.find(r => r.driver && carKey(r.car) === k) || null;
+}
+// «Qaysi hisobdan» — oxirgi tanlov eslab qolinadi
+const pmKey = () => "savdo-pm-" + (me?.id || "");
+function getPm(){ try { const v = localStorage.getItem(pmKey()); return v === "cash" || v === "bank" ? v : ""; } catch(e) { return ""; } }
+function setPm(v){ try { if (v) localStorage.setItem(pmKey(), v); } catch(e) {} }
+const grKey = () => "savdo-grade-" + (me?.id || "");
+function getGrade(){ try { return localStorage.getItem(grKey()) || ""; } catch(e) { return ""; } }
+function setGrade(v){ try { v = String(v || "").trim(); if (v) localStorage.setItem(grKey(), v); } catch(e) {} }
+const pmMark = el => { if (el) el.classList.toggle("pm-set", !!el.value); };
+let autoDriver = "";
+$("#fCar").addEventListener("input", () => {
+  const r = driverForCar($("#fCar").value); if (!r) return;
+  const cur = $("#fDriver").value.trim();
+  if (!cur || cur === autoDriver) { $("#fDriver").value = r.driver; autoDriver = r.driver; if (!$("#fPhone").value.trim() && r.phone) $("#fPhone").value = r.phone; }
+});
+$("#fPay").addEventListener("change", () => { setPm($("#fPay").value); pmMark($("#fPay")); });
 $("#fDriver").addEventListener("change", () => {
   const d = $("#fDriver").value.trim(); if (!d) return;
   const hist = [...rows].sort((a,b)=>sortKey(b).localeCompare(sortKey(a)));
@@ -2841,6 +2864,7 @@ setInterval(() => { if (!editId && !timeTouched) $("#fTime").value = nowTime(); 
 function resetForm(){
   editId = null; autoWb = ""; autoAddr["#fLoad"] = autoAddr["#fUnload"] = ""; $("#entry").reset(); $("#fDate").value = today(); $("#fTime").value = nowTime(); timeTouched = false; $("#fGiver").value = ref.lastGiver || ""; $("#fSeller").value = ref.lastSeller || (ref.sellers.length === 1 ? ref.sellers[0] : "");
   $("#lines").innerHTML = ""; addLine();
+  autoDriver = ""; $("#fPay").value = getPm(); pmMark($("#fPay"));
   if (typeof fillAddr === "function") fillAddr("#fSeller", "seller", "#fLoad");
   $("#formTitle").textContent = "Yangi yuk xati"; $("#saveBtn").textContent = "Saqlash"; $("#cancelEdit").hidden = true;
   if (typeof updateBalance === "function") updateBalance();
@@ -2906,7 +2930,7 @@ function startEdit(key){
   const r = items[0];
   editId = key;
   $("#fDate").value=r.date||""; $("#fTime").value=r.time||""; timeTouched = true; $("#fFirm").value=r.firm||""; $("#fWaybill").value=r.waybill||"";
-  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank";
+  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank"; pmMark($("#fPay")); autoDriver = "";
   $("#fFare").value = fares[r.batch] != null ? fares[r.batch] : "";
   $("#lines").innerHTML = ""; items.forEach(it => addLine(it));
   updateBalance();
@@ -2959,6 +2983,7 @@ function render(){
   const opts = arr => arr.map(x=>`<option value="${esc(x)}">`).join("");
   const col = k => rows.map(r=>r[k]);
   $("#firmList").innerHTML = opts(uniq([...ref.firms, ...col("firm"), ...pays.map(p=>p.firm)]));
+  { const bf = uniq(rows.filter(r => r.kind === "beton").map(r => r.firm)); $("#betonFirmList").innerHTML = bf.length ? opts(bf) : $("#firmList").innerHTML; }
   $("#sellerList").innerHTML = opts(uniq([...ref.sellers, ...col("seller")]));
   if (!editId && !$("#fSeller").value.trim()) $("#fSeller").value = ref.lastSeller || (ref.sellers.length === 1 ? ref.sellers[0] : "");
   $("#prodList").innerHTML = opts(uniq([...ref.products.map(p=>p.name), ...col("product")]));
@@ -4480,8 +4505,8 @@ async function addBetonImages(files){
   for (const f of imgs) {
     let src; try { src = await downscale(f); } catch(e) { toast(`${f.name}: rasmni ochib bo'lmadi`); continue; }
     const card = { id: ++btSeq, src, status: aiCfg().key ? "reading" : "manual", err: "", unsure: [], dupOk: false,
-      f: { date: today(), waybill: "", seller: brand().name || ref.lastSeller || "", firm: "", car: "", driver: "", note: "",
-           items: [{ grade: "", unit: "m³", qty: "", price: "" }] } };
+      f: { date: today(), waybill: "", seller: brand().name || ref.lastSeller || "", firm: "", car: "", driver: "", note: "", payMethod: getPm(),
+           items: [{ grade: getGrade(), unit: "m³", qty: "", price: "" }] } };
     btCards.unshift(card);
     renderBeton();
     if (card.status === "reading") readWithAI(card);
@@ -4520,6 +4545,7 @@ async function readWithAI(card){
     const items = (Array.isArray(d.items) ? d.items : []).filter(x => x && (x.grade || x.qty)).map(x => ({
       grade: String(x.grade || "").replace(/^beton\s*/i, "").toUpperCase(), unit: /m.?3|м.?3|m³|м³|kub/i.test(x.unit || "") || !x.unit ? "m³" : x.unit,
       qty: x.qty ?? "", price: x.price ?? "" }));
+    items.forEach(it => { if (!it.grade) it.grade = getGrade(); });
     card.f = { ...card.f,
       date: /^\d{4}-\d{2}-\d{2}$/.test(d.date || "") ? d.date : card.f.date,
       waybill: d.waybill ? String(d.waybill).trim() : "",
@@ -4528,6 +4554,7 @@ async function readWithAI(card){
       car: d.car ? String(d.car).toUpperCase().replace(/\s+/g, " ").trim() : "",
       driver: d.driver || "", note: d.note || "",
       items: items.length ? items : card.f.items };
+    if (card.f.car && !String(card.f.driver || "").trim()) { const r = driverForCar(card.f.car); if (r) { card.f.driver = r.driver; card.autoDriver = r.driver; } }
     card.unsure = Array.isArray(d.uncertain) ? d.uncertain.map(String) : [];
     card.f.items.forEach(it => { if (!hasPrice({ price: it.price }) || it.price === "") { const p = priceFor(card.f.firm, betonProduct(it.grade), card.f.date); it.price = p ?? ""; } });
     card.status = "done";
@@ -4564,14 +4591,14 @@ function renderBeton(){
           ${cardField(c, "date", "Sana", { type: "date" })}
           ${cardField(c, "waybill", "Yuk xati №", { ph: "64" })}
           ${cardField(c, "seller", "Kimdan (sotuvchi)", { list: "sellerList", cls: "w2" })}
-          ${cardField(c, "firm", "Kimga (xaridor)", { list: "firmList", cls: "w2" })}
+          ${cardField(c, "firm", "Kimga (xaridor) — beton olgan firmalar", { list: "betonFirmList", cls: "w2" })}
           ${cardField(c, "car", "Avtomobil raqami", { list: "carList" })}
           ${cardField(c, "driver", "Haydovchi", { list: "driverList" })}
         </div>
         <div class="bt-items">
           <div class="bt-ihead"><span>Beton markasi</span><span>Birlik</span><span>Miqdori</span><span class="money">Narxi, so'm</span><span></span></div>
           ${c.f.items.map((it, i) => `<div class="bt-irow${c.unsure.includes("grade") || c.unsure.includes("qty") ? " unsure" : ""}">
-            <input aria-label="Beton markasi" data-c="${c.id}" data-i="${i}" data-ik="grade" list="gradeList" value="${esc(it.grade)}" placeholder="B25">
+            <input aria-label="Beton markasi" data-c="${c.id}" data-i="${i}" data-ik="grade" list="gradeList"${it.grade ? ' class="pm-set"' : ""} value="${esc(it.grade)}" placeholder="B25">
             <input aria-label="Birlik" data-c="${c.id}" data-i="${i}" data-ik="unit" list="unitList" value="${esc(it.unit)}">
             <input aria-label="Miqdori" class="num" inputmode="decimal" data-c="${c.id}" data-i="${i}" data-ik="qty" value="${esc(it.qty)}" placeholder="0">
             <input aria-label="Narxi" class="num money" inputmode="decimal" data-c="${c.id}" data-i="${i}" data-ik="price" value="${esc(it.price ?? "")}" placeholder="firma narxi">
@@ -4580,7 +4607,7 @@ function renderBeton(){
           <button type="button" class="add-line sm" data-bt-iadd="${c.id}">+ Marka qo'shish</button>
         </div>
         ${cardField(c, "note", "Izoh", { ph: "ixtiyoriy" })}
-        <div class="f"><label for="bt${c.id}pm">Qaysi hisobdan ayiriladi *</label><select id="bt${c.id}pm" data-c="${c.id}" data-k="payMethod">${[["", "— tanlang —"], ["bank", "Hisob raqam (bank)"], ["cash", "Naqd"]].map(([v, t]) => `<option value="${v}"${(c.f.payMethod || "") === v ? " selected" : ""}>${t}</option>`).join("")}</select></div>
+        <div class="f"><label for="bt${c.id}pm">Qaysi hisobdan ayiriladi *</label><select id="bt${c.id}pm" data-c="${c.id}" data-k="payMethod"${c.f.payMethod ? ' class="pm-set"' : ""}>${[["", "— tanlang —"], ["bank", "Hisob raqam (bank)"], ["cash", "Naqd"]].map(([v, t]) => `<option value="${v}"${(c.f.payMethod || "") === v ? " selected" : ""}>${t}</option>`).join("")}</select></div>
         </fieldset>
         ${dup && !c.dupOk ? `<div class="bt-status bad">Bu firmaga № ${esc(c.f.waybill)} yuk xati avval kiritilgan. Takror bo'lmasligini tekshiring.</div>` : ""}
         <div class="bt-foot">
@@ -4600,6 +4627,9 @@ function renderBeton(){
 $("#btCards").addEventListener("input", e => {
   const t = e.target, c = btCards.find(x => x.id === +t.dataset.c); if (!c) return;
   if (t.dataset.k) { c.f[t.dataset.k] = t.value; c.unsure = c.unsure.filter(u => u !== t.dataset.k && !(t.dataset.k === "firm" && u === "buyer")); }
+  if (t.dataset.k === "payMethod") { setPm(t.value); pmMark(t); }
+  if (t.dataset.k === "car") { const r = driverForCar(t.value), cur = String(c.f.driver || "").trim();
+    if (r && (!cur || cur === c.autoDriver)) { c.f.driver = r.driver; c.autoDriver = r.driver; const el = document.getElementById(`bt${c.id}driver`); if (el) el.value = r.driver; } }
   if (t.dataset.ik) c.f.items[+t.dataset.i][t.dataset.ik] = t.value;
   const sum = c.f.items.reduce((s, it) => s + (it.price !== "" && it.price !== null ? parseNum(it.qty) * parseNum(it.price) : 0), 0);
   const el = document.querySelector(`[data-card="${c.id}"] .bt-sum`); if (el) el.innerHTML = sum ? `Summa: <b>${fmt(sum)}</b> so'm` : "";
@@ -4630,6 +4660,7 @@ async function saveBetonCard(c){
   if (!items.length) { toast("Beton markasi va miqdorini kiriting"); return; }
   if (!String(f.waybill || "").trim()) { toast("Yuk xati raqamini yozing"); const el = document.getElementById(`bt${c.id}waybill`); if (el) el.focus(); return; }
   if (!f.payMethod) { toast("Qaysi hisobdan ayirilishini tanlang: naqd yoki hisob raqam"); const el = document.getElementById(`bt${c.id}pm`); if (el) el.focus(); return; }
+  setGrade(items[0].grade); setPm(f.payMethod);
   for (const it of items) {
     if (!String(it.grade).trim()) { toast("Beton markasini kiriting"); return; }
     if (parseNum(it.qty) <= 0) { toast(`${it.grade}: miqdorini kiriting`); return; }
