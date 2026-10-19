@@ -2840,7 +2840,31 @@ const pmKey = () => "savdo-pm-" + (me?.id || "");
 function getPm(){ try { const v = localStorage.getItem(pmKey()); return v === "cash" || v === "bank" ? v : ""; } catch(e) { return ""; } }
 function setPm(v){ try { if (v) localStorage.setItem(pmKey(), v); } catch(e) {} }
 const grKey = () => "savdo-grade-" + (me?.id || "");
-function getGrade(){ try { return localStorage.getItem(grKey()) || ""; } catch(e) { return ""; } }
+function getGrade(){ try { return localStorage.getItem(grKey()) || lastBetonGrade(); } catch(e) { return lastBetonGrade(); } }
+// bazadagi oxirgi beton markasi (firma berilsa — shu firmaga oxirgi yuborilgani)
+function lastBetonGrade(firm){
+  const r = [...rows].filter(r => r.kind === "beton" && r.product && (!firm || same(r.firm, firm))).sort((a,b)=>sortKey(b).localeCompare(sortKey(a)))[0];
+  return r ? String(r.product).replace(/^beton\s*/i, "").trim() : "";
+}
+// beton kartasida firma tanlanganda: yuk xati raqami (shu firmaning beton yuk xatlari bo'yicha) va marka
+async function btAutoFill(c){
+  const firm = String(c.f.firm || "").trim(); if (!firm) return;
+  const list = await firmWaybills(firm); if (firm !== String(c.f.firm || "").trim()) return;
+  const curWb = String(c.f.waybill || "").trim();
+  if ((!curWb || curWb === c.autoWb) && document.activeElement !== document.getElementById(`bt${c.id}waybill`)) {
+    const k = firm.toLowerCase(), all = wbCache[k] || [], bet = all.filter(r => r.kind === "beton");
+    if (bet.length) wbCache[k] = bet;
+    const nw = nextWaybill(firm); wbCache[k] = all;
+    if (nw) { c.f.waybill = nw; c.autoWb = nw; const el = document.getElementById(`bt${c.id}waybill`); if (el) el.value = nw; }
+  }
+  const it = c.f.items[0], g = lastBetonGrade(firm), gEl = document.querySelector(`[data-c="${c.id}"][data-i="0"][data-ik="grade"]`);
+  if (it && g && gEl !== document.activeElement && (!String(it.grade || "").trim() || it.grade === c.autoGrade)) {
+    it.grade = g; c.autoGrade = g;
+    const el = document.querySelector(`[data-c="${c.id}"][data-i="0"][data-ik="grade"]`); if (el) { el.value = g; el.classList.add("pm-set"); }
+    if (it.price === "" || it.price === null || it.price === undefined) { const p = priceFor(c.f.firm, betonProduct(g), c.f.date);
+      if (p !== null) { it.price = p; const pe = document.querySelector(`[data-c="${c.id}"][data-i="0"][data-ik="price"]`); if (pe) pe.value = p; } }
+  }
+}
 function setGrade(v){ try { v = String(v || "").trim(); if (v) localStorage.setItem(grKey(), v); } catch(e) {} }
 const pmMark = el => { if (el) el.classList.toggle("pm-set", !!el.value); };
 let autoDriver = "";
@@ -4507,6 +4531,7 @@ async function addBetonImages(files){
     const card = { id: ++btSeq, src, status: aiCfg().key ? "reading" : "manual", err: "", unsure: [], dupOk: false,
       f: { date: today(), waybill: "", seller: brand().name || ref.lastSeller || "", firm: "", car: "", driver: "", note: "", payMethod: getPm(),
            items: [{ grade: getGrade(), unit: "m³", qty: "", price: "" }] } };
+    card.autoGrade = card.f.items[0].grade; card.autoPm = card.f.payMethod;
     btCards.unshift(card);
     renderBeton();
     if (card.status === "reading") readWithAI(card);
@@ -4555,6 +4580,7 @@ async function readWithAI(card){
       driver: d.driver || "", note: d.note || "",
       items: items.length ? items : card.f.items };
     if (card.f.car && !String(card.f.driver || "").trim()) { const r = driverForCar(card.f.car); if (r) { card.f.driver = r.driver; card.autoDriver = r.driver; } }
+    if (card.f.firm) btAutoFill(card).then(() => renderBeton()).catch(() => {});
     card.unsure = Array.isArray(d.uncertain) ? d.uncertain.map(String) : [];
     card.f.items.forEach(it => { if (!hasPrice({ price: it.price }) || it.price === "") { const p = priceFor(card.f.firm, betonProduct(it.grade), card.f.date); it.price = p ?? ""; } });
     card.status = "done";
@@ -4627,15 +4653,31 @@ function renderBeton(){
 $("#btCards").addEventListener("input", e => {
   const t = e.target, c = btCards.find(x => x.id === +t.dataset.c); if (!c) return;
   if (t.dataset.k) { c.f[t.dataset.k] = t.value; c.unsure = c.unsure.filter(u => u !== t.dataset.k && !(t.dataset.k === "firm" && u === "buyer")); }
-  if (t.dataset.k === "payMethod") { setPm(t.value); pmMark(t); }
+  if (t.dataset.k === "payMethod") btSharePm(c, t.value);
+  if (t.dataset.k === "firm" && knownName("firm", ref.firms, t.value)) btAutoFill(c).catch(() => {});
+  if (t.dataset.ik === "grade" && t.dataset.i === "0") btShareGrade(c, t.value);
   if (t.dataset.k === "car") { const r = driverForCar(t.value), cur = String(c.f.driver || "").trim();
     if (r && (!cur || cur === c.autoDriver)) { c.f.driver = r.driver; c.autoDriver = r.driver; const el = document.getElementById(`bt${c.id}driver`); if (el) el.value = r.driver; } }
   if (t.dataset.ik) c.f.items[+t.dataset.i][t.dataset.ik] = t.value;
   const sum = c.f.items.reduce((s, it) => s + (it.price !== "" && it.price !== null ? parseNum(it.qty) * parseNum(it.price) : 0), 0);
   const el = document.querySelector(`[data-card="${c.id}"] .bt-sum`); if (el) el.innerHTML = sum ? `Summa: <b>${fmt(sum)}</b> so'm` : "";
 });
+// hisob turi tanlansa — eslab qolinadi va hali tanlanmagan boshqa kartalarga ham qo'yiladi
+function btSharePm(c, v){
+  c.f.payMethod = v; c.autoPm = ""; setPm(v); pmMark(document.getElementById(`bt${c.id}pm`));
+  if (!v) return;
+  btCards.forEach(o => { if (o === c || (o.f.payMethod && o.f.payMethod !== o.autoPm)) return;
+    o.f.payMethod = v; o.autoPm = v; const el = document.getElementById(`bt${o.id}pm`); if (el) { el.value = v; pmMark(el); } });
+}
+function btShareGrade(c, v){
+  v = String(v || "").trim(); if (!v) return;
+  btCards.forEach(o => { const it = o.f.items[0]; if (o === c || !it || (String(it.grade || "").trim() && it.grade !== o.autoGrade)) return;
+    it.grade = v; o.autoGrade = v; const el = document.querySelector(`[data-c="${o.id}"][data-i="0"][data-ik="grade"]`); if (el) { el.value = v; el.classList.add("pm-set"); } });
+}
 $("#btCards").addEventListener("change", e => {
   const t = e.target, c = btCards.find(x => x.id === +t.dataset.c); if (!c) return;
+  if (t.dataset.k === "payMethod") btSharePm(c, t.value);
+  if (t.dataset.k === "firm") btAutoFill(c).then(() => { const el = document.querySelector(`[data-card="${c.id}"] .bt-sum`), sum = c.f.items.reduce((s, it) => s + (it.price !== "" && it.price !== null ? parseNum(it.qty) * parseNum(it.price) : 0), 0); if (el) el.innerHTML = sum ? `Summa: <b>${fmt(sum)}</b> so'm` : ""; });
   if (t.dataset.k === "firm" || t.dataset.ik === "grade" || t.dataset.k === "date") {
     // Qayta chizmasdan, faqat bo'sh narx kataklariga firma narxi qo'yiladi (kursor joyida qoladi)
     c.f.items.forEach((it, i) => { if (it.grade && (it.price === "" || it.price === null)) { const p = priceFor(c.f.firm, betonProduct(it.grade), c.f.date);
