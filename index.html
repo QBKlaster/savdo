@@ -532,6 +532,22 @@ body:not(.locked) .money-lock{display:none!important}
 .ml-in{text-align:center;padding:26px 10px}
 .ml-t{font-size:18px;margin:0 0 6px;font-weight:600}
 select.pm-set,input.pm-set{border-color:var(--danger)!important;color:var(--danger);font-weight:600;background-color:color-mix(in srgb,var(--danger) 8%,var(--surface))}
+/* hisob holati ranglari: 0 — yashil, ortiqcha pul — sariq, qarz — qizil */
+.acc-card.st-zero{border-left:5px solid #1f9d55;background:color-mix(in srgb,#1f9d55 9%,var(--surface))}
+.acc-card.st-over{border-left:5px solid #e0a106;background:color-mix(in srgb,#f2b705 14%,var(--surface))}
+.acc-card.st-debt{border-left:5px solid var(--danger);background:color-mix(in srgb,var(--danger) 9%,var(--surface))}
+.acc-card.st-zero .acc-bal b{color:#1f9d55}.acc-card.st-over .acc-bal b{color:#a87400}.acc-card.st-debt .acc-bal b{color:var(--danger)}
+.pill.zero{background:#1f9d55;color:#fff}.pill.over{background:#f2b705;color:#3a2a00}.pill.debt{background:var(--danger);color:#fff}.pill.none{background:var(--surface-2);color:var(--muted)}
+.acc-proj{font-size:12px;color:var(--muted)}
+.proj-box{margin:6px 0 14px;display:grid;gap:8px}
+.proj-now{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2)}
+.proj-now.st-zero{border-left:5px solid #1f9d55}.proj-now.st-over{border-left:5px solid #e0a106}.proj-now.st-debt{border-left:5px solid var(--danger)}
+.proj-old summary{cursor:pointer;font-size:14px;color:var(--accent);padding:4px 0}
+.proj-old table{font-size:13px}
+.pr-h{display:inline-flex;align-items:center;gap:4px}
+.pr-x{border:0;background:none;color:var(--danger);font-size:15px;line-height:1;padding:0 4px;cursor:pointer;min-height:0}
+.pr-x:hover{background:color-mix(in srgb,var(--danger) 12%,transparent);border-radius:4px}
+.pr-delall{margin-top:4px;font-size:12px}
 </style>
 
 </head>
@@ -706,6 +722,7 @@ select.pm-set,input.pm-set{border-color:var(--danger)!important;color:var(--dang
         <h3 id="accTitle"></h3>
         <button type="button" id="accShow">Yuk xatlarini ko'rsatish</button>
       </div>
+      <div class="proj-box" id="projBox"></div>
       <div class="acc-cols">
         <div>
           <h2>To'lovlar (firma bizga o'tkazgan pul)</h2>
@@ -2493,6 +2510,7 @@ let rows = [], pays = [], ref = {firms:[], sellers:[], products:[], prices:[], l
 
 // Hisob-kitob (narx, summa, to'lov, qarz): xodimlarga hech qachon, rahbariyatga parol kiritilganda ko'rinadi
 let moneyOpen = false;
+let accProj = {};   // { firma (kichik harf): [{ at, by }] } — har bir yopilgan hisob (loyiha) chegarasi
 const M = () => moneyOpen;
 const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
 const parseNum = v => { const n = parseFloat(String(v).replace(/\s/g,"").replace(",", ".")); return isFinite(n) ? n : 0; };
@@ -2593,6 +2611,7 @@ async function reloadAll(silent){
       sellers: refsRows.filter(x => x.kind === "seller").map(x => x.name),
       products: refsRows.filter(x => x.kind === "product").map(x => ({ name: x.name, unit: x.unit || "" })),
       colOrder: st.excel?.colOrder, colHead: st.excel?.colHead, brand: st.brand });
+    accProj = st.acc_projects && typeof st.acc_projects === "object" && !Array.isArray(st.acc_projects) ? st.acc_projects : {};
     ["firms", "sellers"].forEach(k => ref[k].sort((a, b) => a.localeCompare(b)));
     ref.products.sort((a, b) => a.name.localeCompare(b.name));
     refServer = new Set(refsRows.map(x => x.kind + "|" + x.name.trim().toLowerCase()));
@@ -3387,6 +3406,80 @@ function setFirmPrice(firm, product, price, from){
 }
 
 /* ---------- To'lovlar va qoldiq ---------- */
+// Loyihalar: hisob yopilganda shu paytgacha bo'lgan yuk xatlari va to'lovlar eski loyihada qoladi, yangisi 0 dan boshlanadi
+const fkey = f => String(f || "").trim().toLowerCase();
+const tsCache = new Map();
+const tsN = v => { if (!v) return ""; let x = tsCache.get(v); if (x === undefined) { const t = Date.parse(String(v).replace(" ", "T")); x = isNaN(t) ? "" : new Date(t).toISOString(); tsCache.set(v, x); } return x; };
+const rowAt = r => tsN(r.created), payAt = p => tsN(p.at);
+const projCuts = f => (accProj[fkey(f)] || []).map(p => p.at).filter(Boolean).sort();
+function projNow(f){
+  const cuts = projCuts(f), cut = cuts.length ? cuts[cuts.length - 1] : "";
+  const R = rows.filter(r => same(r.firm, f)), Y = pays.filter(p => same(p.firm, f));
+  const del = R.filter(r => rowAt(r) > cut).reduce((s, r) => s + (r.total || 0), 0), paid = Y.filter(p => payAt(p) > cut).reduce((s, p) => s + (p.amount || 0), 0);
+  const carry = cut ? Y.filter(p => payAt(p) <= cut).reduce((s, p) => s + (p.amount || 0), 0) - R.filter(r => rowAt(r) <= cut).reduce((s, r) => s + (r.total || 0), 0) : 0;
+  return { cut, del, paid, carry: Math.abs(carry) < 1 ? 0 : carry, bal: carry + paid - del };
+}
+function balState(f, bal){
+  if (!rows.some(r => same(r.firm, f)) && !pays.some(p => same(p.firm, f))) return "none";
+  return Math.abs(bal) < 1 ? "zero" : bal > 0 ? "over" : "debt";
+}
+function projList(f){
+  const cuts = projCuts(f), R = rows.filter(r => same(r.firm, f)), Y = pays.filter(p => same(p.firm, f));
+  return cuts.map((cut, i) => { const from = i ? cuts[i - 1] : "";
+    const rr = R.filter(r => rowAt(r) > from && rowAt(r) <= cut), yy = Y.filter(p => payAt(p) > from && payAt(p) <= cut);
+    const dates = rr.map(r => r.date).filter(Boolean).sort();
+    return { i: i + 1, from, cut, rows: rr, n: new Set(rr.map(gk)).size, del: rr.reduce((s, r) => s + (r.total || 0), 0), paid: yy.reduce((s, p) => s + (p.amount || 0), 0), d1: dates[0] || "", d2: dates[dates.length - 1] || "" };
+  });
+}
+function renderProjects(){
+  const box = $("#projBox"); if (!box || !accFirm) return;
+  const P = projNow(accFirm), list = projList(accFirm), st = balState(accFirm, P.bal), can = PRIV() && !VIEWING();
+  box.innerHTML = `<div class="proj-now st-${st}">
+      <div><b>${list.length ? `${list.length + 1}-loyiha` : "Hozirgi hisob"}</b>${P.cut ? ` <span class="dim">· ${fmtDate(P.cut.slice(0, 10))} dan boshlangan</span>` : ""}
+        <div class="dim">${st === "zero" ? "Hisob-kitob 0 — yopib, yangi loyihani 0 dan boshlash mumkin." : P.bal < 0 ? `Qarzi bor: <b class="num">${fmt(-P.bal)}</b> so'm` : `Ortiqcha pul (qoldiq): <b class="num">${fmt(P.bal)}</b> so'm`}</div></div>
+      ${can ? `<button type="button" class="${st === "zero" ? "primary" : ""}" id="projClose">📁 Hisobni yopib, yangi loyiha ochish</button>` : ""}
+    </div>
+    ${list.length ? `<details class="proj-old"><summary>Oldingi loyihalar (${list.length})</summary><div class="tbl"><table><thead><tr><th>Loyiha</th><th>Davr</th><th class="r">Yuk xati</th><th class="r">Yuk berildi</th><th class="r">To'landi</th><th></th></tr></thead><tbody>
+      ${list.map((x, j) => `<tr><td>${x.i}-loyiha</td><td class="num">${x.d1 ? fmtDate(x.d1) : "—"} – ${x.d2 ? fmtDate(x.d2) : "—"}<div class="dim">yopildi: ${fmtDate(x.cut.slice(0, 10))}</div></td><td class="r num">${x.n}</td><td class="r num">${fmt(x.del)}</td><td class="r num">${fmt(x.paid)}</td>
+        <td class="r"><button type="button" class="sm" data-proj-show="${x.i}">Yuk xatlari</button>${can && j === list.length - 1 ? ` <button type="button" class="sm ghost danger" data-proj-undo>Yopishni bekor qilish</button>` : ""}</td></tr>`).join("")}
+      </tbody></table></div></details>` : ""}`;
+}
+async function saveProj(){
+  const { error } = await sb.from("settings").upsert({ key: "acc_projects", value: accProj });
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return false; }
+  return true;
+}
+async function delPrices(list, what){
+  const ids = list.map(p => p.id).filter(Boolean); if (!ids.length) return;
+  if (!confirm(`${accFirm} — ${what} o'chirilsinmi?\n\nAvval saqlangan yuk xatlaridagi summalar o'zgarmaydi; bundan keyingi yangi yuk xatlarida bu narx qo'yilmaydi.`)) return;
+  const { error } = await sb.from("firm_prices").delete().in("id", ids);
+  if (error) { toast("O'chirib bo'lmadi: " + error.message); return; }
+  const set = new Set(ids); ref.prices = ref.prices.filter(p => !set.has(p.id)); render(); toast("Narx o'chirildi");
+}
+document.addEventListener("click", async e => {
+  const t = e.target.closest("button"); if (!t || !accFirm) return;
+  if (t.dataset.prdel) { const p = ref.prices.find(x => x.id === t.dataset.prdel); if (p) delPrices([p], `«${p.product}» narxi ${fmt(p.price)} so'm (${fmtDate(p.from)} dan)`); return; }
+  if (t.dataset.prdelall) { const n = t.dataset.prdelall; delPrices(ref.prices.filter(p => same(p.firm, accFirm) && same(p.product, n)), `«${n}» mahsulotining barcha narxlari`); return; }
+  if (t.id === "projClose") {
+    const P = projNow(accFirm), k = fkey(accFirm);
+    const msg = `«${accFirm}» bilan hozirgi hisob-kitob yopiladi va yangi loyiha 0 dan boshlanadi.\n\nEski yuk xatlari va to'lovlar o'chmaydi — «Oldingi loyihalar» ro'yxatida turadi.` +
+      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm yangi loyihaga o'tadi.` : "") + "\n\nDavom etilsinmi?";
+    if (!confirm(msg)) return;
+    // chegara: shu firmaning oxirgi yozuvidan keyin (kompyuter soati noto'g'ri bo'lsa ham eski yozuvlar eski loyihada qoladi)
+    const last = [...rows.filter(r => same(r.firm, accFirm)).map(rowAt), ...pays.filter(p => same(p.firm, accFirm)).map(payAt)].filter(Boolean).sort().pop() || "";
+    let at = new Date().toISOString(); if (last && last >= at) at = new Date(new Date(last).getTime() + 1).toISOString();
+    accProj = { ...accProj, [k]: [...(accProj[k] || []), { at, by: me.full_name || me.login }] };
+    if (await saveProj()) { render(); toast("Hisob yopildi — yangi loyiha 0 dan boshlandi"); }
+  } else if (t.hasAttribute("data-proj-undo")) {
+    if (!confirm("Oxirgi yopish bekor qilinsinmi? Ikki loyiha yana bitta hisobga qo'shiladi.")) return;
+    const k = fkey(accFirm); accProj = { ...accProj, [k]: (accProj[k] || []).slice(0, -1) }; if (!accProj[k].length) delete accProj[k];
+    if (await saveProj()) { render(); toast("Yopish bekor qilindi"); }
+  } else if (t.dataset.projShow) {
+    const x = projList(accFirm)[+t.dataset.projShow - 1]; if (!x) return;
+    $("#qFirm").value = accFirm; $("#qFrom").value = x.d1; $("#qTo").value = x.d2; $$("#chips .chip").forEach(c => c.classList.remove("on"));
+    render(); showPage("archive"); toast(`${x.i}-loyiha yuk xatlari: ${x.d1 ? fmtDate(x.d1) : ""} – ${x.d2 ? fmtDate(x.d2) : ""}`);
+  }
+});
 const delivered = (firm, exceptKey) => rows.filter(r => same(r.firm, firm) && (!exceptKey || gk(r) !== exceptKey)).reduce((s, r) => s + (r.total || 0), 0);
 const paidOf = firm => pays.filter(p => same(p.firm, firm)).reduce((s, p) => s + (p.amount || 0), 0);
 const hasAccount = firm => pays.some(p => same(p.firm, firm));
@@ -3454,23 +3547,24 @@ function renderAccounts(){
   const firms = buyersAll();
   if (accFirm && !firms.some(f => same(f, accFirm))) accFirm = "";
   $("#accCards").innerHTML = firms.length ? firms.map(f => {
-    const del = delivered(f), paid = paidOf(f), bal = paid - del, acc = hasAccount(f);
-    const n = new Set(rows.filter(r => same(r.firm, f)).map(gk)).size;
-    const state = !acc ? "" : bal <= 0 ? `<span class="pill bad">Puli tugagan</span>` : bal < del * 0.1 ? `<span class="pill warn">Puli kam qoldi</span>` : `<span class="pill ok">Pul bor</span>`;
-    return `<button type="button" class="acc-card${same(f, accFirm) ? " on" : ""}${acc && bal <= 0 ? " is-bad" : ""}" data-acc="${esc(f)}">
+    const P = projNow(f), bal = P.bal, st = balState(f, bal);
+    const n = new Set(rows.filter(r => same(r.firm, f) && rowAt(r) > P.cut).map(gk)).size, np = (accProj[fkey(f)] || []).length;
+    return `<button type="button" class="acc-card st-${st}${same(f, accFirm) ? " on" : ""}" data-acc="${esc(f)}">
       <span class="acc-name">${esc(f)}</span>
-      <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(del)}</b></span>
-      <span class="acc-row"><span>To'landi</span><b class="num">${fmt(paid)}</b></span>
-      <span class="acc-row acc-bal ${acc ? (bal < 0 ? "neg" : "pos") : ""}"><span>${!acc ? "To'lov kiritilmagan" : bal < 0 ? "Qarz" : "Qoldiq"}</span><b class="num">${acc ? fmt(Math.abs(bal)) : ""}</b></span>
+      ${np ? `<span class="acc-proj">📁 ${np + 1}-loyiha · ${fmtDate(P.cut.slice(0, 10))} dan</span>` : ""}
+      ${P.carry ? `<span class="acc-row acc-sub"><span>Oldingi loyihadan ${P.carry < 0 ? "qarz" : "qoldiq"}</span><b class="num">${fmt(Math.abs(P.carry))}</b></span>` : ""}
+      <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(P.del)}</b></span>
+      <span class="acc-row"><span>To'landi</span><b class="num">${fmt(P.paid)}</b></span>
+      <span class="acc-row acc-bal"><span>${st === "zero" ? "Hisob" : bal < 0 ? "Qarz" : "Ortiqcha pul (qoldiq)"}</span><b class="num">${fmt(Math.abs(bal))}</b></span>
       ${splitUsed(f) ? ["bank", "cash"].map(m => { const b = paidBy(f, m) - deliveredBy(f, m); return `<span class="acc-row acc-sub"><span>${PM[m]}: ${b < 0 ? "qarz" : "qoldiq"}</span><b class="num ${b < 0 ? "neg" : ""}">${fmt(Math.abs(b))}</b></span>`; }).join("") : ""}
-      <span class="acc-foot"><span class="dim">${n} ta yuk xati</span>${state}</span>
+      <span class="acc-foot"><span class="dim">${n} ta yuk xati</span><span class="pill ${st}">${{ zero: "✓ Hisob 0", over: "Ortiqcha pul bor", debt: "Qarzi bor", none: "Hisob yo'q" }[st]}</span></span>
     </button>`;
   }).join("") : `<p class="hint">Hali xaridor firma yo'q.</p>`;
 
   const d = $("#accDetail");
   if (!accFirm) { d.hidden = true; return; }
   d.hidden = false;
-  $("#accTitle").textContent = accFirm;
+  $("#accTitle").textContent = accFirm; renderProjects();
   if (!$("#payDate").value) $("#payDate").value = today();
   if (!$("#prFrom").value) $("#prFrom").value = today();
   const ps = pays.filter(p => same(p.firm, accFirm)).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.at || "").localeCompare(a.at || ""));
@@ -3488,7 +3582,8 @@ function renderAccounts(){
     const hist = ref.prices.filter(p => same(p.firm, accFirm) && same(p.product, n)).sort((a, b) => (b.from || "").localeCompare(a.from || "") || (b.at || "").localeCompare(a.at || ""));
     const cur = priceFor(accFirm, n, today());
     return `<li><div class="pr-top"><span>${esc(n)}</span><b class="num">${cur !== null ? fmt(cur) + " so'm" : '<span class="dim">narx yo\'q</span>'}</b></div>
-      ${hist.length ? `<div class="pr-hist">${hist.slice(0, 4).map(h => `<span class="num">${fmt(h.price)} — ${fmtDate(h.from)} dan</span>`).join("")}</div>` : ""}</li>`;
+      ${hist.length ? `<div class="pr-hist">${hist.slice(0, 6).map(h => `<span class="num pr-h">${fmt(h.price)} — ${fmtDate(h.from)} dan${h.id && !VIEWING() ? `<button type="button" class="pr-x" data-prdel="${h.id}" title="Shu narxni o'chirish" aria-label="Shu narxni o'chirish">×</button>` : ""}</span>`).join("")}</div>
+        ${!VIEWING() && hist.some(h => h.id) ? `<button type="button" class="ghost danger sm pr-delall" data-prdelall="${esc(n)}">Bu mahsulot narxlarini o'chirish</button>` : ""}` : ""}</li>`;
   }).join("") : `<li class="hint">Bu firmaga hali mahsulot berilmagan.</li>`;
 }
 $("#accCards").addEventListener("click", e => {
@@ -4807,11 +4902,12 @@ async function unlockMoney(text){
   const ok = await requirePassword({ title: "Hisob-kitobni ochish", okLabel: "Ochish",
     text: text || "Narxlar, summalar, to'lovlar va qarzlarni ko'rish uchun o'z parolingizni kiriting." });
   if (!ok) return false;
-  moneyOpen = true; applyMoney(); bumpLock(); toast("Hisob-kitob ochildi"); return true;
+  moneyOpen = true; try { sessionStorage.setItem(moneyKey(), "1"); } catch(e) {} applyMoney(); toast("Hisob-kitob ochildi — o'zingiz «Yopish»ni bosguningizcha ochiq turadi"); return true;
 }
-function lockMoney(){ moneyOpen = false; clearTimeout(lockT); applyMoney(); }
+function lockMoney(){ moneyOpen = false; clearTimeout(lockT); try { sessionStorage.removeItem(moneyKey()); } catch(e) {} applyMoney(); }
 // 10 daqiqa hech narsa qilinmasa, o'zi yopiladi
-function bumpLock(){ if (!M()) return; clearTimeout(lockT); lockT = setTimeout(() => { lockMoney(); toast("Hisob-kitob avtomatik yopildi"); }, 10 * 60 * 1000); }
+function bumpLock(){}
+const moneyKey = () => "savdo-money-" + (me?.id || "");
 ["click","keydown"].forEach(ev => document.addEventListener(ev, bumpLock, true));
 $("#moneyBtn").addEventListener("click", () => M() ? (lockMoney(), toast("Hisob-kitob yopildi")) : unlockMoney());
 
@@ -4915,7 +5011,7 @@ async function afterLogin(user){
   document.body.classList.toggle("can-users", CAN_USERS());
   $("#meName").textContent = me.full_name || me.login;
   $("#meRole").textContent = (ROLE_NAMES[me.role] || me.role) + (!ORG_MAIN() && org.name ? " · " + org.name : "");
-  moneyOpen = false; applyMoney();
+  moneyOpen = false; try { moneyOpen = PRIV() && sessionStorage.getItem(moneyKey()) === "1"; } catch(e) {} applyMoney();
   hideGate();
   setupMenu();
   $("#status").textContent = "Ma'lumotlar onlayn bazada";
