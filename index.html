@@ -564,6 +564,22 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .st-prow i{width:12px;height:12px;border-radius:3px}
 .st-pn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .st-prow b{text-align:right}
+/* narxlanmagan mahsulot ogohlantirishi — sariq, ko'zga tashlanadi, lekin to'smaydi */
+.up-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 12px;padding:9px 12px;border-radius:10px;font-size:13px;
+  background:color-mix(in srgb,#f2b705 16%,var(--surface));border:1px solid color-mix(in srgb,#e0a106 55%,transparent);border-left:5px solid #e0a106;color:var(--ink)}
+.up-ico{font-size:16px;line-height:1}
+.up-chips{display:flex;flex-wrap:wrap;gap:6px;flex-basis:100%}
+.up-chip{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid #e0a106;min-height:0}
+.up-chip small{color:var(--muted)}
+.up-chip:hover{background:color-mix(in srgb,#f2b705 22%,var(--surface))}
+.acc-warn{font-size:12px;font-weight:600;color:#8a5a00;background:color-mix(in srgb,#f2b705 22%,var(--surface));border-radius:6px;padding:3px 7px;line-height:1.3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .acc-warn{color:#ffd36b}}
+:root[data-theme="dark"] .acc-warn{color:#ffd36b}
+.price-list li.pr-need{background:color-mix(in srgb,#f2b705 12%,transparent);border-left:4px solid #e0a106;padding-left:8px}
+.pr-needt{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;font-weight:600;color:#8a5a00;margin-bottom:3px}
+.pr-needt button{font-size:12px;padding:2px 10px;min-height:0}
+.side-badge{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#f2b705;color:#3a2a00;font-size:12px;font-weight:700;display:inline-grid;place-items:center}
+.up-lock{color:#8a5a00;font-weight:600;margin:0 0 10px}
 </style>
 
 </head>
@@ -611,7 +627,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
       <button type="button" data-page="new"><i aria-hidden="true">＋</i>Yangi yuk xati</button>
       <button type="button" data-page="beton"><i aria-hidden="true">📷</i>Beton (rasmdan)</button>
       <button type="button" data-page="archive"><i aria-hidden="true">🗂</i>Arxiv</button>
-      <button type="button" data-page="money" class="priv-only"><i aria-hidden="true">💵</i>Hisob-kitob</button>
+      <button type="button" data-page="money" class="priv-only"><i aria-hidden="true">💵</i>Hisob-kitob<span class="side-badge" id="sbUp" hidden></span></button>
       <button type="button" data-page="stats" class="priv-only"><i aria-hidden="true">📊</i>Statistika</button>
       <button type="button" data-page="refs" class="priv-only"><i aria-hidden="true">🏷</i>Firmalar va mahsulotlar</button>
     </div>
@@ -726,12 +742,13 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
     <p class="hint admin-only bt-admin-hint">Har bir foydalanuvchi o'z bepul Gemini kalitini tepadagi «AI kalitim» orqali qo'yadi — ularning rasmlari o'z kaliti hisobidan o'qiladi. Serverdagi umumiy kalit (Supabase → Edge Functions → Secrets → <b>GEMINI_API_KEY</b>) faqat bosh admin uchun ishlatiladi.</p>
   </section>
 
-  <section class="panel money-lock" id="moneyLock" data-page="money"><div class="ml-in"><p class="ml-t">🔒 Hisob-kitob yopiq</p><p class="hint">Narxlar, to'lovlar va qarzdorlik faqat parol kiritilganda ko'rinadi.</p><button type="button" class="primary" id="moneyLockBtn">Parol bilan ochish</button></div></section>
+  <section class="panel money-lock" id="moneyLock" data-page="money"><div class="ml-in"><p class="ml-t">🔒 Hisob-kitob yopiq</p><p class="hint">Narxlar, to'lovlar va qarzdorlik faqat parol kiritilganda ko'rinadi.</p><p class="up-lock" id="upLock" hidden></p><button type="button" class="primary" id="moneyLockBtn">Parol bilan ochish</button></div></section>
   <section class="panel money" id="accounts" data-page="money">
     <div class="acc-head">
       <h2>Firmalar hisob-kitobi</h2>
       <span class="hint">Firmani bosing: to'lov qo'shish va narx belgilash</span>
     </div>
+    <div class="up-bar" id="upBar" hidden role="status"></div>
     <div class="acc-cards" id="accCards"></div>
     <div class="acc-detail" id="accDetail" hidden>
       <div class="acc-detail-head">
@@ -3574,14 +3591,43 @@ $("#fFirm").addEventListener("input", updateBalance);
 
 let accFirm = "", pendingPayDel = null;
 const buyersAll = () => [...new Map([...ref.firms, ...rows.map(r => r.firm), ...pays.map(p => p.firm)].filter(Boolean).map(f => [f.trim().toLowerCase(), f.trim()])).values()].sort((a, b) => a.localeCompare(b));
+// narxi qo'yilmagan (yoki 0) yuk xati qatorlari — firma bo'yicha
+let UP = new Map();
+function unpricedInfo(){
+  const m = new Map(); if (!PRIV()) return m;
+  rows.forEach(r => { if (!r.firm || !r.product || Number(r.price) > 0) return;
+    const k = fkey(r.firm), x = m.get(k) || { firm: r.firm.trim(), prods: new Map(), wb: new Set() };
+    const pk = fkey(r.product), p = x.prods.get(pk) || { name: r.product.trim(), wb: new Set(), d: r.date || "" };
+    p.wb.add(gk(r)); if (r.date && (!p.d || r.date < p.d)) p.d = r.date; x.prods.set(pk, p); x.wb.add(gk(r)); m.set(k, x); });
+  return m;
+}
+const upNames = x => [...x.prods.values()].map(p => p.name).join(", ");
+function upCard(f){ const x = UP.get(fkey(f)); return x ? `<span class="acc-warn" title="Narxi qo'yilmagan: ${esc(upNames(x))}">⚠ Narxlanmagan: ${esc(upNames(x))} · ${x.wb.size} ta yuk xati</span>` : ""; }
+function renderUnpriced(){
+  const n = UP.size, list = [...UP.values()];
+  const b = $("#sbUp"); if (b) { b.hidden = !n; b.textContent = n; b.title = n ? `${n} ta firmada narxi qo'yilmagan mahsulot bor` : ""; }
+  const html = n ? `<span class="up-ico" aria-hidden="true">⚠</span><span><b>Narxi qo'yilmagan mahsulot bor</b> — ${n} ta firmada. Narx qo'yilmaguncha bu yuk xatlari hisobga 0 bo'lib tushadi.</span>
+    <span class="up-chips">${list.map(x => `<button type="button" class="up-chip" data-up-firm="${esc(x.firm)}">${esc(x.firm)} <small>· ${esc(upNames(x))}</small></button>`).join("")}</span>` : "";
+  const bar = $("#upBar"); if (bar) { bar.hidden = !n; bar.innerHTML = html; }
+  const lk = $("#upLock"); if (lk) { lk.hidden = !n; lk.textContent = n ? `⚠ ${n} ta firmada narxi qo'yilmagan mahsulot bor — ochib, narx qo'ying.` : ""; }
+}
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-up-firm]");
+  if (c) { accFirm = c.dataset.upFirm; pendingPayDel = null; renderAccounts(); $("#accDetail").scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); return; }
+  const s = e.target.closest("[data-up-set]");
+  if (s) { const x = UP.get(fkey(accFirm)), p = x && x.prods.get(fkey(s.dataset.upSet));
+    $("#prProd").value = s.dataset.upSet; $("#prMode").value = "empty"; if (p && p.d) $("#prFrom").value = p.d; $("#prPrice").focus();
+    toast("Narxni yozing — «narxi yozilmagan eski yuk xatlari»ga ham qo'yiladi"); }
+});
 function renderAccounts(){
+  UP = unpricedInfo(); renderUnpriced();
   const firms = buyersAll();
   if (accFirm && !firms.some(f => same(f, accFirm))) accFirm = "";
   $("#accCards").innerHTML = firms.length ? firms.map(f => {
     const P = projNow(f), bal = P.bal, st = balState(f, bal);
     if (P.closed) { const x = projList(f).pop() || { del: 0, paid: 0, n: 0, i: 1 };
       return `<button type="button" class="acc-card st-closed${same(f, accFirm) ? " on" : ""}" data-acc="${esc(f)}">
-      <span class="acc-name">${esc(f)}</span>
+      <span class="acc-name">${esc(f)}</span>${upCard(f)}
       <span class="acc-proj">🔒 ${x.i}-loyiha · hisob ${fmtDate(P.cut.slice(0, 10))} da yopilgan</span>
       <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(x.del)}</b></span>
       <span class="acc-row"><span>To'landi</span><b class="num">${fmt(x.paid)}</b></span>
@@ -3590,7 +3636,7 @@ function renderAccounts(){
     </button>`; }
     const n = new Set(rows.filter(r => same(r.firm, f) && rowAt(r) > P.cut).map(gk)).size, np = (accProj[fkey(f)] || []).length;
     return `<button type="button" class="acc-card st-${st}${same(f, accFirm) ? " on" : ""}" data-acc="${esc(f)}">
-      <span class="acc-name">${esc(f)}</span>
+      <span class="acc-name">${esc(f)}</span>${upCard(f)}
       ${np ? `<span class="acc-proj">📁 ${np + 1}-loyiha · ${fmtDate(P.cut.slice(0, 10))} dan</span>` : ""}
       ${P.carry ? `<span class="acc-row acc-sub"><span>Oldingi loyihadan ${P.carry < 0 ? "qarz" : "qoldiq"}</span><b class="num">${fmt(Math.abs(P.carry))}</b></span>` : ""}
       <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(P.del)}</b></span>
@@ -3621,7 +3667,8 @@ function renderAccounts(){
   $("#priceList").innerHTML = prods.length ? prods.map(n => {
     const hist = ref.prices.filter(p => same(p.firm, accFirm) && same(p.product, n)).sort((a, b) => (b.from || "").localeCompare(a.from || "") || (b.at || "").localeCompare(a.at || ""));
     const cur = priceFor(accFirm, n, today());
-    return `<li><div class="pr-top"><span>${esc(n)}</span><b class="num">${cur !== null ? fmt(cur) + " so'm" : '<span class="dim">narx yo\'q</span>'}</b></div>
+    const upP = (UP.get(fkey(accFirm)) || { prods: new Map() }).prods.get(fkey(n));
+    return `<li${upP ? ' class="pr-need"' : ""}>${upP ? `<div class="pr-needt">⚠ ${upP.wb.size} ta yuk xatida narx yo'q <button type="button" class="sm primary" data-up-set="${esc(n)}">Narx qo'yish</button></div>` : ""}<div class="pr-top"><span>${esc(n)}</span><b class="num">${cur !== null ? fmt(cur) + " so'm" : '<span class="dim">narx yo\'q</span>'}</b></div>
       ${hist.length ? `<div class="pr-hist">${hist.slice(0, 6).map(h => `<span class="num pr-h">${fmt(h.price)} — ${fmtDate(h.from)} dan${h.id && !VIEWING() ? `<button type="button" class="pr-x" data-prdel="${h.id}" title="Shu narxni o'chirish" aria-label="Shu narxni o'chirish">×</button>` : ""}</span>`).join("")}</div>
         ${!VIEWING() && hist.some(h => h.id) ? `<button type="button" class="ghost danger sm pr-delall" data-prdelall="${esc(n)}">Bu mahsulot narxlarini o'chirish</button>` : ""}` : ""}</li>`;
   }).join("") : `<li class="hint">Bu firmaga hali mahsulot berilmagan.</li>`;
@@ -3654,7 +3701,7 @@ $("#prForm").addEventListener("submit", async e => {
   let fixed = 0;
   const mode = $("#prMode").value;
   // qaysi eski yuk xatlari yangi narxga o'tkaziladi
-  const targets = mode === "new" ? [] : rows.filter(r => same(r.firm, accFirm) && same(r.product, prod) && (r.date || "") >= from && (mode === "all" ? r.price !== price : !hasPrice(r)));
+  const targets = mode === "new" ? [] : rows.filter(r => same(r.firm, accFirm) && same(r.product, prod) && (r.date || "") >= from && (mode === "all" ? r.price !== price : !(Number(r.price) > 0)));
   if (mode === "all" && targets.length) {
     const delta = targets.reduce((s, r) => s + Math.round(r.qty * price * 100) / 100 - (r.total || 0), 0);
     const olds = [...new Set(targets.filter(hasPrice).map(r => fmt(r.price)))].join(", ");
