@@ -639,6 +639,34 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .dlg-act{justify-content:flex-end;margin-top:4px}
 @media (max-width:900px){.acc-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.acc-kpi b{font-size:18px}.acc-tools select,.acc-tools .seg,.acc-tools #accPayNew{flex:1 1 auto}.acc-tools #accPayNew{margin-left:0}.dlg-row{grid-template-columns:1fr}.acc-table .acc-go{display:none}}
+/* obyektlar */
+.site-f select{font-weight:500}
+.acc-site1{font-size:12.5px;color:var(--accent);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc-subs{display:grid;gap:4px;margin:2px 0 4px}
+.acc-sub{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:4px 8px;border-radius:7px;background:var(--surface-2);border-left:3px solid var(--line)}
+.acc-sub.st-debt{border-left-color:var(--danger)}.acc-sub.st-over{border-left-color:#e0a106}.acc-sub.st-zero{border-left-color:#1f9d55}.acc-sub.st-closed{border-left-color:#8a98a3}
+.acc-sub b{font-variant-numeric:tabular-nums}.acc-sub.st-debt b{color:var(--danger)}.acc-sub.st-over b{color:#a87400}.acc-sub.st-zero b{color:#17794a}.acc-sub.st-closed b{color:var(--muted)}
+.acc-sn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.acc-table .acc-subs{justify-items:end}.acc-table .acc-sub{min-width:220px}
+.site-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.site-tab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);border-left-width:4px;background:var(--surface);font-size:13px;min-height:0;text-align:left}
+.site-tab b{font-size:14px;font-variant-numeric:tabular-nums}
+.site-tab.st-debt{border-left-color:var(--danger)}.site-tab.st-debt b{color:var(--danger)}
+.site-tab.st-over{border-left-color:#e0a106}.site-tab.st-over b{color:#a87400}
+.site-tab.st-zero{border-left-color:#1f9d55}.site-tab.st-zero b{color:#17794a}
+.site-tab.st-closed{border-left-color:#8a98a3}
+.site-tab.on{background:var(--accent-soft);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.site-assign{padding:10px 14px;border-radius:10px;border:1px dashed color-mix(in srgb,var(--accent) 50%,var(--line));background:color-mix(in srgb,var(--accent-soft) 60%,var(--surface));font-size:13px;display:grid;gap:8px}
+.site-assign-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.site-assign-row label{display:flex;align-items:center;gap:6px}
+.site-assign-row select{min-width:220px}
+.ship.site-tag{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sites-box{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.site-add select{flex:0 1 220px}
+#siteList tr.site-off td{color:var(--muted)}
+.pr-ren{border:0;background:none;padding:0 4px;min-height:0;font-size:13px;cursor:pointer;opacity:.7}.pr-ren:hover{opacity:1}
+@media (max-width:560px){.site-tab{flex:1 1 100%}.acc-table .acc-sub{min-width:0}}
+#paySiteBox{flex-basis:100%}#paySiteBox select{max-width:420px}
 </style>
 
 </head>
@@ -750,9 +778,9 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
       <div class="f c4"><label for="fSeller">Sotuvchi firma</label><input id="fSeller" list="sellerList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
       <div class="f c4"><label for="fFirm">Xaridor firma (kimga sotildi)</label><input id="fFirm" list="firmList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
       <div class="f c2"><label for="fTime">Vaqti (24 soat)</label><input type="time" id="fTime" step="60"></div>
-      <div class="f c2 addr-pad" aria-hidden="true"></div>
-      <div class="f c4"><label for="fLoad">Yuk ortiladigan manzil</label><input id="fLoad" list="loadList" placeholder="Sotuvchi tomondan: qayerdan ortiladi"></div>
-      <div class="f c4"><label for="fUnload">Yuk tushiriladigan manzil</label><input id="fUnload" list="unloadList" placeholder="Xaridor tomondan: qayerga tushiriladi"></div>
+      <div class="f c4 site-f" id="fSiteBox"><label for="fSite">📍 Obyekt (qaysi ish uchun) *</label><select id="fSite"></select></div>
+      <div class="f c3"><label for="fLoad">Yuk ortiladigan manzil</label><input id="fLoad" list="loadList" placeholder="Qayerdan ortiladi"></div>
+      <div class="f c3"><label for="fUnload">Yuk tushiriladigan manzil</label><input id="fUnload" list="unloadList" placeholder="Qayerga tushiriladi"></div>
       <div class="c12 bal" id="fBal" hidden role="status"></div>
       <div class="f c3"><label for="fGiver">Topshiruvchi (F.I.Sh)</label><input id="fGiver" list="giverList" placeholder="Kim topshirdi"></div>
       <div class="f c3"><label for="fReceiver">Qabul qiluvchi (F.I.Sh) <span style="font-weight:400;opacity:.7">— ixtiyoriy</span></label><input id="fReceiver" list="receiverList" placeholder="Kim qabul qiladi"></div>
@@ -819,6 +847,8 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
         <h3 id="accTitle"></h3>
         <button type="button" id="accShow">Yuk xatlarini ko'rsatish</button>
       </div>
+      <div class="site-tabs" id="accSiteTabs" hidden></div>
+      <div class="site-assign" id="accAssign" hidden></div>
       <div class="proj-box" id="projBox"></div>
       <div class="acc-cols">
         <div>
@@ -826,6 +856,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
           <form class="mini-form" id="payForm" autocomplete="off">
             <div class="f"><label for="payDate">Sana</label><input type="date" id="payDate"></div>
             <div class="f"><label for="payMethod">Qanday to'landi</label><select id="payMethod"><option value="bank">Hisob raqamga (bank)</option><option value="cash">Naqd</option></select></div>
+            <div class="f" id="paySiteBox"><label for="paySite">📍 Qaysi obyekt uchun</label><select id="paySite"></select></div>
             <div class="f"><label for="payAmt">Summa, so'm</label><input id="payAmt" class="num" inputmode="decimal" placeholder="0"></div>
             <div class="f grow"><label for="payNote">Izoh</label><input id="payNote" placeholder="masalan, bank o'tkazmasi"></div>
             <button type="submit" class="primary">To'lov qo'shish</button>
@@ -858,7 +889,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
       <div class="f" id="stOrgBox" hidden><label for="stOrg">Korxona</label><select id="stOrg"></select></div>
       <div class="f"><label for="stFrom">Qaysi oydan</label><input type="month" id="stFrom"></div>
       <div class="f"><label for="stTo">Qaysi oygacha</label><input type="month" id="stTo"></div>
-      <div class="f" id="stDimBox"><label for="stDim">Bo'lib ko'rsatish</label><select id="stDim"><option value="product">Mahsulotlar bo'yicha</option><option value="firm">Xaridor firmalar bo'yicha</option></select></div>
+      <div class="f" id="stDimBox"><label for="stDim">Bo'lib ko'rsatish</label><select id="stDim"><option value="product">Mahsulotlar bo'yicha</option><option value="firm">Xaridor firmalar bo'yicha</option><option value="site">Obyektlar bo'yicha</option></select></div>
       <div class="f"><label for="stMeasure">Ko'rsatkich</label><select id="stMeasure"><option value="sum">Summa (so'm)</option><option value="qty">Miqdor (dona, m³ …)</option></select></div>
       <div class="f"><label for="stKind">Diagramma ko'rinishi</label><select id="stKind"><option value="bar">Ustunli</option><option value="pie">Dumaloq (pitsa)</option></select></div>
       <div class="f st-btns"><label>&nbsp;</label><div class="btns"><button type="button" id="stRefresh">Yangilash</button><button type="button" id="stXl">Excel</button></div></div>
@@ -959,6 +990,16 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
         <p class="hint">Narx har bir firma uchun alohida belgilanadi: "Firmalar hisob-kitobi" bo'limida firmani tanlang.</p>
       </div>
     </div>
+    <div class="sites-box" id="sitesBox">
+      <h2>📍 Obyektlar (ish joylari)</h2>
+      <p class="hint">Yuk xati va to'lov qaysi obyekt uchun ekani shu ro'yxatdan tanlanadi. Har obyektning hisob-kitobi alohida yuritiladi. Ishlamay qolgan obyektni «Yopish» bilan ro'yxatdan yashiring — eski yozuvlari saqlanib qoladi.</p>
+      <form class="ref-add site-add" id="siteForm" autocomplete="off">
+        <select id="sRegion" aria-label="Viloyat"></select>
+        <input id="sName" placeholder="Obyekt nomi, masalan: 110 kV podstansiya" aria-label="Obyekt nomi">
+        <button type="submit" class="primary">Qo'shish</button>
+      </form>
+      <div class="tbl"><table><thead><tr><th>Viloyat</th><th>Obyekt</th><th class="r">Yuk xatlari</th><th>Holat</th><th></th></tr></thead><tbody id="siteList"></tbody></table></div>
+    </div>
   </details>
 
   <section class="panel" data-page="archive">
@@ -966,6 +1007,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
       <div class="f"><label for="q">Qidirish</label><input id="q" type="search" placeholder="Firma, mahsulot, yuk xati, haydovchi, telefon, manzil"></div>
       <div class="f"><label for="qKind">Turi</label><select id="qKind"><option value="">Hammasi</option><option value="beton">Beton</option><option value="other">Temir-beton buyumlar</option></select></div>
       <div class="f"><label for="qFirm">Xaridor firma</label><select id="qFirm"><option value="">Barcha firmalar</option></select></div>
+      <div class="f" id="qSiteBox"><label for="qSite">Obyekt</label><select id="qSite"><option value="">Barcha obyektlar</option></select></div>
       <div class="f priv-only"><label for="qBy">Kim yozgan</label><select id="qBy"><option value="">Hamma xodimlar</option></select></div>
       <div class="f"><label for="qFrom">Sanadan</label><input type="date" id="qFrom"></div>
       <div class="f"><label for="qTo">Sanagacha</label><input type="date" id="qTo"></div>
@@ -1069,11 +1111,26 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
   <h3 id="apT">To'lov qo'shish</h3>
   <p class="hint">Firma bizga o'tkazgan pul — shu firmaning hisobiga yoziladi.</p>
   <div class="f"><label for="apFirm">Firma</label><input id="apFirm" list="firmList" placeholder="Firmani tanlang yoki yozing"></div>
+  <div class="f" id="apSiteBox"><label for="apSite">📍 Qaysi obyekt uchun</label><select id="apSite"></select></div>
   <div class="dlg-row"><div class="f"><label for="apDate">Sana</label><input type="date" id="apDate"></div>
   <div class="f"><label for="apMethod">Qanday to'landi</label><select id="apMethod"><option value="bank">Hisob raqamga (bank)</option><option value="cash">Naqd</option></select></div></div>
   <div class="f"><label for="apAmt">Summa, so'm</label><input id="apAmt" class="num" inputmode="decimal" placeholder="0"></div>
   <div class="f"><label for="apNote">Izoh</label><input id="apNote" placeholder="ixtiyoriy"></div>
   <div class="btns dlg-act"><button type="button" id="apCancel">Bekor qilish</button><button type="submit" class="primary">Saqlash</button></div>
+</form></dialog>
+
+<dialog class="dlg" id="siteDlg" aria-labelledby="sdT"><form id="siteDlgF" autocomplete="off" novalidate>
+  <h3 id="sdT">Yangi obyekt</h3>
+  <p class="hint">Yuk qaysi ish joyi uchun chiqayotganini belgilash uchun.</p>
+  <div class="f"><label for="sdRegion">Viloyat</label><select id="sdRegion"></select></div>
+  <div class="f"><label for="sdName">Obyekt nomi</label><input id="sdName" placeholder="masalan: 110 kV podstansiya"></div>
+  <div class="btns dlg-act"><button type="button" id="sdCancel">Bekor qilish</button><button type="submit" class="primary">Qo'shish</button></div>
+</form></dialog>
+<dialog class="dlg" id="txtDlg" aria-labelledby="tdT"><form id="txtDlgF" autocomplete="off" novalidate>
+  <h3 id="tdT"></h3>
+  <p class="hint" id="tdHint"></p>
+  <div class="f"><label for="tdIn" id="tdLbl"></label><input id="tdIn"></div>
+  <div class="btns dlg-act"><button type="button" id="tdCancel">Bekor qilish</button><button type="submit" class="primary" id="tdOk">Saqlash</button></div>
 </form></dialog>
 
 <script>
@@ -2619,7 +2676,84 @@ let rows = [], pays = [], ref = {firms:[], sellers:[], products:[], prices:[], l
 
 // Hisob-kitob (narx, summa, to'lov, qarz): xodimlarga hech qachon, rahbariyatga parol kiritilganda ko'rinadi
 let moneyOpen = false;
-let accProj = {};   // { firma (kichik harf): [{ at, by }] } — har bir yopilgan hisob (loyiha) chegarasi
+let accProj = {};
+let sites = [], SITES_OK = false, accSite;
+const REGIONS = ["Qashqadaryo viloyati", "Navoiy viloyati", "Buxoro viloyati", "Samarqand viloyati", "Surxondaryo viloyati", "Jizzax viloyati", "Sirdaryo viloyati", "Toshkent viloyati", "Toshkent shahri", "Andijon viloyati", "Farg'ona viloyati", "Namangan viloyati", "Xorazm viloyati", "Qoraqalpog'iston Respublikasi"];
+const siteById = id => sites.find(x => x.id === id);
+const siteLbl = id => { const x = siteById(id); return x ? `${x.region.replace(/ viloyati$/, "")} — ${x.name}` : id ? "Noma'lum obyekt" : "Obyekt belgilanmagan"; };
+const siteShort = id => { const x = siteById(id); return x ? x.name : id ? "Noma'lum obyekt" : "Belgilanmagan"; };
+function siteOptions(sel, o = {}){
+  const act = sites.filter(x => x.active || x.id === sel);
+  const groups = [...new Set(act.map(x => x.region))].sort((a, b) => (REGIONS.indexOf(a) + 99) % 99 - (REGIONS.indexOf(b) + 99) % 99 || a.localeCompare(b));
+  return `<option value="">${o.empty || "— obyektni tanlang —"}</option>` + groups.map(g => `<optgroup label="${esc(g)}">${act.filter(x => x.region === g).sort((a, b) => a.name.localeCompare(b.name)).map(x => `<option value="${x.id}"${x.id === sel ? " selected" : ""}>${esc(x.name)}${x.active ? "" : " (yopilgan)"}</option>`).join("")}</optgroup>`).join("") +
+    (PRIV() && !VIEWING() && !o.noNew ? `<option value="__new">＋ Yangi obyekt qo'shish…</option>` : "");
+}
+const siteKey = () => "savdo-site-" + (me?.id || "");
+function getLastSite(){ try { const v = localStorage.getItem(siteKey()) || ""; return siteById(v)?.active ? v : ""; } catch(e) { return ""; } }
+function setLastSite(v){ try { if (v && v !== "__new") localStorage.setItem(siteKey(), v); } catch(e) {} }
+function lastSiteFor(firm){
+  if (!firm) return "";
+  const r = rows.filter(r => same(r.firm, firm) && r.site && siteById(r.site)?.active).sort((a, b) => sortKey(b).localeCompare(sortKey(a)))[0];
+  return r ? r.site : "";
+}
+function fillSiteSel(sel, val){ const el = $(sel); if (!el) return; el.innerHTML = siteOptions(val); el.value = val || ""; if (el.value !== (val || "")) el.value = ""; pmMark(el); }
+const needSite = () => SITES_OK && sites.some(x => x.active);
+// matn so'raydigan kichik oyna (loyiha nomi, obyekt nomi)
+function askText(o){
+  return new Promise(res => {
+    const d = $("#txtDlg"); $("#tdT").textContent = o.title; $("#tdHint").textContent = o.hint || ""; $("#tdLbl").textContent = o.label || ""; $("#tdIn").value = o.value || ""; $("#tdIn").placeholder = o.ph || ""; $("#tdOk").textContent = o.ok || "Saqlash";
+    let done = false; const fin = v => { if (done) return; done = true; d.close(); res(v); };
+    $("#txtDlgF").onsubmit = e => { e.preventDefault(); fin($("#tdIn").value.trim()); };
+    $("#tdCancel").onclick = () => fin(null); d.oncancel = e => { e.preventDefault(); fin(null); };
+    d.showModal(); setTimeout(() => $("#tdIn").focus(), 30);
+  });
+}
+async function addSite(region, name){
+  name = String(name || "").trim(); if (!region || !name) { toast("Viloyat va obyekt nomini kiriting"); return null; }
+  const ex = sites.find(x => same(x.region, region) && same(x.name, name));
+  if (ex) { if (!ex.active) await setSiteActive(ex.id, true); return ex.id; }
+  const { data, error } = await sb.from("sites").insert({ region, name }).select().single();
+  if (error) { toast("Obyektni qo'shib bo'lmadi: " + error.message); return null; }
+  sites.push({ id: data.id, region: data.region, name: data.name, active: true }); render(); toast(`Obyekt qo'shildi: ${siteLbl(data.id)}`); return data.id;
+}
+async function setSiteActive(id, on){
+  const { error } = await sb.from("sites").update({ active: on }).eq("id", id);
+  if (error) { toast(error.message); return; }
+  const x = siteById(id); if (x) x.active = on; render();
+}
+function openSiteDlg(cb){
+  const d = $("#siteDlg"); if (!$("#sdRegion").options.length) $("#sdRegion").innerHTML = REGIONS.map(r => `<option>${esc(r)}</option>`).join("");
+  $("#sdName").value = ""; let done = false; const fin = v => { if (done) return; done = true; d.close(); cb(v); };
+  $("#siteDlgF").onsubmit = async e => { e.preventDefault(); const id = await addSite($("#sdRegion").value, $("#sdName").value); if (id) fin(id); };
+  $("#sdCancel").onclick = () => fin(null); d.oncancel = e => { e.preventDefault(); fin(null); };
+  d.showModal(); setTimeout(() => $("#sdName").focus(), 30);
+}
+// «＋ Yangi obyekt» tanlansa — oyna ochiladi, qo'shilgan obyekt tanlanadi
+function siteSelNew(el, prev, after){
+  if (el.value !== "__new") return false;
+  openSiteDlg(id => { el.innerHTML = siteOptions(id || prev); el.value = id || prev || ""; pmMark(el); if (after) after(el.value); });
+  return true;
+}
+function renderSites(){
+  const box = $("#sitesBox"); if (!box) return; box.hidden = !SITES_OK; if (!SITES_OK) return;
+  if (!$("#sRegion").options.length) $("#sRegion").innerHTML = REGIONS.map(r => `<option>${esc(r)}</option>`).join("");
+  const cnt = id => new Set(rows.filter(r => r.site === id).map(gk)).size;
+  const list = [...sites].sort((a, b) => (b.active - a.active) || (REGIONS.indexOf(a.region) - REGIONS.indexOf(b.region)) || a.name.localeCompare(b.name));
+  $("#siteList").innerHTML = list.length ? list.map(x => { const n = cnt(x.id), used = n || pays.some(p => p.site === x.id);
+    return `<tr class="${x.active ? "" : "site-off"}"><td>${esc(x.region)}</td><td><b>${esc(x.name)}</b></td><td class="r num">${n}</td><td><span class="pill ${x.active ? "zero" : "closed"}">${x.active ? "Faol" : "Yopilgan"}</span></td>
+      <td class="r nw">${VIEWING() ? "" : `<button type="button" class="sm ghost" data-site-ren="${x.id}">Nomini o'zgartirish</button> <button type="button" class="sm ghost" data-site-tog="${x.id}">${x.active ? "Yopish" : "Qayta ochish"}</button>${used ? "" : ` <button type="button" class="sm ghost danger" data-site-del="${x.id}">O'chirish</button>`}`}</td></tr>`; }).join("")
+    : `<tr><td colspan="5" class="empty">Hali obyekt qo'shilmagan. Yuqorida viloyatni tanlab, obyekt nomini yozing.</td></tr>`;
+}
+$("#siteForm").addEventListener("submit", async e => { e.preventDefault(); if (await addSite($("#sRegion").value, $("#sName").value)) $("#sName").value = ""; });
+$("#siteList").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.siteTog) { const x = siteById(b.dataset.siteTog); if (x) await setSiteActive(x.id, !x.active); }
+  else if (b.dataset.siteRen) { const x = siteById(b.dataset.siteRen); if (!x) return;
+    const v = await askText({ title: "Obyekt nomi", hint: x.region, label: "Yangi nomi", value: x.name }); if (!v || v === x.name) return;
+    const { error } = await sb.from("sites").update({ name: v }).eq("id", x.id); if (error) { toast(error.message); return; } x.name = v; render(); toast("Nomi o'zgartirildi"); }
+  else if (b.dataset.siteDel) { const x = siteById(b.dataset.siteDel); if (!x || !confirm(`«${siteLbl(x.id)}» obyekti o'chirilsinmi?`)) return;
+    const { error } = await sb.from("sites").delete().eq("id", x.id); if (error) { toast(error.message); return; } sites = sites.filter(y => y.id !== x.id); render(); toast("Obyekt o'chirildi"); }
+});   // { firma (kichik harf): [{ at, by }] } — har bir yopilgan hisob (loyiha) chegarasi
 const M = () => moneyOpen;
 const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
 const parseNum = v => { const n = parseFloat(String(v).replace(/\s/g,"").replace(",", ".")); return isFinite(n) ? n : 0; };
@@ -2680,7 +2814,7 @@ const fromDb = s => {
   return { id: s.id, batch: s.batch, kind: s.kind || "", date: s.date || "", time: s.time || "", seller: s.seller || "", firm: s.firm || "",
     waybill: s.waybill || "", giver: s.giver || "", receiver: s.receiver || "", driver: s.driver || "", phone: s.phone || "", car: s.car || "", note: s.note || "",
     loadAddr: s.load_addr || "", unloadAddr: s.unload_addr || "", product: s.product, qty: Number(s.qty), unit: s.unit || "",
-    hasPhoto: !!s.has_photo, created: s.created_at, createdBy: s.created_by, payMethod: s.pay_method || "bank",
+    hasPhoto: !!s.has_photo, created: s.created_at, createdBy: s.created_by, payMethod: s.pay_method || "bank", site: s.site_id || "",
     price: m && m.price != null ? Number(m.price) : null, total: m ? Number(m.total || 0) : 0 };
 };
 const toDb = (r, withCreated) => {
@@ -2691,6 +2825,8 @@ const toDb = (r, withCreated) => {
   // Narxni faqat rahbariyat yuboradi; xodim yuborsa ham server e'tiborsiz qoldiradi
   if (PRIV() && r.price != null && r.price !== "") d.price_hint = Number(r.price);
   if (withCreated && r.created) d.created_at = r.created;
+  // obyekt faqat berilganda yoziladi (aks holda eski qiymat o'zgarmaydi); baza yangilanmagan bo'lsa yuborilmaydi
+  if (SITES_OK && "site" in r) d.site_id = r.site && siteById(r.site) ? r.site : null;
   return d;
 };
 async function fetchAll(table, select, build){
@@ -2713,6 +2849,9 @@ async function reloadAll(silent){
       fetchAll("settings", "*", q => q.order("key"))
     ]);
     rows = sales.map(fromDb);
+    // obyektlar ro'yxati (baza hali yangilanmagan bo'lsa — jim o'tkazib yuboriladi)
+    try { sites = (await fetchAll("sites", "*", q => q.order("created_at"))).map(x => ({ id: x.id, region: x.region, name: x.name, active: x.active !== false })); SITES_OK = true; }
+    catch(e) { sites = []; SITES_OK = false; }
     const st = Object.fromEntries(settings.map(x => [x.key, x.value]));
     const keep = { lastGiver: ref.lastGiver, lastSeller: ref.lastSeller };
     ref = normRef({ ...keep,
@@ -2728,7 +2867,7 @@ async function reloadAll(silent){
       const [pr, py, pf, fr] = await Promise.all([fetchAll("firm_prices", "*", q => q.order("created_at")), fetchAll("payments", "*", q => q.order("created_at")), fetchAll("profiles", "*", q => q.order("created_at")), fetchAll("waybill_fares", "batch,fare", q => q.order("batch"))]);
       fares = Object.fromEntries(fr.map(f => [f.batch, Number(f.fare)]));
       ref.prices = pr.map(p => ({ id: p.id, firm: p.firm, product: p.product, price: Number(p.price), from: p.from_date, at: p.created_at }));
-      pays = py.map(p => ({ id: p.id, firm: p.firm, date: p.date || "", amount: Number(p.amount), note: p.note || "", method: p.method || "bank", at: p.created_at }));
+      pays = py.map(p => ({ id: p.id, firm: p.firm, date: p.date || "", amount: Number(p.amount), note: p.note || "", method: p.method || "bank", at: p.created_at, site: p.site_id || "" }));
       profilesById = Object.fromEntries(pf.map(p => [p.id, p]));
     } else { ref.prices = []; pays = []; fares = {}; profilesById = { [me.id]: me }; }
     render(); if (typeof renderBeton === "function") renderBeton();
@@ -2985,6 +3124,7 @@ async function btAutoFill(c){
     const nw = nextWaybill(firm); wbCache[k] = all;
     if (nw) { c.f.waybill = nw; c.autoWb = nw; const el = document.getElementById(`bt${c.id}waybill`); if (el) el.value = nw; }
   }
+  if (SITES_OK && (!c.f.site || c.f.site === c.autoSite)) { const v = lastSiteFor(firm); if (v) { c.f.site = v; c.autoSite = v; const el = document.getElementById(`bt${c.id}site`); if (el) { el.value = v; pmMark(el); } } }
   const it = c.f.items[0], g = lastBetonGrade(firm), gEl = document.querySelector(`[data-c="${c.id}"][data-i="0"][data-ik="grade"]`);
   if (it && g && gEl !== document.activeElement && (!String(it.grade || "").trim() || it.grade === c.autoGrade)) {
     it.grade = g; c.autoGrade = g;
@@ -3002,6 +3142,17 @@ $("#fCar").addEventListener("input", () => {
   if (!cur || cur === autoDriver) { $("#fDriver").value = r.driver; autoDriver = r.driver; if (!$("#fPhone").value.trim() && r.phone) $("#fPhone").value = r.phone; }
 });
 $("#fPay").addEventListener("change", () => { setPm($("#fPay").value); pmMark($("#fPay")); });
+// obyekt: firma tanlansa — shu firmaga oxirgi marta yozilgan obyekt o'zi qo'yiladi (qo'lda tanlangani o'zgarmaydi)
+let autoSite = "";
+function fillSite(){
+  if (editId || !SITES_OK) return;
+  const cur = $("#fSite").value; if (cur && cur !== autoSite) return;
+  const v = lastSiteFor($("#fFirm").value.trim()) || cur || getLastSite();
+  $("#fSite").value = v; if ($("#fSite").value !== v) $("#fSite").value = ""; autoSite = $("#fSite").value; pmMark($("#fSite"));
+}
+$("#fFirm").addEventListener("change", fillSite);
+$("#fFirm").addEventListener("input", e => { if (knownName("firm", ref.firms, e.target.value)) fillSite(); });
+$("#fSite").addEventListener("change", e => { if (siteSelNew(e.target, autoSite, () => updateBalance())) return; autoSite = ""; pmMark(e.target); updateBalance(); });
 $("#fDriver").addEventListener("change", () => {
   const d = $("#fDriver").value.trim(); if (!d) return;
   const hist = [...rows].sort((a,b)=>sortKey(b).localeCompare(sortKey(a)));
@@ -3017,6 +3168,7 @@ function resetForm(){
   editId = null; autoWb = ""; autoAddr["#fLoad"] = autoAddr["#fUnload"] = ""; $("#entry").reset(); $("#fDate").value = today(); $("#fTime").value = nowTime(); timeTouched = false; $("#fGiver").value = ref.lastGiver || ""; $("#fSeller").value = ref.lastSeller || (ref.sellers.length === 1 ? ref.sellers[0] : "");
   $("#lines").innerHTML = ""; addLine();
   autoDriver = ""; $("#fPay").value = getPm(); pmMark($("#fPay"));
+  if (typeof fillSiteSel === "function") { fillSiteSel("#fSite", getLastSite()); autoSite = $("#fSite").value; }
   if (typeof fillAddr === "function") fillAddr("#fSeller", "seller", "#fLoad");
   $("#formTitle").textContent = "Yangi yuk xati"; $("#saveBtn").textContent = "Saqlash"; $("#cancelEdit").hidden = true;
   if (typeof updateBalance === "function") updateBalance();
@@ -3034,13 +3186,16 @@ $("#entry").addEventListener("submit", async e => {
   }
   if (!$("#fWaybill").value.trim()) { toast("Yuk xati raqamini yozing"); $("#fWaybill").focus(); return; }
   if (!$("#fPay").value) { toast("Qaysi hisobdan ayirilishini tanlang: naqd yoki hisob raqam"); $("#fPay").focus(); return; }
+  if (needSite() && !siteById($("#fSite").value)) { toast("Obyektni tanlang — yuk qaysi ish uchun chiqayotgani"); $("#fSite").focus(); return; }
   const oldItems = editId ? groupItems(editId) : [];
   const old = oldItems[0] || null;
   const head = {
     date: $("#fDate").value, time: $("#fTime").value || (old?.time ?? (editId ? "" : nowTime())), seller: $("#fSeller").value.trim(), firm: $("#fFirm").value.trim(), waybill: $("#fWaybill").value.trim(),
     giver: $("#fGiver").value.trim(), receiver: $("#fReceiver").value.trim(), driver: $("#fDriver").value.trim(), phone: $("#fPhone").value.trim(), loadAddr: $("#fLoad").value.trim(), unloadAddr: $("#fUnload").value.trim(), car: $("#fCar").value.trim().toUpperCase(),
-    note: $("#fNote").value.trim(), payMethod: $("#fPay").value, batch: old?.batch || newId()
+    note: $("#fNote").value.trim(), payMethod: $("#fPay").value, batch: old?.batch || newId(),
+    ...(SITES_OK ? { site: siteById($("#fSite").value) ? $("#fSite").value : "" } : {})
   };
+  setLastSite(head.site);
   const wantPrint = e.submitter && e.submitter.id === "savePrintBtn";
   const now = Date.now(), ids = [];
   try {
@@ -3068,7 +3223,7 @@ $("#entry").addEventListener("submit", async e => {
   savePrefs();
   if (refChanged) await saveRef(); else render();
   delete wbCache[head.firm.trim().toLowerCase()];
-  const st = head.firm ? await moneyState(head.firm, null, null, head.payMethod) : "none";
+  const st = head.firm ? await moneyState(head.firm, null, null, head.payMethod, head.site) : "none";
   toast(st === "out" ? "Saqlandi. Diqqat: firmaning puli tugagan"
     : (editId ? "Yuk xati o'zgartirildi" : (lines.length>1 ? `Yuk xati saqlandi: ${lines.length} ta mahsulot` : "Saqlandi")));
   const savedKey = "b:" + head.batch;
@@ -3082,7 +3237,7 @@ function startEdit(key){
   const r = items[0];
   editId = key;
   $("#fDate").value=r.date||""; $("#fTime").value=r.time||""; timeTouched = true; $("#fFirm").value=r.firm||""; $("#fWaybill").value=r.waybill||"";
-  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank"; pmMark($("#fPay")); autoDriver = "";
+  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank"; pmMark($("#fPay")); autoDriver = ""; fillSiteSel("#fSite", r.site || ""); autoSite = "";
   $("#fFare").value = fares[r.batch] != null ? fares[r.batch] : "";
   $("#lines").innerHTML = ""; items.forEach(it => addLine(it));
   updateBalance();
@@ -3106,12 +3261,14 @@ function setPreset(p){
   render();
 }
 $$(".chip[data-p]").forEach(c => c.addEventListener("click", () => setPreset(c.dataset.p)));
-["#q","#qFirm","#qKind","#qBy"].forEach(s => $(s).addEventListener("input", render));
+["#q","#qFirm","#qKind","#qBy","#qSite"].forEach(s => $(s).addEventListener("input", render));
 ["#qFrom","#qTo"].forEach(s => $(s).addEventListener("input", () => { $$(".chip[data-p]").forEach(c=>c.classList.remove("on")); render(); }));
 
 function filtered(){
   const q = $("#q").value.trim().toLowerCase(), f = $("#qFirm").value, from = $("#qFrom").value, to = $("#qTo").value, kd = $("#qKind").value, by = PRIV() ? $("#qBy").value : "";
+  const sf = SITES_OK ? $("#qSite").value : "";
   return rows.filter(r =>
+    (!sf || (sf === "__none" ? !r.site : r.site === sf)) &&
     (!by || r.createdBy === by) &&
     (!kd || (kd === "beton" ? r.kind === "beton" : r.kind !== "beton")) &&
     (!f || (f===NO_FIRM ? !r.firm : r.firm===f)) &&
@@ -3147,6 +3304,12 @@ function render(){
   $("#giverList").innerHTML = opts(uniq([ref.lastGiver, ...col("giver")]));
   $("#receiverList").innerHTML = opts(uniq(col("receiver")));
   renderRef();
+  $("#fSiteBox").hidden = $("#qSiteBox").hidden = $("#paySiteBox").hidden = $("#apSiteBox").hidden = !SITES_OK;
+  if (SITES_OK) {
+    { const v = $("#fSite").value; $("#fSite").innerHTML = siteOptions(v); $("#fSite").value = v; if ($("#fSite").value !== v) $("#fSite").value = ""; pmMark($("#fSite")); }
+    { const v = $("#qSite").value; $("#qSite").innerHTML = `<option value="">Barcha obyektlar</option>` + [...sites].sort((a, b) => siteLbl(a.id).localeCompare(siteLbl(b.id))).map(x => `<option value="${x.id}">${esc(siteLbl(x.id))}</option>`).join("") + (rows.some(r => !r.site) ? `<option value="__none">Obyekt belgilanmagan</option>` : ""); $("#qSite").value = v; if ($("#qSite").value !== v) $("#qSite").value = ""; }
+  }
+  renderSites();
 
   const firms = [...new Set(col("firm").filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   const cur = $("#qFirm").value;
@@ -3181,6 +3344,7 @@ function render(){
         html += `<tr class="month"><td colspan="4">${label}</td><td class="r num nw money">${fmt(ms)}</td><td></td></tr>`;
       }
       const ship = [
+        SITES_OK && r.site ? `<span class="ship site-tag" title="${esc(siteLbl(r.site))}">📍 ${esc(siteShort(r.site))}</span>` : "",
         `<span class="ship pm pm-${r.payMethod === "cash" ? "cash" : "bank"}">${PM[r.payMethod === "cash" ? "cash" : "bank"]}</span>`,
         r.giver ? `<span class="ship dim">Topshirdi: ${esc(r.giver)}</span>` : "",
         PRIV() && r.createdBy ? byBadge(r) : "",
@@ -3520,42 +3684,47 @@ const fkey = f => String(f || "").trim().toLowerCase();
 const tsCache = new Map();
 const tsN = v => { if (!v) return ""; let x = tsCache.get(v); if (x === undefined) { const t = Date.parse(String(v).replace(" ", "T")); x = isNaN(t) ? "" : new Date(t).toISOString(); tsCache.set(v, x); } return x; };
 const rowAt = r => tsN(r.created), payAt = p => tsN(p.at);
-const projCuts = f => (accProj[fkey(f)] || []).map(p => p.at).filter(Boolean).sort();
-function projNow(f){
-  const cuts = projCuts(f), cut = cuts.length ? cuts[cuts.length - 1] : "";
-  const R = rows.filter(r => same(r.firm, f)), Y = pays.filter(p => same(p.firm, f));
+const accK = (f, s) => s ? fkey(f) + "|" + s : fkey(f);
+const projName = (f, s, i) => ((accProj.__names || {})[accK(f, s) + "#" + i]) || "";
+const projTitle = (f, s, i) => projName(f, s, i) || `${i}-loyiha`;
+const projCuts = (f, s) => (accProj[accK(f, s)] || []).map(p => p.at).filter(Boolean).sort();
+function projNow(f, s){
+  const cuts = projCuts(f, s), cut = cuts.length ? cuts[cuts.length - 1] : "";
+  const R = rows.filter(r => same(r.firm, f) && inSite(r, s)), Y = pays.filter(p => same(p.firm, f) && inSite(p, s));
   const del = R.filter(r => rowAt(r) > cut).reduce((s, r) => s + (r.total || 0), 0), paid = Y.filter(p => payAt(p) > cut).reduce((s, p) => s + (p.amount || 0), 0);
   const carry = cut ? Y.filter(p => payAt(p) <= cut).reduce((s, p) => s + (p.amount || 0), 0) - R.filter(r => rowAt(r) <= cut).reduce((s, r) => s + (r.total || 0), 0) : 0;
-  const lastP = (accProj[fkey(f)] || []).slice().sort((a, b) => (a.at || "").localeCompare(b.at || "")).pop();
+  const lastP = (accProj[accK(f, s)] || []).slice().sort((a, b) => (a.at || "").localeCompare(b.at || "")).pop();
   const after = R.some(r => rowAt(r) > cut) || Y.some(p => payAt(p) > cut);
   return { cut, del, paid, carry: Math.abs(carry) < 1 ? 0 : carry, bal: carry + paid - del, closed: !!(lastP && lastP.closed && !after) };
 }
-function balState(f, bal){
-  if (!rows.some(r => same(r.firm, f)) && !pays.some(p => same(p.firm, f))) return "none";
+function balState(f, bal, s){
+  if (!rows.some(r => same(r.firm, f) && inSite(r, s)) && !pays.some(p => same(p.firm, f) && inSite(p, s))) return "none";
   return Math.abs(bal) < 1 ? "zero" : bal > 0 ? "over" : "debt";
 }
-function projList(f){
-  const cuts = projCuts(f), R = rows.filter(r => same(r.firm, f)), Y = pays.filter(p => same(p.firm, f));
+function projList(f, s){
+  const cuts = projCuts(f, s), R = rows.filter(r => same(r.firm, f) && inSite(r, s)), Y = pays.filter(p => same(p.firm, f) && inSite(p, s));
   return cuts.map((cut, i) => { const from = i ? cuts[i - 1] : "";
     const rr = R.filter(r => rowAt(r) > from && rowAt(r) <= cut), yy = Y.filter(p => payAt(p) > from && payAt(p) <= cut);
     const dates = rr.map(r => r.date).filter(Boolean).sort();
-    return { i: i + 1, from, cut, closed: !!((accProj[fkey(f)] || []).find(p => p.at === cut) || {}).closed, rows: rr, n: new Set(rr.map(gk)).size, del: rr.reduce((s, r) => s + (r.total || 0), 0), paid: yy.reduce((s, p) => s + (p.amount || 0), 0), d1: dates[0] || "", d2: dates[dates.length - 1] || "" };
+    return { i: i + 1, from, cut, closed: !!((accProj[accK(f, s)] || []).find(p => p.at === cut) || {}).closed, rows: rr, n: new Set(rr.map(gk)).size, del: rr.reduce((s, r) => s + (r.total || 0), 0), paid: yy.reduce((s, p) => s + (p.amount || 0), 0), d1: dates[0] || "", d2: dates[dates.length - 1] || "" };
   });
 }
 function renderProjects(){
   const box = $("#projBox"); if (!box || !accFirm) return;
-  const P = projNow(accFirm), list = projList(accFirm), st = balState(accFirm, P.bal), can = PRIV() && !VIEWING();
+  const S = accSite, P = projNow(accFirm, S), list = projList(accFirm, S), st = balState(accFirm, P.bal, S), can = PRIV() && !VIEWING();
+  const ren = i => can ? ` <button type="button" class="pr-ren" data-proj-name="${i}" title="Loyihaga nom berish" aria-label="Loyihaga nom berish">✏️</button>` : "";
+  const curI = P.closed ? list.length : list.length + 1;
   box.innerHTML = P.closed ? `<div class="proj-now st-closed">
-      <div><b>🔒 Hisob yopilgan</b> <span class="dim">· ${fmtDate(P.cut.slice(0, 10))}</span>
+      <div><b>🔒 ${esc(projTitle(accFirm, S, curI))} — hisob yopilgan</b>${ren(curI)} <span class="dim">· ${fmtDate(P.cut.slice(0, 10))}</span>
         <div class="dim">${Math.abs(P.bal) < 1 ? "Hisob-kitob 0 da yopilgan." : P.bal < 0 ? `Yopilganda qarz qolgan: <b class="num">${fmt(-P.bal)}</b> so'm.` : `Yopilganda ortiqcha pul qolgan: <b class="num">${fmt(P.bal)}</b> so'm.`} Shu firmaga yangi yuk xati yoki to'lov yozilsa, yangi loyiha o'zi ochiladi.</div></div>
       ${can ? `<span class="btns"><button type="button" class="primary" id="projOpen">📁 Yangi loyiha ochish</button><button type="button" class="ghost danger" data-proj-undo>Yopishni bekor qilish</button></span>` : ""}
     </div>` : `<div class="proj-now st-${st}">
-      <div><b>${list.length ? `${list.length + 1}-loyiha` : "Hozirgi hisob"}</b>${P.cut ? ` <span class="dim">· ${fmtDate(P.cut.slice(0, 10))} dan boshlangan</span>` : ""}
+      <div><b>${projName(accFirm, S, curI) ? esc(projName(accFirm, S, curI)) : list.length ? `${curI}-loyiha` : "Hozirgi hisob"}</b>${ren(curI)}${P.cut ? ` <span class="dim">· ${fmtDate(P.cut.slice(0, 10))} dan boshlangan</span>` : ""}
         <div class="dim">${st === "zero" ? "Hisob-kitob 0 — yopish mumkin." : P.bal < 0 ? `Qarzi bor: <b class="num">${fmt(-P.bal)}</b> so'm` : `Ortiqcha pul (qoldiq): <b class="num">${fmt(P.bal)}</b> so'm`}</div></div>
       ${can ? `<span class="btns"><button type="button" class="${st === "zero" ? "primary" : ""}" id="projLock">🔒 Hisobni yopish</button><button type="button" id="projClose">📁 Yopib, yangi loyiha ochish</button></span>` : ""}
     </div>
     ${list.length ? `<details class="proj-old"><summary>Oldingi loyihalar (${list.length})</summary><div class="tbl"><table><thead><tr><th>Loyiha</th><th>Davr</th><th class="r">Yuk xati</th><th class="r">Yuk berildi</th><th class="r">To'landi</th><th></th></tr></thead><tbody>
-      ${list.map((x, j) => `<tr><td>${x.i}-loyiha</td><td class="num">${x.d1 ? fmtDate(x.d1) : "—"} – ${x.d2 ? fmtDate(x.d2) : "—"}<div class="dim">yopildi: ${fmtDate(x.cut.slice(0, 10))}</div></td><td class="r num">${x.n}</td><td class="r num">${fmt(x.del)}</td><td class="r num">${fmt(x.paid)}</td>
+      ${list.map((x, j) => `<tr><td>${esc(projTitle(accFirm, S, x.i))}${ren(x.i)}</td><td class="num">${x.d1 ? fmtDate(x.d1) : "—"} – ${x.d2 ? fmtDate(x.d2) : "—"}<div class="dim">yopildi: ${fmtDate(x.cut.slice(0, 10))}</div></td><td class="r num">${x.n}</td><td class="r num">${fmt(x.del)}</td><td class="r num">${fmt(x.paid)}</td>
         <td class="r"><button type="button" class="sm" data-proj-show="${x.i}">Yuk xatlari</button>${can && j === list.length - 1 ? ` <button type="button" class="sm ghost danger" data-proj-undo>Yopishni bekor qilish</button>` : ""}</td></tr>`).join("")}
       </tbody></table></div></details>` : ""}`;
 }
@@ -3577,44 +3746,56 @@ document.addEventListener("click", async e => {
   if (t.dataset.prdelall) { const n = t.dataset.prdelall; delPrices(ref.prices.filter(p => same(p.firm, accFirm) && same(p.product, n)), `«${n}» mahsulotining barcha narxlari`); return; }
   if (t.id === "projClose" || t.id === "projLock") {
     const lockOnly = t.id === "projLock";
-    const P = projNow(accFirm), k = fkey(accFirm);
-    const msg = lockOnly ? `«${accFirm}» bilan hisob-kitob yopiladi. Yangi loyiha hozircha ochilmaydi — kerak bo'lganda «Yangi loyiha ochish»ni bosasiz (yoki shu firmaga yangi yuk xati yozilsa, o'zi ochiladi).` +
-      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm.` : "") + "\n\nDavom etilsinmi?" : `«${accFirm}» bilan hozirgi hisob-kitob yopiladi va yangi loyiha 0 dan boshlanadi.\
+    const S = accSite, P = projNow(accFirm, S), k = accK(accFirm, S), where = SITES_OK && S !== undefined ? ` (📍 ${siteLbl(S)})` : "";
+    const msg = lockOnly ? `«${accFirm}»${where} bilan hisob-kitob yopiladi. Yangi loyiha hozircha ochilmaydi — kerak bo'lganda «Yangi loyiha ochish»ni bosasiz (yoki shu firmaga yangi yuk xati yozilsa, o'zi ochiladi).` +
+      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm.` : "") + "\n\nDavom etilsinmi?" : `«${accFirm}»${where} bilan hozirgi hisob-kitob yopiladi va yangi loyiha 0 dan boshlanadi.\
 \
 Eski yuk xatlari va to'lovlar o'chmaydi — «Oldingi loyihalar» ro'yxatida turadi.` +
       (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm yangi loyihaga o'tadi.` : "") + "\n\nDavom etilsinmi?";
     if (!confirm(msg)) return;
     // chegara: shu firmaning oxirgi yozuvidan keyin (kompyuter soati noto'g'ri bo'lsa ham eski yozuvlar eski loyihada qoladi)
-    const last = [...rows.filter(r => same(r.firm, accFirm)).map(rowAt), ...pays.filter(p => same(p.firm, accFirm)).map(payAt)].filter(Boolean).sort().pop() || "";
+    const last = [...rows.filter(r => same(r.firm, accFirm) && inSite(r, S)).map(rowAt), ...pays.filter(p => same(p.firm, accFirm) && inSite(p, S)).map(payAt)].filter(Boolean).sort().pop() || "";
+    let nm = "";
+    if (!lockOnly) { nm = await askText({ title: "Yangi loyiha nomi", hint: "Masalan: «Navoiy — 2-bosqich» yoki «2027 yil shartnomasi». Bo'sh qoldirsangiz, raqam bilan nomlanadi.", label: "Loyiha nomi (ixtiyoriy)", ok: "Ochish" }); if (nm === null) return; }
     let at = new Date().toISOString(); if (last && last >= at) at = new Date(new Date(last).getTime() + 1).toISOString();
     accProj = { ...accProj, [k]: [...(accProj[k] || []), { at, by: me.full_name || me.login, ...(lockOnly ? { closed: true } : {}) }] };
+    if (nm) accProj.__names = { ...(accProj.__names || {}), [k + "#" + (accProj[k].length + 1)]: nm };
     if (await saveProj()) { render(); toast(lockOnly ? "Hisob yopildi" : "Hisob yopildi — yangi loyiha 0 dan boshlandi"); }
   } else if (t.id === "projOpen") {
-    const k = fkey(accFirm), list = (accProj[k] || []).map(p => ({ ...p })); const l = list[list.length - 1]; if (!l) return;
+    const k = accK(accFirm, accSite), list = (accProj[k] || []).map(p => ({ ...p })); const l = list[list.length - 1]; if (!l) return;
+    const nm = await askText({ title: "Yangi loyiha nomi", hint: "Bo'sh qoldirsangiz, raqam bilan nomlanadi.", label: "Loyiha nomi (ixtiyoriy)", ok: "Ochish" }); if (nm === null) return;
     delete l.closed; accProj = { ...accProj, [k]: list };
+    if (nm) accProj.__names = { ...(accProj.__names || {}), [k + "#" + (list.length + 1)]: nm };
     if (await saveProj()) { render(); toast("Yangi loyiha ochildi — hisob 0 dan boshlandi"); }
   } else if (t.hasAttribute("data-proj-undo")) {
     if (!confirm("Oxirgi yopish bekor qilinsinmi? Ikki loyiha yana bitta hisobga qo'shiladi.")) return;
-    const k = fkey(accFirm); accProj = { ...accProj, [k]: (accProj[k] || []).slice(0, -1) }; if (!accProj[k].length) delete accProj[k];
+    const k = accK(accFirm, accSite); accProj = { ...accProj, [k]: (accProj[k] || []).slice(0, -1) }; if (!accProj[k].length) delete accProj[k];
     if (await saveProj()) { render(); toast("Yopish bekor qilindi"); }
+  } else if (t.dataset.projName) {
+    const i = +t.dataset.projName, k = accK(accFirm, accSite);
+    const v = await askText({ title: "Loyiha nomi", hint: accFirm + (SITES_OK && accSite !== undefined ? " · 📍 " + siteLbl(accSite) : ""), label: "Nomi", value: projName(accFirm, accSite, i), ph: `${i}-loyiha` }); if (v === null) return;
+    const names = { ...(accProj.__names || {}) }; if (v) names[k + "#" + i] = v; else delete names[k + "#" + i];
+    accProj = { ...accProj, __names: names }; if (await saveProj()) { render(); toast("Loyiha nomi saqlandi"); }
   } else if (t.dataset.projShow) {
-    const x = projList(accFirm)[+t.dataset.projShow - 1]; if (!x) return;
+    const x = projList(accFirm, accSite)[+t.dataset.projShow - 1]; if (!x) return;
+    if (SITES_OK && accSite !== undefined) $("#qSite").value = accSite || "__none";
     $("#qFirm").value = accFirm; $("#qFrom").value = x.d1; $("#qTo").value = x.d2; $$("#chips .chip").forEach(c => c.classList.remove("on"));
-    render(); showPage("archive"); toast(`${x.i}-loyiha yuk xatlari: ${x.d1 ? fmtDate(x.d1) : ""} – ${x.d2 ? fmtDate(x.d2) : ""}`);
+    render(); showPage("archive"); toast(`${projTitle(accFirm, accSite, x.i)} — yuk xatlari: ${x.d1 ? fmtDate(x.d1) : ""} – ${x.d2 ? fmtDate(x.d2) : ""}`);
   }
 });
-const delivered = (firm, exceptKey) => rows.filter(r => same(r.firm, firm) && (!exceptKey || gk(r) !== exceptKey)).reduce((s, r) => s + (r.total || 0), 0);
-const paidOf = firm => pays.filter(p => same(p.firm, firm)).reduce((s, p) => s + (p.amount || 0), 0);
+const inSite = (x, s) => s === undefined || s === null || (x.site || "") === s;
+const delivered = (firm, exceptKey, s) => rows.filter(r => same(r.firm, firm) && inSite(r, s) && (!exceptKey || gk(r) !== exceptKey)).reduce((t, r) => t + (r.total || 0), 0);
+const paidOf = (firm, s) => pays.filter(p => same(p.firm, firm) && inSite(p, s)).reduce((t, p) => t + (p.amount || 0), 0);
 const hasAccount = firm => pays.some(p => same(p.firm, firm));
 // Naqd va hisob raqam (bank) hisoblari alohida yuritiladi
 const PM = { cash: "Naqd", bank: "Hisob raqam" };
-const deliveredBy = (firm, m, exceptKey) => rows.filter(r => same(r.firm, firm) && (r.payMethod || "bank") === m && (!exceptKey || gk(r) !== exceptKey)).reduce((s, r) => s + (r.total || 0), 0);
-const paidBy = (firm, m) => pays.filter(p => same(p.firm, firm) && (p.method || "bank") === m).reduce((s, p) => s + (p.amount || 0), 0);
-const splitUsed = firm => rows.some(r => same(r.firm, firm) && r.payMethod === "cash") || pays.some(p => same(p.firm, firm) && p.method === "cash");
+const deliveredBy = (firm, m, exceptKey, s) => rows.filter(r => same(r.firm, firm) && inSite(r, s) && (r.payMethod || "bank") === m && (!exceptKey || gk(r) !== exceptKey)).reduce((t, r) => t + (r.total || 0), 0);
+const paidBy = (firm, m, s) => pays.filter(p => same(p.firm, firm) && inSite(p, s) && (p.method || "bank") === m).reduce((t, p) => t + (p.amount || 0), 0);
+const splitUsed = (firm, s) => rows.some(r => same(r.firm, firm) && inSite(r, s) && r.payMethod === "cash") || pays.some(p => same(p.firm, firm) && inSite(p, s) && p.method === "cash");
 // Firmaning puli holati serverdan (xodim ham biladi, lekin summasini emas)
-async function moneyState(firm, items, exceptBatch, method){
+async function moneyState(firm, items, exceptBatch, method, site){
   if (!firm || !sb) return "none";
-  const { data } = await sb.rpc("firm_money_state", { p_firm: firm, p_date: $("#fDate").value || null, p_items: items || [], p_except_batch: exceptBatch || null, p_method: method || null });
+  const { data } = await sb.rpc("firm_money_state", { p_firm: firm, p_date: $("#fDate").value || null, p_items: items || [], p_except_batch: exceptBatch || null, p_method: method || null, ...(SITES_OK && site ? { p_site: site } : {}) });
   return data || "none";
 }
 let balT = null, balSeq = 0;
@@ -3627,7 +3808,7 @@ function updateBalance(){
     balT = setTimeout(async () => {
       const seq = ++balSeq, items = readLines().filter(l => l.product && l.qty > 0).map(l => ({ product: l.product, qty: l.qty }));
       const ex = editId ? groupItems(editId)[0]?.batch : null;
-      const pm = $("#fPay").value || null, st = await moneyState(firm, items, ex, pm), lb = pm ? ` ${PM[pm].toLowerCase()}` : "";
+      const pm = $("#fPay").value || null, st = await moneyState(firm, items, ex, pm, siteById($("#fSite").value) ? $("#fSite").value : null), lb = pm ? ` ${PM[pm].toLowerCase()}` : "";
       if (seq !== balSeq) return;
       if (st === "out" || st === "short") { box.hidden = false; box.className = st === "out" ? "c12 bal bad" : "c12 bal warn";
         box.innerHTML = st === "out" ? `<b>Diqqat: bu firmaning${lb} puli tugagan.</b> Yuk berishdan oldin rahbariyat bilan kelishing.` : `<b>Diqqat: shu yuk bilan firmaning${lb} puli yetmaydi.</b>`; }
@@ -3636,9 +3817,10 @@ function updateBalance(){
     return;
   }
   if (!firm || !hasAccount(firm)) { box.hidden = true; return; }
-  const pm = $("#fPay").value, lbl = pm ? ` (${PM[pm].toLowerCase()})` : "", split = splitUsed(firm);
-  const before = pm ? paidBy(firm, pm) - deliveredBy(firm, pm, editId) : paidOf(firm) - delivered(firm, editId);
-  const both = !pm && split && M() ? ` <span class="dim">· Naqd: <span class="num">${fmt(paidBy(firm, "cash") - deliveredBy(firm, "cash", editId))}</span> · Hisob raqam: <span class="num">${fmt(paidBy(firm, "bank") - deliveredBy(firm, "bank", editId))}</span> — qaysi hisobdan ayirilishini tanlang</span>` : "";
+  const sv = SITES_OK ? (siteById($("#fSite").value) ? $("#fSite").value : "") : undefined;
+  const pm = $("#fPay").value, lbl = (pm ? ` (${PM[pm].toLowerCase()})` : "") + (SITES_OK && sv ? ` · 📍 ${esc(siteShort(sv))}` : ""), split = splitUsed(firm, sv);
+  const before = pm ? paidBy(firm, pm, sv) - deliveredBy(firm, pm, editId, sv) : paidOf(firm, sv) - delivered(firm, editId, sv);
+  const both = !pm && split && M() ? ` <span class="dim">· Naqd: <span class="num">${fmt(paidBy(firm, "cash", sv) - deliveredBy(firm, "cash", editId, sv))}</span> · Hisob raqam: <span class="num">${fmt(paidBy(firm, "bank", sv) - deliveredBy(firm, "bank", editId, sv))}</span> — qaysi hisobdan ayirilishini tanlang</span>` : "";
   const cur = readLines().reduce((s, l) => s + (l.price !== null ? l.qty * l.price : 0), 0);
   const after = before - cur;
   if (!M()) {
@@ -3699,50 +3881,120 @@ try { accView = localStorage.getItem("savdo-acc-view") === "table" ? "table" : "
 const accIni = f => { const w = String(f || "").replace(/["«»“”'`]/g, "").replace(/\b(MCHJ|MCHJ|OOO|XK|AJ|QK|LLC|XF)\b/gi, "").trim().split(/\s+/).filter(Boolean);
   return ((w[0] || "?")[0] + ((w[1] || "")[0] || "")).toUpperCase(); };
 const ST_TXT = { zero: "✓ Hisob 0", over: "Avans mavjud", debt: "Bizga qarzdor", none: "Hisob yo'q", closed: "🔒 Hisob yopilgan" };
-function accInfo(f){
-  const P = projNow(f), st = P.closed ? "closed" : balState(f, P.bal);
-  let del = P.del, paid = P.paid, n;
-  if (P.closed) { const x = projList(f).pop() || { del: 0, paid: 0, n: 0 }; del = x.del; paid = x.paid; n = x.n; }
-  else n = new Set(rows.filter(r => same(r.firm, f) && rowAt(r) > P.cut).map(gk)).size;
-  const last = rows.filter(r => same(r.firm, f)).map(r => r.date || "").sort().pop() || "";
-  return { f, P, st, del, paid, bal: P.bal, n, up: UP.get(fkey(f)), np: (accProj[fkey(f)] || []).length, last };
+function firmSites(f){
+  if (!SITES_OK) return [undefined];
+  const set = new Set([...rows.filter(r => same(r.firm, f)).map(r => r.site || ""), ...pays.filter(p => same(p.firm, f)).map(p => p.site || "")]);
+  if (!set.size) set.add("");
+  return [...set].sort((a, b) => a === "" ? 1 : b === "" ? -1 : siteLbl(a).localeCompare(siteLbl(b)));
 }
-const balLbl = x => x.st === "debt" ? "Bizga qarzdor" : x.st === "over" ? "Avans (ortiqcha pul)" : "Qoldiq";
+function accOne(f, s){
+  const P = projNow(f, s), st = P.closed ? "closed" : balState(f, P.bal, s);
+  let del = P.del, paid = P.paid, n;
+  if (P.closed) { const x = projList(f, s).pop() || { del: 0, paid: 0, n: 0 }; del = x.del; paid = x.paid; n = x.n; }
+  else n = new Set(rows.filter(r => same(r.firm, f) && inSite(r, s) && rowAt(r) > P.cut).map(gk)).size;
+  return { s, P, st, del, paid, bal: P.bal, n, np: (accProj[accK(f, s)] || []).length };
+}
+const ST_RANK = { debt: 4, over: 3, zero: 2, closed: 1, none: 0 };
+function accInfo(f){
+  const subs = firmSites(f).map(s => accOne(f, s)), open = subs.filter(y => y.st !== "closed");
+  const st = !open.length ? "closed" : open.reduce((a, y) => ST_RANK[y.st] > ST_RANK[a] ? y.st : a, "none");
+  const sum = k => subs.reduce((t, y) => t + y[k], 0);
+  return { f, subs, st, del: sum("del"), paid: sum("paid"), bal: sum("bal"), n: sum("n"), up: UP.get(fkey(f)),
+    last: rows.filter(r => same(r.firm, f)).map(r => r.date || "").sort().pop() || "",
+    debt: open.reduce((t, y) => t + (y.bal < -0.5 ? -y.bal : 0), 0), adv: open.reduce((t, y) => t + (y.bal > 0.5 ? y.bal : 0), 0), one: subs.length === 1 ? subs[0] : null };
+}
+const balLbl = y => y.st === "debt" ? "Bizga qarzdor" : y.st === "over" ? "Avans (ortiqcha pul)" : "Qoldiq";
+const sgn = y => y.st === "debt" ? "−" : y.st === "over" ? "+" : "";
+function pickSite(f){
+  if (!SITES_OK) return undefined;
+  const subs = firmSites(f); if (subs.includes(accSite)) return accSite;
+  const d = subs.find(s => { const P = projNow(f, s); return !P.closed && P.bal < -0.5; });
+  return d !== undefined ? d : subs[0];
+}
+function accProjLine(f, y){
+  if (!y.np) return "";
+  const i = y.P.closed ? y.np : y.np + 1, t = esc(projTitle(f, y.s, i));
+  return `<span class="acc-proj">${y.P.closed ? `🔒 ${t} · ${fmtDate(y.P.cut.slice(0, 10))} da yopilgan` : `📁 ${t} · ${fmtDate(y.P.cut.slice(0, 10))} dan`}</span>`;
+}
 function renderAccList(firms){
-  const all = firms.map(accInfo);
-  const debt = all.reduce((s, x) => s + (x.bal < -0.5 ? -x.bal : 0), 0), adv = all.reduce((s, x) => s + (x.bal > 0.5 ? x.bal : 0), 0);
-  $("#accTop").innerHTML = `<div class="acc-kpi"><span>Yuk berildi</span><b class="num">${fmt(all.reduce((s, x) => s + x.P.del, 0))}</b><small>so'm · joriy loyihalar</small></div>
-    <div class="acc-kpi"><span>Tushum</span><b class="num">${fmt(all.reduce((s, x) => s + x.P.paid, 0))}</b><small>so'm · bank va naqd</small></div>
-    <div class="acc-kpi k-debt"><span>Bizga qarzdorlik</span><b class="num">${fmt(debt)}</b><small>so'm · ${all.filter(x => x.st === "debt").length} ta firma</small></div>
-    <div class="acc-kpi k-over"><span>Firmalar avansi</span><b class="num">${fmt(adv)}</b><small>so'm · ${all.filter(x => x.st === "over").length} ta firma</small></div>`;
+  const all = firms.map(accInfo), subsAll = all.flatMap(x => x.subs);
+  $("#accTop").innerHTML = `<div class="acc-kpi"><span>Yuk berildi</span><b class="num">${fmt(subsAll.reduce((t, y) => t + y.P.del, 0))}</b><small>so'm · joriy loyihalar</small></div>
+    <div class="acc-kpi"><span>Tushum</span><b class="num">${fmt(subsAll.reduce((t, y) => t + y.P.paid, 0))}</b><small>so'm · bank va naqd</small></div>
+    <div class="acc-kpi k-debt"><span>Bizga qarzdorlik</span><b class="num">${fmt(all.reduce((t, x) => t + x.debt, 0))}</b><small>so'm · ${all.filter(x => x.debt > 0).length} ta firma</small></div>
+    <div class="acc-kpi k-over"><span>Firmalar avansi</span><b class="num">${fmt(all.reduce((t, x) => t + x.adv, 0))}</b><small>so'm · ${all.filter(x => x.adv > 0).length} ta firma</small></div>`;
   const q = accQ.trim().toLowerCase();
-  let list = all.filter(x => (!q || x.f.toLowerCase().includes(q)) && (!accFilt || (accFilt === "up" ? !!x.up : x.st === accFilt)));
-  list.sort(accSort === "debt" ? (a, b) => a.bal - b.bal || a.f.localeCompare(b.f) : accSort === "last" ? (a, b) => b.last.localeCompare(a.last) || a.f.localeCompare(b.f) : (a, b) => a.f.localeCompare(b.f));
+  let list = all.filter(x => (!q || x.f.toLowerCase().includes(q) || x.subs.some(y => y.s && siteLbl(y.s).toLowerCase().includes(q))) && (!accFilt || (accFilt === "up" ? !!x.up : x.subs.some(y => y.st === accFilt))));
+  list.sort(accSort === "debt" ? (a, b) => b.debt - a.debt || a.bal - b.bal || a.f.localeCompare(b.f) : accSort === "last" ? (a, b) => b.last.localeCompare(a.last) || a.f.localeCompare(b.f) : (a, b) => a.f.localeCompare(b.f));
   $("#accCount").textContent = list.length === all.length ? `${all.length} ta firma` : `${list.length} ta firma topildi (jami ${all.length})`;
   $$("#accTools [data-accview]").forEach(b => { const on = b.dataset.accview === accView; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
   const box = $("#accCards"); box.className = accView === "table" ? "acc-table" : "acc-cards";
   if (!all.length) { box.innerHTML = `<p class="hint">Hali xaridor firma yo'q.</p>`; return; }
   if (!list.length) { box.innerHTML = `<p class="hint acc-none">Firma topilmadi.</p>`; return; }
   const upTxt = x => x.up ? `<span class="acc-warn" title="Narxi qo'yilmagan mahsulotlar — firmani ochib, narx qo'ying">⚠ ${x.up.prods.size} ta mahsulot narxsiz</span>` : "";
+  const showSite = SITES_OK && sites.length > 0;
+  const subLines = x => `<span class="acc-subs">${x.subs.map(y => `<span class="acc-sub st-${y.st}"><span class="acc-sn" title="${esc(siteLbl(y.s))}">📍 ${esc(siteShort(y.s))}</span><b class="num">${y.st === "closed" ? "🔒 " : ""}${sgn(y)}${fmt(Math.abs(y.bal))}</b></span>`).join("")}</span>`;
   if (accView === "table") {
     box.innerHTML = `<div class="tbl"><table><thead><tr><th>Firma</th><th class="r">Yuk berildi</th><th class="r">To'landi</th><th class="r">Qoldiq, so'm</th><th>Holat</th><th></th></tr></thead><tbody>${list.map(x => `<tr class="st-${x.st}${same(x.f, accFirm) ? " on" : ""}" data-acc="${esc(x.f)}" tabindex="0">
-      <td><span class="acc-top"><span class="acc-ava">${esc(accIni(x.f))}</span><span><b class="acc-name">${esc(x.f)}</b><small class="dim">${x.n} ta yuk xati${x.np ? ` · ${x.P.closed ? x.np : x.np + 1}-loyiha` : ""}</small></span></span></td>
-      <td class="r num">${fmt(x.del)}</td><td class="r num">${fmt(x.paid)}</td><td class="r num acc-v">${fmt(Math.abs(x.bal))}</td>
+      <td><span class="acc-top"><span class="acc-ava">${esc(accIni(x.f))}</span><span><b class="acc-name">${esc(x.f)}</b><small class="dim">${x.n} ta yuk xati${x.one && showSite && x.one.s ? ` · 📍 ${esc(siteLbl(x.one.s))}` : !x.one ? ` · ${x.subs.length} ta obyekt` : ""}</small></span></span></td>
+      <td class="r num">${fmt(x.del)}</td><td class="r num">${fmt(x.paid)}</td>
+      <td class="r num acc-v">${x.one ? fmt(Math.abs(x.bal)) : subLines(x)}</td>
       <td><span class="pill ${x.st}">${ST_TXT[x.st]}</span> ${upTxt(x)}</td><td class="r"><span class="acc-go">Batafsil →</span></td></tr>`).join("")}</tbody></table></div>`;
     return;
   }
-  box.innerHTML = list.map(x => `<button type="button" class="acc-card st-${x.st}${same(x.f, accFirm) ? " on" : ""}" data-acc="${esc(x.f)}">
+  box.innerHTML = list.map(x => { const y = x.one;
+    return `<button type="button" class="acc-card st-${x.st}${same(x.f, accFirm) ? " on" : ""}" data-acc="${esc(x.f)}">
       <span class="acc-top"><span class="acc-ava">${esc(accIni(x.f))}</span><span class="acc-name">${esc(x.f)}</span></span>
-      ${x.np ? `<span class="acc-proj">${x.P.closed ? `🔒 ${x.np}-loyiha · ${fmtDate(x.P.cut.slice(0, 10))} da yopilgan` : `📁 ${x.np + 1}-loyiha · ${fmtDate(x.P.cut.slice(0, 10))} dan`}</span>` : ""}
-      ${x.P.carry && !x.P.closed ? `<span class="acc-row acc-sub"><span>Oldingi loyihadan ${x.P.carry < 0 ? "qarz" : "qoldiq"}</span><b class="num">${fmt(Math.abs(x.P.carry))}</b></span>` : ""}
-      <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(x.del)}</b></span>
-      <span class="acc-row"><span>To'landi</span><b class="num">${fmt(x.paid)}</b></span>
-      <span class="acc-row acc-bal"><span>${balLbl(x)}</span><b class="num acc-v">${fmt(Math.abs(x.bal))}</b></span>
-      ${!x.P.closed && splitUsed(x.f) ? ["bank", "cash"].map(m => { const b = paidBy(x.f, m) - deliveredBy(x.f, m); return `<span class="acc-row acc-sub"><span>${PM[m]}: ${b < 0 ? "qarz" : "qoldiq"}</span><b class="num ${b < 0 ? "neg" : ""}">${fmt(Math.abs(b))}</b></span>`; }).join("") : ""}
-      <span class="acc-foot"><span class="dim">${x.n} ta yuk xati</span><span class="pill ${x.st}">${ST_TXT[x.st]}</span></span>
+      ${y ? `${showSite ? `<span class="acc-site1">📍 ${esc(siteLbl(y.s))}</span>` : ""}${accProjLine(x.f, y)}
+      ${y.P.carry && !y.P.closed ? `<span class="acc-row acc-sub"><span>Oldingi loyihadan ${y.P.carry < 0 ? "qarz" : "qoldiq"}</span><b class="num">${fmt(Math.abs(y.P.carry))}</b></span>` : ""}
+      <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(y.del)}</b></span>
+      <span class="acc-row"><span>To'landi</span><b class="num">${fmt(y.paid)}</b></span>
+      <span class="acc-row acc-bal"><span>${balLbl(y)}</span><b class="num acc-v">${fmt(Math.abs(y.bal))}</b></span>
+      ${!y.P.closed && splitUsed(x.f, y.s) ? ["bank", "cash"].map(m => { const b = paidBy(x.f, m, y.s) - deliveredBy(x.f, m, undefined, y.s); return `<span class="acc-row acc-sub"><span>${PM[m]}: ${b < 0 ? "qarz" : "qoldiq"}</span><b class="num ${b < 0 ? "neg" : ""}">${fmt(Math.abs(b))}</b></span>`; }).join("") : ""}`
+      : `${subLines(x)}
+      <span class="acc-row"><span>Yuk berildi (jami)</span><b class="num">${fmt(x.del)}</b></span>
+      <span class="acc-row"><span>To'landi (jami)</span><b class="num">${fmt(x.paid)}</b></span>`}
+      <span class="acc-foot"><span class="dim">${x.n} ta yuk xati${!y ? ` · ${x.subs.length} ta obyekt` : ""}</span><span class="pill ${x.st}">${ST_TXT[x.st]}</span></span>
       ${upTxt(x)}
-    </button>`).join("");
+    </button>`; }).join("");
 }
+// firma ichida: obyektlar bo'yicha yorliqlar, to'lov obyekti, eski yozuvlarni obyektga biriktirish
+function renderSiteTabs(){
+  const tabs = $("#accSiteTabs"), as = $("#accAssign");
+  if (!SITES_OK) { tabs.hidden = true; as.hidden = true; return; }
+  const subs = firmSites(accFirm); if (!subs.includes(accSite)) accSite = pickSite(accFirm);
+  tabs.hidden = !(subs.length > 1 || (subs[0] && subs[0] !== "") || sites.length);
+  tabs.innerHTML = subs.map(s => { const y = accOne(accFirm, s);
+    return `<button type="button" class="site-tab st-${y.st}${s === accSite ? " on" : ""}" data-acc-site="${esc(s)}"><span>📍 ${esc(siteLbl(s))}</span><b class="num">${y.st === "closed" ? "🔒 " : ""}${sgn(y)}${fmt(Math.abs(y.bal))}</b></button>`; }).join("");
+  const unR = rows.filter(r => same(r.firm, accFirm) && !r.site), unP = pays.filter(p => same(p.firm, accFirm) && !p.site), can = PRIV() && !VIEWING();
+  as.hidden = !(accSite === "" && can && sites.some(x => x.active) && (unR.length || unP.length));
+  if (!as.hidden && !as.dataset.on) {
+    as.dataset.on = "1";
+    as.innerHTML = `<b>📍 Bu yozuvlar hali obyektga biriktirilmagan.</b> <span class="dim">Sana oralig'ini tanlab, ularni obyektga o'tkazing — keyin hisob o'sha obyekt bo'yicha yuritiladi.</span>
+      <div class="site-assign-row"><select id="asSite"></select><label>Sanadan <input type="date" id="asFrom"></label><label>Sanagacha <input type="date" id="asTo"></label><button type="button" class="primary" id="asGo">Obyektga biriktirish</button></div>`;
+  }
+  if (!as.hidden) { const v = $("#asSite").value; $("#asSite").innerHTML = siteOptions(v, { noNew: true }); $("#asSite").value = v; }
+  else delete as.dataset.on;
+  const pv = $("#paySite").value; $("#paySite").innerHTML = siteOptions(pv); $("#paySite").value = accSite || "";
+  if ($("#paySite").value !== (accSite || "")) $("#paySite").value = ""; pmMark($("#paySite"));
+}
+$("#accSiteTabs").addEventListener("click", e => { const b = e.target.closest("[data-acc-site]"); if (!b) return; accSite = b.dataset.accSite; pendingPayDel = null; renderAccounts(); });
+$("#paySite").addEventListener("change", e => { siteSelNew(e.target, accSite || ""); pmMark(e.target); });
+$("#apSite").addEventListener("change", e => { siteSelNew(e.target, ""); pmMark(e.target); });
+$("#apFirm").addEventListener("change", () => { if (!SITES_OK) return; const v = lastSiteFor($("#apFirm").value.trim()); if (v) { $("#apSite").value = v; pmMark($("#apSite")); } });
+document.addEventListener("click", async e => {
+  if (!e.target.closest("#asGo")) return;
+  const sid = $("#asSite").value, d1 = $("#asFrom").value, d2 = $("#asTo").value;
+  if (!siteById(sid)) { toast("Qaysi obyektga biriktirishni tanlang"); $("#asSite").focus(); return; }
+  const inR = x => (!d1 || (x.date || "") >= d1) && (!d2 || (x.date || "") <= d2);
+  const rr = rows.filter(r => same(r.firm, accFirm) && !r.site && inR(r)), pp = pays.filter(p => same(p.firm, accFirm) && !p.site && inR(p));
+  const nW = new Set(rr.map(gk)).size;
+  if (!rr.length && !pp.length) { toast("Bu oraliqda biriktirilmagan yozuv yo'q"); return; }
+  if (!confirm(`${accFirm}\n\n${nW} ta yuk xati va ${pp.length} ta to'lov «${siteLbl(sid)}» obyektiga biriktirilsinmi?`)) return;
+  const upd = async (tbl, ids) => { for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from(tbl).update({ site_id: sid }).in("id", ids.slice(i, i + 200)); if (error) throw error; } };
+  try { await upd("sales", rr.map(r => r.id)); await upd("payments", pp.map(p => p.id)); }
+  catch(err) { toast("Biriktirib bo'lmadi: " + err.message); return; }
+  accSite = sid; await reloadAll(true); toast(`${nW} ta yuk xati va ${pp.length} ta to'lov obyektga biriktirildi`);
+});
 $("#accQ").addEventListener("input", e => { accQ = e.target.value; renderAccounts(); });
 $("#accFilt").addEventListener("change", e => { accFilt = e.target.value; renderAccounts(); });
 $("#accSort").addEventListener("change", e => { accSort = e.target.value; renderAccounts(); });
@@ -3752,6 +4004,7 @@ $("#accBack").addEventListener("click", () => { accFirm = ""; pendingPayDel = nu
 // tepadagi «+ To'lov qo'shish»: firmani tanlab, darhol to'lov yoziladi
 $("#accPayNew").addEventListener("click", () => {
   $("#apFirm").value = accFirm || ""; $("#apDate").value = today(); $("#apAmt").value = ""; $("#apNote").value = ""; $("#apMethod").value = "bank";
+  if (SITES_OK) fillSiteSel("#apSite", accFirm ? (accSite || "") : "");
   $("#accPayDlg").showModal(); setTimeout(() => (accFirm ? $("#apAmt") : $("#apFirm")).focus(), 30);
 });
 $("#apCancel").addEventListener("click", () => $("#accPayDlg").close());
@@ -3760,7 +4013,9 @@ $("#accPayF").addEventListener("submit", e => {
   const name = $("#apFirm").value.trim(), firm = buyersAll().find(f => same(f, name));
   if (!firm) { toast("Firmani ro'yxatdan tanlang"); $("#apFirm").focus(); return; }
   if (!(parseNum($("#apAmt").value) > 0)) { toast("To'lov summasini kiriting"); $("#apAmt").focus(); return; }
-  accFirm = firm; pendingPayDel = null; renderAccounts();
+  if (needSite() && !siteById($("#apSite").value)) { toast("To'lov qaysi obyekt uchun ekanini tanlang"); $("#apSite").focus(); return; }
+  accFirm = firm; accSite = SITES_OK ? (siteById($("#apSite").value) ? $("#apSite").value : "") : undefined; pendingPayDel = null; renderAccounts();
+  $("#paySite").value = accSite || "";
   $("#payDate").value = $("#apDate").value || today(); $("#payMethod").value = $("#apMethod").value; $("#payAmt").value = $("#apAmt").value; $("#payNote").value = $("#apNote").value;
   $("#accPayDlg").close(); $("#payForm").requestSubmit(); scrollTo(0, 0);
 });
@@ -3774,10 +4029,10 @@ function renderAccounts(){
   const d = $("#accDetail");
   if (!accFirm) { d.hidden = true; return; }
   d.hidden = false;
-  $("#accTitle").textContent = accFirm; renderProjects();
+  $("#accTitle").textContent = accFirm; renderSiteTabs(); renderProjects();
   if (!$("#payDate").value) $("#payDate").value = today();
   if (!$("#prFrom").value) $("#prFrom").value = today();
-  const ps = pays.filter(p => same(p.firm, accFirm)).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.at || "").localeCompare(a.at || ""));
+  const ps = pays.filter(p => same(p.firm, accFirm) && inSite(p, accSite)).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.at || "").localeCompare(a.at || ""));
   $("#payList").innerHTML = ps.length ? ps.map(p => `<li>
       <span class="num">${p.date ? fmtDate(p.date) : "—"}</span>
       <span class="num pay-amt">${fmt(p.amount)} so'm</span><span class="pill pm-${p.method === "cash" ? "cash" : "bank"}">${PM[p.method === "cash" ? "cash" : "bank"]}</span>
@@ -3799,17 +4054,20 @@ function renderAccounts(){
 }
 $("#accCards").addEventListener("click", e => {
   const c = e.target.closest("[data-acc]"); if (!c) return;
-  accFirm = same(c.dataset.acc, accFirm) ? "" : c.dataset.acc; pendingPayDel = null; renderAccounts(); scrollTo(0, 0); return;
+  accFirm = same(c.dataset.acc, accFirm) ? "" : c.dataset.acc; accSite = null; accSite = accFirm ? pickSite(accFirm) : undefined; pendingPayDel = null; renderAccounts(); scrollTo(0, 0); return;
   if (accFirm) $("#accDetail").scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 });
-$("#accShow").addEventListener("click", () => { $("#qFirm").value = accFirm; render(); showPage("archive"); });
+$("#accShow").addEventListener("click", () => { $("#qFirm").value = accFirm; if (SITES_OK && accSite !== undefined) $("#qSite").value = accSite || "__none"; render(); showPage("archive"); });
 $("#payForm").addEventListener("submit", e => {
   e.preventDefault();
   const amt = parseNum($("#payAmt").value);
   if (amt <= 0) { toast("To'lov summasini kiriting"); $("#payAmt").focus(); return; }
-  sb.from("payments").insert({ firm: accFirm, date: $("#payDate").value || null, amount: amt, note: $("#payNote").value.trim(), method: $("#payMethod").value }).select().single().then(({ data, error }) => {
+  const psite = SITES_OK && siteById($("#paySite").value) ? $("#paySite").value : "";
+  if (needSite() && !psite) { toast("To'lov qaysi obyekt uchun ekanini tanlang"); $("#paySite").focus(); return; }
+  sb.from("payments").insert({ firm: accFirm, date: $("#payDate").value || null, amount: amt, note: $("#payNote").value.trim(), method: $("#payMethod").value, ...(SITES_OK ? { site_id: psite || null } : {}) }).select().single().then(({ data, error }) => {
     if (error) { toast("To'lovni saqlab bo'lmadi: " + error.message); return; }
-    pays.push({ id: data.id, firm: data.firm, date: data.date || "", amount: Number(data.amount), note: data.note || "", method: data.method || "bank", at: data.created_at });
+    pays.push({ id: data.id, firm: data.firm, date: data.date || "", amount: Number(data.amount), note: data.note || "", method: data.method || "bank", at: data.created_at, site: data.site_id || "" });
+    if (SITES_OK) accSite = data.site_id || "";
     rememberFirm(accFirm); saveRef();
     $("#payAmt").value = ""; $("#payNote").value = "";
     render(); scheduleSync(); toast("To'lov qo'shildi");
@@ -4837,7 +5095,7 @@ async function addBetonImages(files){
     const card = { id: ++btSeq, src, status: aiCfg().key ? "reading" : "manual", err: "", unsure: [], dupOk: false,
       f: { date: today(), waybill: "", seller: brand().name || ref.lastSeller || "", firm: "", car: "", driver: "", note: "", payMethod: getPm(),
            items: [{ grade: getGrade(), unit: "m³", qty: "", price: "" }] } };
-    card.autoGrade = card.f.items[0].grade; card.autoPm = card.f.payMethod;
+    card.autoGrade = card.f.items[0].grade; card.autoPm = card.f.payMethod; card.f.site = getLastSite(); card.autoSite = card.f.site;
     btCards.unshift(card);
     renderBeton();
     if (card.status === "reading") readWithAI(card);
@@ -4939,6 +5197,7 @@ function renderBeton(){
           <button type="button" class="add-line sm" data-bt-iadd="${c.id}">+ Marka qo'shish</button>
         </div>
         ${cardField(c, "note", "Izoh", { ph: "ixtiyoriy" })}
+        ${SITES_OK ? `<div class="f"><label for="bt${c.id}site">📍 Obyekt *</label><select id="bt${c.id}site" data-c="${c.id}" data-k="site"${c.f.site ? ' class="pm-set"' : ""}>${siteOptions(c.f.site || "")}</select></div>` : ""}
         <div class="f"><label for="bt${c.id}pm">Qaysi hisobdan ayiriladi *</label><select id="bt${c.id}pm" data-c="${c.id}" data-k="payMethod"${c.f.payMethod ? ' class="pm-set"' : ""}>${[["", "— tanlang —"], ["bank", "Hisob raqam (bank)"], ["cash", "Naqd"]].map(([v, t]) => `<option value="${v}"${(c.f.payMethod || "") === v ? " selected" : ""}>${t}</option>`).join("")}</select></div>
         </fieldset>
         ${dup && !c.dupOk ? `<div class="bt-status bad">Bu firmaga № ${esc(c.f.waybill)} yuk xati avval kiritilgan. Takror bo'lmasligini tekshiring.</div>` : ""}
@@ -4960,6 +5219,7 @@ $("#btCards").addEventListener("input", e => {
   const t = e.target, c = btCards.find(x => x.id === +t.dataset.c); if (!c) return;
   if (t.dataset.k) { c.f[t.dataset.k] = t.value; c.unsure = c.unsure.filter(u => u !== t.dataset.k && !(t.dataset.k === "firm" && u === "buyer")); }
   if (t.dataset.k === "payMethod") btSharePm(c, t.value);
+  if (t.dataset.k === "site" && t.value !== "__new") { c.autoSite = ""; pmMark(t); }
   if (t.dataset.k === "firm" && knownName("firm", ref.firms, t.value)) btAutoFill(c).catch(() => {});
   if (t.dataset.ik === "grade" && t.dataset.i === "0") btShareGrade(c, t.value);
   if (t.dataset.k === "car") { const r = driverForCar(t.value), cur = String(c.f.driver || "").trim();
@@ -4983,6 +5243,7 @@ function btShareGrade(c, v){
 $("#btCards").addEventListener("change", e => {
   const t = e.target, c = btCards.find(x => x.id === +t.dataset.c); if (!c) return;
   if (t.dataset.k === "payMethod") btSharePm(c, t.value);
+  if (t.dataset.k === "site" && t.value === "__new") { const prev = c.autoSite || ""; c.f.site = prev; openSiteDlg(id => { c.f.site = id || prev; c.autoSite = ""; renderBeton(); }); return; }
   if (t.dataset.k === "firm") btAutoFill(c).then(() => { const el = document.querySelector(`[data-card="${c.id}"] .bt-sum`), sum = c.f.items.reduce((s, it) => s + (it.price !== "" && it.price !== null ? parseNum(it.qty) * parseNum(it.price) : 0), 0); if (el) el.innerHTML = sum ? `Summa: <b>${fmt(sum)}</b> so'm` : ""; });
   if (t.dataset.k === "firm" || t.dataset.ik === "grade" || t.dataset.k === "date") {
     // Qayta chizmasdan, faqat bo'sh narx kataklariga firma narxi qo'yiladi (kursor joyida qoladi)
@@ -5008,7 +5269,8 @@ async function saveBetonCard(c){
   if (!items.length) { toast("Beton markasi va miqdorini kiriting"); return; }
   if (!String(f.waybill || "").trim()) { toast("Yuk xati raqamini yozing"); const el = document.getElementById(`bt${c.id}waybill`); if (el) el.focus(); return; }
   if (!f.payMethod) { toast("Qaysi hisobdan ayirilishini tanlang: naqd yoki hisob raqam"); const el = document.getElementById(`bt${c.id}pm`); if (el) el.focus(); return; }
-  setGrade(items[0].grade); setPm(f.payMethod);
+  if (needSite() && !siteById(f.site)) { toast("Obyektni tanlang — beton qaysi ish uchun ketayotgani"); const el = document.getElementById(`bt${c.id}site`); if (el) el.focus(); return; }
+  setGrade(items[0].grade); setPm(f.payMethod); setLastSite(f.site);
   for (const it of items) {
     if (!String(it.grade).trim()) { toast("Beton markasini kiriting"); return; }
     if (parseNum(it.qty) <= 0) { toast(`${it.grade}: miqdorini kiriting`); return; }
@@ -5018,7 +5280,7 @@ async function saveBetonCard(c){
   const firm = f.firm.trim(), seller = f.seller.trim(), batch = newId(), base = Date.now();
   const head = { date: f.date, time: "", seller, firm, waybill: String(f.waybill).trim(), giver: "", driver: f.driver.trim(), phone: "",
     car: f.car.trim().toUpperCase(), note: f.note.trim(), loadAddr: seller ? lastAddr("seller", "loadAddr", seller) : "",
-    unloadAddr: firm ? lastAddr("firm", "unloadAddr", firm) : "", batch, kind: "beton", hasPhoto: true, payMethod: f.payMethod };
+    unloadAddr: firm ? lastAddr("firm", "unloadAddr", firm) : "", batch, kind: "beton", hasPhoto: true, payMethod: f.payMethod, ...(SITES_OK ? { site: siteById(f.site) ? f.site : "" } : {}) };
   try {
     for (let i = 0; i < items.length; i++) {
       const it = items[i], product = betonProduct(it.grade);
@@ -5037,7 +5299,7 @@ async function saveBetonCard(c){
   syncWaybills.add("b:" + batch);
   btCards = btCards.filter(x => x !== c);
   await saveRef(); renderBeton();
-  const st = await moneyState(firm, null, null, f.payMethod);
+  const st = await moneyState(firm, null, null, f.payMethod, siteById(f.site) ? f.site : null);
   toast(st === "out" ? `Saqlandi. Diqqat: ${plainName(firm)} puli tugagan` : "Beton yuk xati saqlandi");
 }
 // Rasmni kattalashtirib ko'rish
@@ -5541,20 +5803,21 @@ function stSingle(rows, months){
   const total = totM.reduce((a, b) => a + b, 0), wbs = wbM.reduce((a, b) => a + b, 0), active = totM.filter(v => v > 0).length || 1;
   // bo'lib ko'rsatish: mahsulot yoki xaridor
   const items = new Map();
-  rows.forEach(r => { const k = String(r[dim] || "—").trim(), id = k.toLowerCase(); const it = items.get(id) || { name: k, unit: r.unit || "", qty: {}, sum: {}, tq: 0, ts: 0 };
+  rows.forEach(r => { const k = String(r[dim] || (dim === "site" ? "Obyekt belgilanmagan" : "—")).trim(), id = k.toLowerCase(); const it = items.get(id) || { name: k, unit: r.unit || "", qty: {}, sum: {}, tq: 0, ts: 0 };
     it.qty[r.month] = (it.qty[r.month] || 0) + r.qty; it.sum[r.month] = (it.sum[r.month] || 0) + r.total; it.tq += r.qty; it.ts += r.total; if (!it.unit && r.unit) it.unit = r.unit; items.set(id, it); });
   const list = [...items.values()].sort((a, b) => (qtyMode ? b.tq - a.tq : b.ts - a.ts) || a.name.localeCompare(b.name));
   const top = [...list].sort((a, b) => b.ts - a.ts)[0];
-  const dimName = dim === "product" ? "Mahsulotlar" : "Xaridor firmalar";
+  const dimName = { product: "Mahsulotlar", firm: "Xaridor firmalar", site: "Obyektlar" }[dim] || "Mahsulotlar";
+  const dim1 = { product: "Mahsulot", firm: "Xaridor firma", site: "Obyekt" }[dim] || "Mahsulot";
   let html = `<div class="st-kpis">
     <div class="st-kpi"><span>Jami savdo</span><b class="num">${fmt(total)}</b><small>so'm</small></div>
     <div class="st-kpi"><span>Yuk xatlari</span><b class="num">${fmt(wbs)}</b><small>ta</small></div>
     <div class="st-kpi"><span>O'rtacha oyiga</span><b class="num">${stCompact(total / active)}</b><small>so'm (savdo bo'lgan oylar)</small></div>
-    <div class="st-kpi"><span>${dim === "product" ? "Eng ko'p sotilgan" : "Eng katta xaridor"}</span><b class="st-kpi-t">${esc(top ? top.name : "—")}</b><small>${top ? stCompact(top.ts) + " so'm" : ""}</small></div></div>
+    <div class="st-kpi"><span>${dim === "product" ? "Eng ko'p sotilgan" : dim === "site" ? "Eng katta obyekt" : "Eng katta xaridor"}</span><b class="st-kpi-t">${esc(top ? top.name : "—")}</b><small>${top ? stCompact(top.ts) + " so'm" : ""}</small></div></div>
     <figure class="st-fig"><figcaption>${stPieMode() ? "Oylar bo'yicha savdo ulushi" : "Oyma-oy jami savdo, so'm"}</figcaption><div class="st-chart" id="stC1"></div></figure>`;
   if (!qtyMode) html += `<figure class="st-fig"><figcaption>${dimName} bo'yicha${stPieMode() ? " — ulushi" : ", so'm"}</figcaption><div class="st-legend" id="stL2"></div><div class="st-chart" id="stC2"></div></figure>`;
   else html += `<figure class="st-fig"><figcaption>Mahsulotlar bo'yicha miqdor — har biri o'z birligida</figcaption><div class="st-multi" id="stC2"></div></figure>`;
-  html += `<div class="tbl st-tbl"><table><thead><tr><th>${dim === "product" ? "Mahsulot" : "Xaridor firma"}</th>${qtyMode ? "<th>Birlik</th>" : ""}${months.map(m => `<th class="r">${stM(m)}</th>`).join("")}<th class="r">Jami</th><th class="r">${qtyMode ? "Summadagi ulushi" : "Ulushi"}</th></tr></thead><tbody>${list.map(it => {
+  html += `<div class="tbl st-tbl"><table><thead><tr><th>${dim1}</th>${qtyMode ? "<th>Birlik</th>" : ""}${months.map(m => `<th class="r">${stM(m)}</th>`).join("")}<th class="r">Jami</th><th class="r">${qtyMode ? "Summadagi ulushi" : "Ulushi"}</th></tr></thead><tbody>${list.map(it => {
     const v = m => qtyMode ? it.qty[m] || 0 : it.sum[m] || 0, t = qtyMode ? it.tq : it.ts;
     return `<tr><td>${esc(it.name)}</td>${qtyMode ? `<td>${esc(it.unit)}</td>` : ""}${months.map(m => `<td class="r num">${v(m) ? fmt(v(m)) : "—"}</td>`).join("")}<td class="r num"><b>${fmt(t)}</b></td><td class="r num">${total && !qtyMode ? (it.ts / total * 100).toFixed(1).replace(".", ",") + "%" : qtyMode && total ? (it.ts / total * 100).toFixed(1).replace(".", ",") + "%" : "—"}</td></tr>`; }).join("")}</tbody>
     ${qtyMode ? "" : `<tfoot><tr><td>JAMI</td>${months.map((m, i) => `<td class="r num">${totM[i] ? fmt(totM[i]) : "—"}</td>`).join("")}<td class="r num">${fmt(total)}</td><td class="r num">100%</td></tr></tfoot>`}</table></div>`;
@@ -5577,7 +5840,7 @@ function stSingle(rows, months){
     box.innerHTML = head.map((it, i) => `<div class="st-mini"><div class="st-mini-h"><b>${esc(it.name)}</b><span class="hint">${fmt(it.tq)} ${esc(it.unit)}</span></div><div class="st-chart" data-mini="${i}"></div></div>`).join("") + (list.length > 8 ? `<p class="hint">Qolgan ${list.length - 8} ta mahsulot pastdagi jadvalda.</p>` : "");
     head.forEach((it, i) => stBars(box.querySelector(`[data-mini="${i}"]`), months, [{ name: it.name, color: "var(--s1)", values: months.map(m => it.qty[m] || 0) }], { unit: it.unit, height: 150, fmtY: v => stCompact(v) }));
   }
-  stView = { title: `${dimName} — ${qtyMode ? "miqdor" : "summa"}`, head: [dim === "product" ? "Mahsulot" : "Xaridor firma", ...(qtyMode ? ["Birlik"] : []), ...months.map(stMFull), "Jami"],
+  stView = { title: `${dimName} — ${qtyMode ? "miqdor" : "summa"}`, head: [dim1, ...(qtyMode ? ["Birlik"] : []), ...months.map(stMFull), "Jami"],
     rows: [...list.map(it => [it.name, ...(qtyMode ? [it.unit] : []), ...months.map(m => qtyMode ? it.qty[m] || 0 : it.sum[m] || 0), qtyMode ? it.tq : it.ts]),
       ...(qtyMode ? [] : [["JAMI", ...totM, total], ["Yuk xatlari (ta)", ...wbM, wbs]])], chart };
 }
