@@ -667,6 +667,11 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .pr-ren{border:0;background:none;padding:0 4px;min-height:0;font-size:13px;cursor:pointer;opacity:.7}.pr-ren:hover{opacity:1}
 @media (max-width:560px){.site-tab{flex:1 1 100%}.acc-table .acc-sub{min-width:0}}
 #paySiteBox{flex-basis:100%}#paySiteBox select{max-width:420px}
+.site-move{border-style:solid;background:var(--surface-2)}
+.site-move summary{cursor:pointer;color:var(--accent);font-weight:600}
+.site-move details[open] summary{margin-bottom:6px}
+.pay-list [data-pay-site]{font-size:12.5px}
+.site-arch{margin-top:10px}.site-arch summary{cursor:pointer;color:var(--muted);font-size:13.5px;padding:6px 0}
 </style>
 
 </head>
@@ -992,13 +997,13 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
     </div>
     <div class="sites-box" id="sitesBox">
       <h2>📍 Obyektlar (ish joylari)</h2>
-      <p class="hint">Yuk xati va to'lov qaysi obyekt uchun ekani shu ro'yxatdan tanlanadi. Har obyektning hisob-kitobi alohida yuritiladi. Ishlamay qolgan obyektni «Yopish» bilan ro'yxatdan yashiring — eski yozuvlari saqlanib qoladi.</p>
+      <p class="hint">Yuk xati va to'lov qaysi obyekt uchun ekani shu ro'yxatdan tanlanadi. Har obyektning hisob-kitobi alohida yuritiladi. Ishi tugagan obyektni «📦 Arxivga olish» bilan ro'yxatdan olib tashlang — eski yuk xatlari, to'lovlari va hisob-kitobi saqlanib qoladi.</p>
       <form class="ref-add site-add" id="siteForm" autocomplete="off">
-        <select id="sRegion" aria-label="Viloyat"></select>
-        <input id="sName" placeholder="Obyekt nomi, masalan: 110 kV podstansiya" aria-label="Obyekt nomi">
+        <input id="sName" placeholder="Obyekt nomi, masalan: Navoiy — 110 kV podstansiya" aria-label="Obyekt nomi">
         <button type="submit" class="primary">Qo'shish</button>
       </form>
-      <div class="tbl"><table><thead><tr><th>Viloyat</th><th>Obyekt</th><th class="r">Yuk xatlari</th><th>Holat</th><th></th></tr></thead><tbody id="siteList"></tbody></table></div>
+      <div class="tbl"><table><thead><tr><th>Obyekt</th><th class="r">Yuk xatlari</th><th></th></tr></thead><tbody id="siteList"></tbody></table></div>
+      <details class="site-arch" id="siteArchBox" hidden><summary id="siteArchSum"></summary><div class="tbl"><table><tbody id="siteArchList"></tbody></table></div></details>
     </div>
   </details>
 
@@ -1122,8 +1127,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 <dialog class="dlg" id="siteDlg" aria-labelledby="sdT"><form id="siteDlgF" autocomplete="off" novalidate>
   <h3 id="sdT">Yangi obyekt</h3>
   <p class="hint">Yuk qaysi ish joyi uchun chiqayotganini belgilash uchun.</p>
-  <div class="f"><label for="sdRegion">Viloyat</label><select id="sdRegion"></select></div>
-  <div class="f"><label for="sdName">Obyekt nomi</label><input id="sdName" placeholder="masalan: 110 kV podstansiya"></div>
+  <div class="f"><label for="sdName">Obyekt nomi</label><input id="sdName" placeholder="masalan: Navoiy — 110 kV podstansiya"></div>
   <div class="btns dlg-act"><button type="button" id="sdCancel">Bekor qilish</button><button type="submit" class="primary">Qo'shish</button></div>
 </form></dialog>
 <dialog class="dlg" id="txtDlg" aria-labelledby="tdT"><form id="txtDlgF" autocomplete="off" novalidate>
@@ -1131,6 +1135,13 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
   <p class="hint" id="tdHint"></p>
   <div class="f"><label for="tdIn" id="tdLbl"></label><input id="tdIn"></div>
   <div class="btns dlg-act"><button type="button" id="tdCancel">Bekor qilish</button><button type="submit" class="primary" id="tdOk">Saqlash</button></div>
+</form></dialog>
+
+<dialog class="dlg" id="psDlg" aria-labelledby="psT"><form id="psF" novalidate>
+  <h3 id="psT">To'lovning obyektini o'zgartirish</h3>
+  <p class="hint" id="psInfo"></p>
+  <div class="f"><label for="psSel">📍 Qaysi obyekt hisobiga</label><select id="psSel"></select></div>
+  <div class="btns dlg-act"><button type="button" id="psCancel">Bekor qilish</button><button type="submit" class="primary">Saqlash</button></div>
 </form></dialog>
 
 <script>
@@ -2680,12 +2691,11 @@ let accProj = {};
 let sites = [], SITES_OK = false, accSite;
 const REGIONS = ["Qashqadaryo viloyati", "Navoiy viloyati", "Buxoro viloyati", "Samarqand viloyati", "Surxondaryo viloyati", "Jizzax viloyati", "Sirdaryo viloyati", "Toshkent viloyati", "Toshkent shahri", "Andijon viloyati", "Farg'ona viloyati", "Namangan viloyati", "Xorazm viloyati", "Qoraqalpog'iston Respublikasi"];
 const siteById = id => sites.find(x => x.id === id);
-const siteLbl = id => { const x = siteById(id); return x ? `${x.region.replace(/ viloyati$/, "")} — ${x.name}` : id ? "Noma'lum obyekt" : "Obyekt belgilanmagan"; };
+const siteLbl = id => { const x = siteById(id); return x ? x.name : id ? "Noma'lum obyekt" : "Obyekt belgilanmagan"; };
 const siteShort = id => { const x = siteById(id); return x ? x.name : id ? "Noma'lum obyekt" : "Belgilanmagan"; };
 function siteOptions(sel, o = {}){
-  const act = sites.filter(x => x.active || x.id === sel);
-  const groups = [...new Set(act.map(x => x.region))].sort((a, b) => (REGIONS.indexOf(a) + 99) % 99 - (REGIONS.indexOf(b) + 99) % 99 || a.localeCompare(b));
-  return `<option value="">${o.empty || "— obyektni tanlang —"}</option>` + groups.map(g => `<optgroup label="${esc(g)}">${act.filter(x => x.region === g).sort((a, b) => a.name.localeCompare(b.name)).map(x => `<option value="${x.id}"${x.id === sel ? " selected" : ""}>${esc(x.name)}${x.active ? "" : " (yopilgan)"}</option>`).join("")}</optgroup>`).join("") +
+  const act = sites.filter(x => (x.active || x.id === sel) && !(o.except && x.id === o.except)).sort((a, b) => a.name.localeCompare(b.name));
+  return `<option value="">${o.empty || "— obyektni tanlang —"}</option>` + act.map(x => `<option value="${x.id}"${x.id === sel ? " selected" : ""}>${esc(x.name)}${x.active ? "" : " (arxivda)"}</option>`).join("") +
     (PRIV() && !VIEWING() && !o.noNew ? `<option value="__new">＋ Yangi obyekt qo'shish…</option>` : "");
 }
 const siteKey = () => "savdo-site-" + (me?.id || "");
@@ -2709,8 +2719,8 @@ function askText(o){
   });
 }
 async function addSite(region, name){
-  name = String(name || "").trim(); if (!region || !name) { toast("Viloyat va obyekt nomini kiriting"); return null; }
-  const ex = sites.find(x => same(x.region, region) && same(x.name, name));
+  region = region || ""; name = String(name || "").trim(); if (!name) { toast("Obyekt nomini kiriting"); return null; }
+  const ex = sites.find(x => same(x.name, name));
   if (ex) { if (!ex.active) await setSiteActive(ex.id, true); return ex.id; }
   const { data, error } = await sb.from("sites").insert({ region, name }).select().single();
   if (error) { toast("Obyektni qo'shib bo'lmadi: " + error.message); return null; }
@@ -2722,9 +2732,9 @@ async function setSiteActive(id, on){
   const x = siteById(id); if (x) x.active = on; render();
 }
 function openSiteDlg(cb){
-  const d = $("#siteDlg"); if (!$("#sdRegion").options.length) $("#sdRegion").innerHTML = REGIONS.map(r => `<option>${esc(r)}</option>`).join("");
+  const d = $("#siteDlg");
   $("#sdName").value = ""; let done = false; const fin = v => { if (done) return; done = true; d.close(); cb(v); };
-  $("#siteDlgF").onsubmit = async e => { e.preventDefault(); const id = await addSite($("#sdRegion").value, $("#sdName").value); if (id) fin(id); };
+  $("#siteDlgF").onsubmit = async e => { e.preventDefault(); const id = await addSite("", $("#sdName").value); if (id) fin(id); };
   $("#sdCancel").onclick = () => fin(null); d.oncancel = e => { e.preventDefault(); fin(null); };
   d.showModal(); setTimeout(() => $("#sdName").focus(), 30);
 }
@@ -2736,20 +2746,27 @@ function siteSelNew(el, prev, after){
 }
 function renderSites(){
   const box = $("#sitesBox"); if (!box) return; box.hidden = !SITES_OK; if (!SITES_OK) return;
-  if (!$("#sRegion").options.length) $("#sRegion").innerHTML = REGIONS.map(r => `<option>${esc(r)}</option>`).join("");
   const cnt = id => new Set(rows.filter(r => r.site === id).map(gk)).size;
-  const list = [...sites].sort((a, b) => (b.active - a.active) || (REGIONS.indexOf(a.region) - REGIONS.indexOf(b.region)) || a.name.localeCompare(b.name));
-  $("#siteList").innerHTML = list.length ? list.map(x => { const n = cnt(x.id), used = n || pays.some(p => p.site === x.id);
-    return `<tr class="${x.active ? "" : "site-off"}"><td>${esc(x.region)}</td><td><b>${esc(x.name)}</b></td><td class="r num">${n}</td><td><span class="pill ${x.active ? "zero" : "closed"}">${x.active ? "Faol" : "Yopilgan"}</span></td>
-      <td class="r nw">${VIEWING() ? "" : `<button type="button" class="sm ghost" data-site-ren="${x.id}">Nomini o'zgartirish</button> <button type="button" class="sm ghost" data-site-tog="${x.id}">${x.active ? "Yopish" : "Qayta ochish"}</button>${used ? "" : ` <button type="button" class="sm ghost danger" data-site-del="${x.id}">O'chirish</button>`}`}</td></tr>`; }).join("")
-    : `<tr><td colspan="5" class="empty">Hali obyekt qo'shilmagan. Yuqorida viloyatni tanlab, obyekt nomini yozing.</td></tr>`;
+  const row = x => { const n = cnt(x.id), used = n || pays.some(p => p.site === x.id);
+    return `<tr class="${x.active ? "" : "site-off"}"><td><b>${esc(x.name)}</b></td><td class="r num">${n}</td>
+      <td class="r nw">${VIEWING() ? "" : `<button type="button" class="sm ghost" data-site-ren="${x.id}">Nomini o'zgartirish</button> ${x.active ? `<button type="button" class="sm ghost" data-site-arc="${x.id}">📦 Arxivga olish</button>` : `<button type="button" class="sm ghost" data-site-tog="${x.id}">Arxivdan qaytarish</button>`}${used ? "" : ` <button type="button" class="sm ghost danger" data-site-del="${x.id}">O'chirish</button>`}`}</td></tr>`; };
+  const act = sites.filter(x => x.active).sort((a, b) => a.name.localeCompare(b.name)), arc = sites.filter(x => !x.active).sort((a, b) => a.name.localeCompare(b.name));
+  $("#siteList").innerHTML = act.length ? act.map(row).join("") : `<tr><td colspan="3" class="empty">${arc.length ? "Faol obyekt yo'q." : "Hali obyekt qo'shilmagan. Yuqorida obyekt nomini yozib, «Qo'shish»ni bosing."}</td></tr>`;
+  $("#siteArchBox").hidden = !arc.length; $("#siteArchSum").textContent = `📦 Arxivdagi obyektlar (${arc.length})`;
+  $("#siteArchList").innerHTML = arc.map(row).join("");
 }
-$("#siteForm").addEventListener("submit", async e => { e.preventDefault(); if (await addSite($("#sRegion").value, $("#sName").value)) $("#sName").value = ""; });
-$("#siteList").addEventListener("click", async e => {
+$("#siteForm").addEventListener("submit", async e => { e.preventDefault(); if (await addSite("", $("#sName").value)) $("#sName").value = ""; });
+$("#sitesBox").addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.siteArc) { const x = siteById(b.dataset.siteArc); if (!x) return;
+    // shu obyektda hali yopilmagan qarz yoki avans bo'lsa — ogohlantiriladi
+    const left = buyersAll().map(f => ({ f, P: projNow(f, x.id) })).filter(z => !z.P.closed && Math.abs(z.P.bal) >= 1 && (rows.some(r => same(r.firm, z.f) && r.site === x.id) || pays.some(p => same(p.firm, z.f) && p.site === x.id)));
+    const warn = left.length ? `\n\nDiqqat, bu obyektda hisob hali 0 emas:\n${left.slice(0, 8).map(z => `· ${z.f}: ${z.P.bal < 0 ? "qarz" : "avans"} ${fmt(Math.abs(z.P.bal))} so'm`).join("\n")}${left.length > 8 ? `\n… va yana ${left.length - 8} ta firma` : ""}` : "";
+    if (!confirm(`«${x.name}» obyekti arxivga olinsinmi?\n\nYangi yuk xati va to'lovlarda bu obyekt ro'yxatda chiqmaydi. Eski yuk xatlari, to'lovlar va hisob-kitobi o'chmaydi — hisob-kitob, arxiv va statistikada ko'rinib turadi. Kerak bo'lsa, arxivdan qaytarish mumkin.${warn}`)) return;
+    await setSiteActive(x.id, false); toast(`«${x.name}» arxivga olindi`); return; }
   if (b.dataset.siteTog) { const x = siteById(b.dataset.siteTog); if (x) await setSiteActive(x.id, !x.active); }
   else if (b.dataset.siteRen) { const x = siteById(b.dataset.siteRen); if (!x) return;
-    const v = await askText({ title: "Obyekt nomi", hint: x.region, label: "Yangi nomi", value: x.name }); if (!v || v === x.name) return;
+    const v = await askText({ title: "Obyekt nomi", label: "Yangi nomi", value: x.name }); if (!v || v === x.name) return;
     const { error } = await sb.from("sites").update({ name: v }).eq("id", x.id); if (error) { toast(error.message); return; } x.name = v; render(); toast("Nomi o'zgartirildi"); }
   else if (b.dataset.siteDel) { const x = siteById(b.dataset.siteDel); if (!x || !confirm(`«${siteLbl(x.id)}» obyekti o'chirilsinmi?`)) return;
     const { error } = await sb.from("sites").delete().eq("id", x.id); if (error) { toast(error.message); return; } sites = sites.filter(y => y.id !== x.id); render(); toast("Obyekt o'chirildi"); }
@@ -3966,34 +3983,53 @@ function renderSiteTabs(){
   tabs.innerHTML = subs.map(s => { const y = accOne(accFirm, s);
     return `<button type="button" class="site-tab st-${y.st}${s === accSite ? " on" : ""}" data-acc-site="${esc(s)}"><span>📍 ${esc(siteLbl(s))}</span><b class="num">${y.st === "closed" ? "🔒 " : ""}${sgn(y)}${fmt(Math.abs(y.bal))}</b></button>`; }).join("");
   const unR = rows.filter(r => same(r.firm, accFirm) && !r.site), unP = pays.filter(p => same(p.firm, accFirm) && !p.site), can = PRIV() && !VIEWING();
-  as.hidden = !(accSite === "" && can && sites.some(x => x.active) && (unR.length || unP.length));
-  if (!as.hidden && !as.dataset.on) {
-    as.dataset.on = "1";
-    as.innerHTML = `<b>📍 Bu yozuvlar hali obyektga biriktirilmagan.</b> <span class="dim">Sana oralig'ini tanlab, ularni obyektga o'tkazing — keyin hisob o'sha obyekt bo'yicha yuritiladi.</span>
-      <div class="site-assign-row"><select id="asSite"></select><label>Sanadan <input type="date" id="asFrom"></label><label>Sanagacha <input type="date" id="asTo"></label><button type="button" class="primary" id="asGo">Obyektga biriktirish</button></div>`;
+  const hasHere = rows.some(r => same(r.firm, accFirm) && (r.site || "") === accSite) || pays.some(p => same(p.firm, accFirm) && (p.site || "") === accSite);
+  const isNone = accSite === "";
+  as.hidden = !(can && hasHere && (isNone ? sites.some(x => x.active) : true));
+  const mode = isNone ? "none" : "move:" + accSite;
+  if (!as.hidden && as.dataset.on !== mode) {
+    as.dataset.on = mode;
+    const row = `<div class="site-assign-row"><select id="asSite"></select><label>Sanadan <input type="date" id="asFrom"></label><label>Sanagacha <input type="date" id="asTo"></label><button type="button" class="primary" id="asGo">${isNone ? "Obyektga biriktirish" : "O'tkazish"}</button></div>`;
+    as.className = "site-assign" + (isNone ? "" : " site-move");
+    as.innerHTML = isNone ? `<b>📍 Bu yozuvlar hali obyektga biriktirilmagan.</b> <span class="dim">Sana oralig'ini tanlab, ularni obyektga o'tkazing — keyin hisob o'sha obyekt bo'yicha yuritiladi.</span>${row}`
+      : `<details><summary>↪ Boshqa obyektga o'tkazish <span class="dim">— adashib shu obyektga yozilgan yuk xatlari va to'lovlarni to'g'rilash</span></summary><p class="dim">Sana oralig'ini tanlang (bo'sh qoldirsangiz — shu firmaning shu obyektdagi hammasi). Tanlangan oraliqdagi yuk xatlari va to'lovlar boshqa obyektga o'tadi.</p>${row}</details>`;
   }
-  if (!as.hidden) { const v = $("#asSite").value; $("#asSite").innerHTML = siteOptions(v, { noNew: true }); $("#asSite").value = v; }
+  if (!as.hidden) { const v = $("#asSite").value; $("#asSite").innerHTML = siteOptions(v, { noNew: true, except: isNone ? undefined : accSite, empty: isNone ? "— obyektni tanlang —" : "— qaysi obyektga —" }) + (isNone ? "" : `<option value="__none">Obyekt belgilanmagan</option>`); $("#asSite").value = v; }
   else delete as.dataset.on;
   const pv = $("#paySite").value; $("#paySite").innerHTML = siteOptions(pv); $("#paySite").value = accSite || "";
   if ($("#paySite").value !== (accSite || "")) $("#paySite").value = ""; pmMark($("#paySite"));
 }
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-pay-site]"); if (!b) return;
+  const p = pays.find(x => x.id === b.dataset.paySite); if (!p) return;
+  const d = $("#psDlg"); $("#psSel").innerHTML = siteOptions(p.site || "", { noNew: true, empty: "Obyekt belgilanmagan" }); $("#psSel").value = p.site || "";
+  $("#psInfo").textContent = `${fmtDate(p.date)} · ${fmt(p.amount)} so'm · ${PM[p.method === "cash" ? "cash" : "bank"]}`;
+  let done = false; const fin = () => { if (!done) { done = true; d.close(); } };
+  $("#psCancel").onclick = fin; d.oncancel = e2 => { e2.preventDefault(); fin(); };
+  $("#psF").onsubmit = async e2 => { e2.preventDefault(); const v = $("#psSel").value;
+    if (v === (p.site || "")) { fin(); return; }
+    const { error } = await sb.from("payments").update({ site_id: v || null }).eq("id", p.id);
+    if (error) { toast("O'zgartirib bo'lmadi: " + error.message); return; }
+    p.site = v; fin(); render(); toast(`To'lov «${siteLbl(v)}» hisobiga o'tkazildi`); };
+  d.showModal();
+});
 $("#accSiteTabs").addEventListener("click", e => { const b = e.target.closest("[data-acc-site]"); if (!b) return; accSite = b.dataset.accSite; pendingPayDel = null; renderAccounts(); });
 $("#paySite").addEventListener("change", e => { siteSelNew(e.target, accSite || ""); pmMark(e.target); });
 $("#apSite").addEventListener("change", e => { siteSelNew(e.target, ""); pmMark(e.target); });
 $("#apFirm").addEventListener("change", () => { if (!SITES_OK) return; const v = lastSiteFor($("#apFirm").value.trim()); if (v) { $("#apSite").value = v; pmMark($("#apSite")); } });
 document.addEventListener("click", async e => {
   if (!e.target.closest("#asGo")) return;
-  const sid = $("#asSite").value, d1 = $("#asFrom").value, d2 = $("#asTo").value;
-  if (!siteById(sid)) { toast("Qaysi obyektga biriktirishni tanlang"); $("#asSite").focus(); return; }
+  const raw = $("#asSite").value, sid = raw === "__none" ? "" : raw, d1 = $("#asFrom").value, d2 = $("#asTo").value, from = accSite || "";
+  if (raw !== "__none" && !siteById(sid)) { toast("Qaysi obyektga o'tkazishni tanlang"); $("#asSite").focus(); return; }
   const inR = x => (!d1 || (x.date || "") >= d1) && (!d2 || (x.date || "") <= d2);
-  const rr = rows.filter(r => same(r.firm, accFirm) && !r.site && inR(r)), pp = pays.filter(p => same(p.firm, accFirm) && !p.site && inR(p));
+  const rr = rows.filter(r => same(r.firm, accFirm) && (r.site || "") === from && inR(r)), pp = pays.filter(p => same(p.firm, accFirm) && (p.site || "") === from && inR(p));
   const nW = new Set(rr.map(gk)).size;
-  if (!rr.length && !pp.length) { toast("Bu oraliqda biriktirilmagan yozuv yo'q"); return; }
-  if (!confirm(`${accFirm}\n\n${nW} ta yuk xati va ${pp.length} ta to'lov «${siteLbl(sid)}» obyektiga biriktirilsinmi?`)) return;
-  const upd = async (tbl, ids) => { for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from(tbl).update({ site_id: sid }).in("id", ids.slice(i, i + 200)); if (error) throw error; } };
+  if (!rr.length && !pp.length) { toast("Bu oraliqda o'tkaziladigan yozuv yo'q"); return; }
+  if (!confirm(`${accFirm}\n\n«${siteLbl(from)}» → «${siteLbl(sid)}»\n${nW} ta yuk xati va ${pp.length} ta to'lov o'tkazilsinmi?`)) return;
+  const upd = async (tbl, ids) => { for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from(tbl).update({ site_id: sid || null }).in("id", ids.slice(i, i + 200)); if (error) throw error; } };
   try { await upd("sales", rr.map(r => r.id)); await upd("payments", pp.map(p => p.id)); }
   catch(err) { toast("Biriktirib bo'lmadi: " + err.message); return; }
-  accSite = sid; await reloadAll(true); toast(`${nW} ta yuk xati va ${pp.length} ta to'lov obyektga biriktirildi`);
+  accSite = sid; delete $("#accAssign").dataset.on; await reloadAll(true); toast(`${nW} ta yuk xati va ${pp.length} ta to'lov «${siteLbl(sid)}»ga o'tkazildi`);
 });
 $("#accQ").addEventListener("input", e => { accQ = e.target.value; renderAccounts(); });
 $("#accFilt").addEventListener("change", e => { accFilt = e.target.value; renderAccounts(); });
@@ -4038,7 +4074,7 @@ function renderAccounts(){
       <span class="num pay-amt">${fmt(p.amount)} so'm</span><span class="pill pm-${p.method === "cash" ? "cash" : "bank"}">${PM[p.method === "cash" ? "cash" : "bank"]}</span>
       <span class="dim pay-note">${esc(p.note || "")}</span>
       ${pendingPayDel === p.id ? `<span class="confirm">O'chirilsinmi? <button type="button" class="ghost danger" data-pay-yes="${p.id}">Ha</button><button type="button" class="ghost" data-pay-no>Yo'q</button></span>`
-        : `<button type="button" class="ghost danger" data-pay-del="${p.id}">O'chirish</button>`}
+        : `${SITES_OK && !VIEWING() ? `<button type="button" class="ghost" data-pay-site="${p.id}">📍 Obyektni o'zgartirish</button>` : ""}<button type="button" class="ghost danger" data-pay-del="${p.id}">O'chirish</button>`}
     </li>`).join("") : `<li class="hint">Hali to'lov kiritilmagan.</li>`;
 
   const prods = [...new Map([...ref.prices.filter(p => same(p.firm, accFirm)).map(p => p.product), ...rows.filter(r => same(r.firm, accFirm)).map(r => r.product)]
@@ -5803,7 +5839,7 @@ function stSingle(rows, months){
   const total = totM.reduce((a, b) => a + b, 0), wbs = wbM.reduce((a, b) => a + b, 0), active = totM.filter(v => v > 0).length || 1;
   // bo'lib ko'rsatish: mahsulot yoki xaridor
   const items = new Map();
-  rows.forEach(r => { const k = String(r[dim] || (dim === "site" ? "Obyekt belgilanmagan" : "—")).trim(), id = k.toLowerCase(); const it = items.get(id) || { name: k, unit: r.unit || "", qty: {}, sum: {}, tq: 0, ts: 0 };
+  rows.forEach(r => { const k = String((dim === "site" ? String(r.site || "").replace(/^.* — /, "") : r[dim]) || (dim === "site" ? "Obyekt belgilanmagan" : "—")).trim(), id = k.toLowerCase(); const it = items.get(id) || { name: k, unit: r.unit || "", qty: {}, sum: {}, tq: 0, ts: 0 };
     it.qty[r.month] = (it.qty[r.month] || 0) + r.qty; it.sum[r.month] = (it.sum[r.month] || 0) + r.total; it.tq += r.qty; it.ts += r.total; if (!it.unit && r.unit) it.unit = r.unit; items.set(id, it); });
   const list = [...items.values()].sort((a, b) => (qtyMode ? b.tq - a.tq : b.ts - a.ts) || a.name.localeCompare(b.name));
   const top = [...list].sort((a, b) => b.ts - a.ts)[0];
