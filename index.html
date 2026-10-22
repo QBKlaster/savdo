@@ -672,6 +672,49 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .site-move details[open] summary{margin-bottom:6px}
 .pay-list [data-pay-site]{font-size:12.5px}
 .site-arch{margin-top:10px}.site-arch summary{cursor:pointer;color:var(--muted);font-size:13.5px;padding:6px 0}
+/* ---- kalkulyatsiya ---- */
+.calc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+body:not(.locked) .money-hide{display:none!important}
+.calc-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.calc-filters .f{min-width:150px}
+.calc-xl{margin-left:auto}
+.calc-ex{margin:12px 0 14px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--surface-2)}
+.calc-ex summary{cursor:pointer;font-size:14px}
+.calc-ex-top{display:flex;gap:8px;margin:8px 0}.calc-ex-top input{flex:1}
+.calc-ex-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px 14px;max-height:260px;overflow:auto;font-size:13.5px}
+.calc-ex-list .chk{display:flex;gap:8px;align-items:center}
+.calc-h{margin:20px 0 8px}
+.calc-warn{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px;padding:9px 12px;border-radius:10px;font-size:13px;background:color-mix(in srgb,#f2b705 14%,var(--surface));border:1px solid color-mix(in srgb,#e0a106 50%,transparent)}
+.calc-mat{display:flex;flex-wrap:wrap;gap:4px;max-width:520px}
+.cr-chip{display:inline-flex;gap:4px;align-items:baseline;font-size:12.5px;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.calc-norec td{background:color-mix(in srgb,#f2b705 8%,transparent)}
+.warn-t{color:#8a5a00;font-size:12px;font-weight:600}
+.calc-need{padding:16px;border-radius:10px;background:color-mix(in srgb,#f2b705 14%,var(--surface))}
+.cr-grid{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px;align-items:start}
+.cr-side{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:8px;position:sticky;top:70px}
+.cr-search{display:flex;gap:6px}.cr-search input{flex:1;min-width:0}
+.cr-list{display:grid;gap:2px;max-height:60vh;overflow:auto}
+.cr-p{display:flex;justify-content:space-between;gap:8px;align-items:center;text-align:left;border:0;background:none;padding:7px 9px;border-radius:7px;font-size:13.5px;min-height:0}
+.cr-p:hover{background:var(--surface-2)}.cr-p.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.cr-ok{color:#17794a;font-size:12px}.cr-no{color:var(--muted);font-size:11.5px}
+.cr-edit{display:grid;gap:12px;min-width:0}
+.cr-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.cr-head h3{margin:0;font-size:18px}
+.cr-vers{display:flex;flex-wrap:wrap;gap:6px}.cr-vers .on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.cr-meta{display:flex;flex-wrap:wrap;gap:14px}.cr-meta .f{min-width:220px}
+.cr-base{display:flex;align-items:center;gap:6px}.cr-base input{width:110px}
+.cr-lines select{min-width:200px;width:100%}.cr-q{width:110px;text-align:right}
+.cr-sum{padding:10px 12px;border-radius:10px;background:var(--surface-2);display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px}
+.cr-cost{flex-basis:100%;margin-top:4px}
+.cr-act{justify-content:flex-end}
+.cr-empty{padding:20px}
+.ci-form{flex-wrap:wrap}.ci-price{display:flex;gap:6px}.ci-price input:first-child{width:160px}
+.calc-hist{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12px;color:var(--muted)}
+.calc-used{font-size:12.5px;max-width:260px}
+@media (max-width:820px){.cr-grid{grid-template-columns:1fr}.cr-side{position:static}.calc-xl{margin-left:0}}
+.calc-kpis{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.acc-kpi.k-profit b{color:#17794a}
+.calc-panel td.num{white-space:nowrap}
+.calc-panel #ciFrom{width:150px}
 </style>
 
 </head>
@@ -721,6 +764,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
       <button type="button" data-page="archive"><i aria-hidden="true">🗂</i>Arxiv</button>
       <button type="button" data-page="money" class="priv-only"><i aria-hidden="true">💵</i>Hisob-kitob<span class="side-badge" id="sbUp" hidden></span></button>
       <button type="button" data-page="stats" class="priv-only"><i aria-hidden="true">📊</i>Statistika</button>
+      <button type="button" data-page="calc" class="priv-only"><i aria-hidden="true">🧮</i>Kalkulyatsiya</button>
       <button type="button" data-page="refs" class="priv-only"><i aria-hidden="true">🏷</i>Firmalar va mahsulotlar</button>
     </div>
     <div class="side-grp" id="sgPay">
@@ -964,6 +1008,47 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
     </div>
   </details>
 
+  <section class="panel priv-only calc-panel" id="calcPanel" data-page="calc">
+    <div class="calc-top">
+      <span class="seg calc-tabs" id="calcTabs" role="group" aria-label="Kalkulyatsiya bo'limlari"><button type="button" data-ctab="report">📊 Hisobot</button><button type="button" data-ctab="rec">🧾 Mahsulot tarkibi</button><button type="button" data-ctab="items">🧱 Xomashyolar</button></span>
+      <button type="button" class="sm money-hide" id="calcUnlock">🔒 Narxlarni ko'rish</button>
+    </div>
+    <div id="calcRep">
+      <div class="calc-filters">
+        <div class="f"><label for="cFrom">Sanadan</label><input type="date" id="cFrom"></div>
+        <div class="f"><label for="cTo">Sanagacha</label><input type="date" id="cTo"></div>
+        <div class="f" id="cSiteBox"><label for="cSite">Obyekt</label><select id="cSite"><option value="">Barcha obyektlar</option></select></div>
+        <div class="f calc-pre" id="calcPresets"><label>&nbsp;</label><span class="btns"><button type="button" class="chip" data-cp="month">Shu oy</button><button type="button" class="chip" data-cp="prev">O'tgan oy</button><button type="button" class="chip" data-cp="year">Shu yil</button></span></div>
+        <div class="f calc-xl"><label>&nbsp;</label><button type="button" class="primary" id="calcXl">Excel yuklab olish</button></div>
+      </div>
+      <details class="calc-ex"><summary>🚫 Hisobdan chiqariladigan firmalar: <b id="cExN">hech biri</b></summary>
+        <p class="hint">Belgilangan firmalarga sotilgan mahsulotlar kalkulyatsiyaga kirmaydi (masalan, o'zimizning firmalar). Tanlov eslab qolinadi.</p>
+        <div class="calc-ex-top"><input type="search" id="cExQ" placeholder="Firma qidirish…" aria-label="Firma qidirish"><button type="button" class="sm ghost" id="cExClear">Hammasini olib tashlash</button></div>
+        <div class="calc-ex-list" id="cExList"></div>
+      </details>
+    </div>
+    <div id="calcRec" hidden>
+      <div class="cr-grid">
+        <div class="cr-side">
+          <div class="cr-search"><input type="search" id="crSearch" placeholder="Mahsulot qidirish yoki yangi nom…" aria-label="Mahsulot"><button type="button" class="sm" id="crNew" title="Ro'yxatda yo'q mahsulot (masalan, yarim tayyor beton) uchun tarkib">+ Yangi</button></div>
+          <div class="cr-list" id="crList"></div>
+        </div>
+        <div class="cr-edit" id="crEdit"></div>
+      </div>
+    </div>
+    <div id="calcItems" hidden>
+      <form class="ref-add ci-form" id="ciForm" autocomplete="off">
+        <input id="ciName" placeholder="Xomashyo nomi, masalan: Sement M400" aria-label="Xomashyo nomi">
+        <input id="ciUnit" list="ciUnits" placeholder="Birligi" value="kg" aria-label="Birligi" style="flex:0 1 110px">
+        <span id="ciPriceBox" class="ci-price"><input id="ciPrice" class="num" inputmode="decimal" placeholder="Narxi (ixtiyoriy)" aria-label="Narxi, so'm"><input type="date" id="ciFrom" aria-label="Narx qaysi sanadan" title="Narx qaysi sanadan (bo'sh — boshidan, eski sotuvlarga ham)"></span>
+        <button type="submit" class="primary">Qo'shish</button>
+      </form>
+      <datalist id="ciUnits"><option value="kg"><option value="tonna"><option value="m³"><option value="litr"><option value="dona"><option value="metr"><option value="m²"><option value="qop"></datalist>
+      <div class="tbl"><table><thead><tr><th>Xomashyo</th><th>Birligi</th><th class="r">Hozirgi narx</th><th>Narx tarixi</th><th>Qaysi mahsulotlarda</th><th></th></tr></thead><tbody id="ciList"></tbody></table></div>
+    </div>
+    <div id="calcBody"></div>
+  </section>
+
   <details class="panel ref priv-only" id="refPanel" data-page="refs">
     <summary><span>Saqlangan firmalar va mahsulotlar</span> <span class="hint" id="refCount"></span></summary>
     <div class="ref-grid">
@@ -1142,6 +1227,14 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
   <p class="hint" id="psInfo"></p>
   <div class="f"><label for="psSel">📍 Qaysi obyekt hisobiga</label><select id="psSel"></select></div>
   <div class="btns dlg-act"><button type="button" id="psCancel">Bekor qilish</button><button type="submit" class="primary">Saqlash</button></div>
+</form></dialog>
+
+<dialog class="dlg" id="cpDlg" aria-labelledby="cpT"><form id="cpF" autocomplete="off" novalidate>
+  <h3 id="cpT">Narx</h3>
+  <p class="hint">Yangi narx tanlangan sanadan boshlab amal qiladi; eski sotuvlar eski narxda hisoblanadi.</p>
+  <div class="dlg-row"><div class="f"><label for="cpPrice">Narxi, so'm</label><input id="cpPrice" class="num" inputmode="decimal" placeholder="0"></div>
+  <div class="f"><label for="cpFrom">Qaysi sanadan</label><input type="date" id="cpFrom"></div></div>
+  <div class="btns dlg-act"><button type="button" id="cpCancel">Bekor qilish</button><button type="submit" class="primary">Saqlash</button></div>
 </form></dialog>
 
 <script>
@@ -3327,6 +3420,7 @@ function render(){
     { const v = $("#qSite").value; $("#qSite").innerHTML = `<option value="">Barcha obyektlar</option>` + [...sites].sort((a, b) => siteLbl(a.id).localeCompare(siteLbl(b.id))).map(x => `<option value="${x.id}">${esc(siteLbl(x.id))}</option>`).join("") + (rows.some(r => !r.site) ? `<option value="__none">Obyekt belgilanmagan</option>` : ""); $("#qSite").value = v; if ($("#qSite").value !== v) $("#qSite").value = ""; }
   }
   renderSites();
+  if (typeof curPage !== "undefined" && curPage === "calc" && typeof renderCalc === "function" && CALC_OK && calcTab !== "rec") renderCalc();
 
   const firms = [...new Set(col("firm").filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   const cur = $("#qFirm").value;
@@ -5543,6 +5637,7 @@ const PAGES = {
   money: ["wb", "Hisob-kitob", "Firmalar bilan to'lovlar va qarzdorlik"],
   stats: ["wb", "Statistika", "Oyma-oy savdo, mahsulotlar va xaridorlar bo'yicha"],
   refs:  ["wb", "Firmalar va mahsulotlar", "Ro'yxatlar va narxlar"],
+  calc:  ["wb", "Kalkulyatsiya", "Xomashyo me'yorlari va davr bo'yicha sarf"],
   users: ["gen", "Foydalanuvchilar", "Login, parol va huquqlar"],
   brand: ["gen", "Yuk xati blanki", "Chop etiladigan blank ko'rinishi"],
   "p-objects": ["pay", "Obyektlar va xodimlar"],
@@ -5592,6 +5687,7 @@ function showPage(id){
     $("#pgTitle").textContent = P[1]; $("#pgTag").textContent = P[2] || "";
     document.body.dataset.page = id;
     if (id === "stats" && typeof stRender === "function") setTimeout(() => { try { stRender(); } catch(e) {} }, 0);
+    if (id === "calc" && typeof calcOpen === "function") calcOpen();
     scrollTo(0, 0);
   }
   try { localStorage.setItem("savdo-page-" + me.id, id); } catch(e) {}
@@ -6077,6 +6173,290 @@ async function xlAddCharts(u8, sheetNo, charts){
   zip.file("[Content_Types].xml", ct);
   return await zip.generateAsync({ type: "uint8array", compression: "DEFLATE" });
 }
+
+/* ---------- 🧮 Kalkulyatsiya: xomashyolar, mahsulot tarkibi (me'yorlar) va davr bo'yicha xomashyo sarfi ----------
+   Ma'lumot korxona bo'yicha bitta yozuvda (calc jadvali): { items, prices, recipes }.
+   Tarkib 1 nechta mahsulot uchun yoziladi (base), ichiga boshqa mahsulot ham kirishi mumkin (Lotok → Beton B25 → sement…).
+   Har tarkib va har narx «qaysi sanadan» amal qiladi; sotuv sanasidagi me'yor va narx olinadi. */
+let calc = { items: [], prices: [], recipes: [] }, CALC_OK = null, calcTab = "report", calcProd = "", calcDraft = null, calcEx = [];
+const CALC_UNITS = ["kg", "tonna", "m³", "litr", "dona", "metr", "m²", "qop"];
+const ciById = id => calc.items.find(x => x.id === id);
+const fq = v => (Math.round((v || 0) * 1000) / 1000).toLocaleString("ru-RU").replace(/\s/g, " ");
+const cMoney = () => M();
+async function calcLoad(){
+  const { data, error } = await sb.from("calc").select("data").limit(1);
+  if (error) { CALC_OK = false; return; }
+  CALC_OK = true;
+  const d = (data && data[0] && data[0].data) || {};
+  calc = { items: Array.isArray(d.items) ? d.items : [], prices: Array.isArray(d.prices) ? d.prices : [], recipes: Array.isArray(d.recipes) ? d.recipes : [] };
+}
+async function calcSave(msg){
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return false; }
+  const { error } = await sb.from("calc").upsert({ data: calc, updated_at: new Date().toISOString() }, { onConflict: "org_id" });
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return false; }
+  if (msg) toast(msg);
+  return true;
+}
+function itemPrice(id, date){
+  const d = date || today();
+  const l = calc.prices.filter(p => p.item === id && (p.from || "") <= d).sort((a, b) => (a.from || "").localeCompare(b.from || "") || (a.at || "").localeCompare(b.at || ""));
+  return l.length ? l[l.length - 1].price : null;
+}
+const recipesOf = name => calc.recipes.filter(r => same(r.product, name)).sort((a, b) => (a.from || "").localeCompare(b.from || ""));
+function recipeFor(name, date){ const l = recipesOf(name).filter(r => (r.from || "") <= (date || today())); return l.length ? l[l.length - 1] : null; }
+// mahsulotni xomashyoga ajratish (ichma-ich); out: { xomashyo id: miqdor }
+function calcExpand(name, qty, date, out, warn, depth){
+  if ((depth || 0) > 8) { warn.add(name + " (tarkibi o'zini o'zi takrorlaydi)"); return; }
+  const r = recipeFor(name, date); if (!r) { warn.add(name); return; }
+  const base = r.base > 0 ? r.base : 1;
+  for (const l of r.lines || []) {
+    const q = (Number(l.qty) || 0) / base * qty; if (!q) continue;
+    if (l.t === "p") calcExpand(l.ref, q, date, out, warn, (depth || 0) + 1);
+    else out[l.ref] = (out[l.ref] || 0) + q;
+  }
+}
+const prodUnit = name => { const p = ref.products.find(x => same(x.name, name)); if (p && p.unit) return p.unit; const r = rows.find(x => same(x.product, name) && x.unit); return r ? r.unit : ""; };
+function calcProducts(){
+  const m = new Map();
+  [...ref.products.map(p => p.name), ...rows.map(r => r.product), ...calc.recipes.map(r => r.product)].filter(Boolean).forEach(n => { const k = n.trim().toLowerCase(); if (!m.has(k)) m.set(k, n.trim()); });
+  return [...m.values()].sort((a, b) => a.localeCompare(b));
+}
+const calcExKey = () => "savdo-calc-ex-" + (me?.id || "");
+
+/* ---------- sahifa ---------- */
+async function calcOpen(){
+  if (CALC_OK === null) { $("#calcBody").innerHTML = `<p class="hint">Yuklanmoqda…</p>`; await calcLoad(); }
+  try { calcEx = JSON.parse(localStorage.getItem(calcExKey()) || "[]"); } catch(e) { calcEx = []; }
+  if (!$("#cFrom").value) { const t = today(); $("#cFrom").value = t.slice(0, 8) + "01"; $("#cTo").value = t; }
+  renderCalc();
+}
+function renderCalc(){
+  if (CALC_OK === false) { $("#calcBody").innerHTML = `<div class="calc-need"><b>Kalkulyatsiya uchun bazani yangilash kerak.</b><p class="hint">Supabase → SQL Editor'da yangi <b>schema.sql</b> ni bir marta ishga tushiring, so'ng sahifani yangilang.</p></div>`; return; }
+  $$("#calcTabs [data-ctab]").forEach(b => { const on = b.dataset.ctab === calcTab; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $("#calcRep").hidden = calcTab !== "report"; $("#calcRec").hidden = calcTab !== "rec"; $("#calcItems").hidden = calcTab !== "items";
+  $("#calcBody").innerHTML = "";
+  if (calcTab === "report") renderCalcReport(); else if (calcTab === "rec") renderCalcRec(); else renderCalcItems();
+}
+$("#calcTabs").addEventListener("click", e => { const b = e.target.closest("[data-ctab]"); if (!b) return; calcTab = b.dataset.ctab; renderCalc(); });
+
+/* ---------- 🧱 xomashyolar ---------- */
+function renderCalcItems(){
+  const money = cMoney(), used = id => calc.recipes.filter(r => (r.lines || []).some(l => l.t !== "p" && l.ref === id)).map(r => r.product);
+  $("#ciPriceBox").hidden = !money;
+  const list = [...calc.items].sort((a, b) => a.name.localeCompare(b.name));
+  $("#ciList").innerHTML = list.length ? list.map(x => {
+    const u = [...new Set(used(x.id).map(n => n.trim()))], pr = itemPrice(x.id);
+    const hist = calc.prices.filter(p => p.item === x.id).sort((a, b) => (b.from || "").localeCompare(a.from || ""));
+    return `<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.unit)}</td>
+      <td class="r num">${money ? (pr != null ? fmt(pr) : `<span class="dim">kiritilmagan</span>`) : "•••"}</td>
+      <td class="calc-hist">${money ? hist.map(h => `<span class="num">${fmt(h.price)} — ${h.from ? fmtDate(h.from) + " dan" : "boshidan"}<button type="button" class="pr-x" data-cp-del="${h.id}" title="Shu narxni o'chirish">×</button></span>`).join("") : ""}</td>
+      <td class="dim calc-used">${u.length ? esc(u.slice(0, 4).join(", ")) + (u.length > 4 ? ` va yana ${u.length - 4} ta` : "") : "—"}</td>
+      <td class="r nw">${VIEWING() ? "" : `${money ? `<button type="button" class="sm ghost" data-ci-price="${x.id}">+ Narx</button> ` : ""}<button type="button" class="sm ghost" data-ci-ren="${x.id}">Nomi / birligi</button>${u.length ? "" : ` <button type="button" class="sm ghost danger" data-ci-del="${x.id}">O'chirish</button>`}`}</td></tr>`; }).join("")
+    : `<tr><td colspan="6" class="empty">Hali xomashyo kiritilmagan. Yuqorida nomi va birligini yozib, «Qo'shish»ni bosing.</td></tr>`;
+}
+$("#ciForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("#ciName").value.trim(), unit = $("#ciUnit").value.trim() || "kg";
+  if (!name) { toast("Xomashyo nomini yozing"); $("#ciName").focus(); return; }
+  if (calc.items.some(x => same(x.name, name))) { toast("Bu xomashyo ro'yxatda bor"); return; }
+  const it = { id: newId(), name, unit }; calc.items.push(it);
+  const pr = parseNum($("#ciPrice").value);
+  if (cMoney() && pr > 0) calc.prices.push({ id: newId(), item: it.id, price: pr, from: $("#ciFrom").value || "", at: new Date().toISOString() });
+  if (await calcSave(`Xomashyo qo'shildi: ${name}`)) { $("#ciName").value = ""; $("#ciPrice").value = ""; renderCalc(); $("#ciName").focus(); }
+});
+$("#ciList").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.ciPrice) { const x = ciById(b.dataset.ciPrice); if (!x) return; calcPriceDlg(x); }
+  else if (b.dataset.cpDel) { const p = calc.prices.find(y => y.id === b.dataset.cpDel); if (!p || !confirm(`${fmt(p.price)} so'mlik narx o'chirilsinmi?`)) return;
+    calc.prices = calc.prices.filter(y => y !== p); if (await calcSave("Narx o'chirildi")) renderCalc(); }
+  else if (b.dataset.ciRen) { const x = ciById(b.dataset.ciRen); if (!x) return;
+    const n = await askText({ title: "Xomashyo nomi", label: "Nomi", value: x.name }); if (n === null || !n) return;
+    const u = await askText({ title: "Birligi", hint: "Masalan: kg, tonna, m³, litr, dona", label: "Birligi", value: x.unit }); if (u === null) return;
+    x.name = n; x.unit = u || x.unit; if (await calcSave("Saqlandi")) renderCalc(); }
+  else if (b.dataset.ciDel) { const x = ciById(b.dataset.ciDel); if (!x || !confirm(`«${x.name}» o'chirilsinmi?`)) return;
+    calc.items = calc.items.filter(y => y !== x); calc.prices = calc.prices.filter(p => p.item !== x.id); if (await calcSave("O'chirildi")) renderCalc(); }
+});
+function calcPriceDlg(x){
+  const d = $("#cpDlg"); $("#cpT").textContent = `${x.name} — narx (1 ${x.unit} uchun)`; $("#cpPrice").value = "";
+  // birinchi narx — boshidan (eski sotuvlarga ham), keyingilari — bugundan
+  $("#cpFrom").value = calc.prices.some(p => p.item === x.id) ? today() : "";
+  let done = false; const fin = () => { if (!done) { done = true; d.close(); } };
+  $("#cpCancel").onclick = fin; d.oncancel = e => { e.preventDefault(); fin(); };
+  $("#cpF").onsubmit = async e => { e.preventDefault(); const pr = parseNum($("#cpPrice").value); if (!(pr > 0)) { toast("Narxni yozing"); $("#cpPrice").focus(); return; }
+    calc.prices.push({ id: newId(), item: x.id, price: pr, from: $("#cpFrom").value || "", at: new Date().toISOString() }); fin();
+    if (await calcSave(`Narx saqlandi: ${fmt(pr)} so'm`)) renderCalc(); };
+  d.showModal(); setTimeout(() => $("#cpPrice").focus(), 30);
+}
+
+/* ---------- 🧾 mahsulot tarkibi ---------- */
+function renderCalcRec(){
+  const q = ($("#crSearch").value || "").trim().toLowerCase(), all = calcProducts();
+  $("#crList").innerHTML = all.filter(n => !q || n.toLowerCase().includes(q)).map(n => { const v = recipesOf(n).length;
+    return `<button type="button" class="cr-p${same(n, calcProd) ? " on" : ""}" data-cr-p="${esc(n)}"><span>${esc(n)}</span>${v ? `<b class="cr-ok" title="${v} ta versiya">✓${v > 1 ? " " + v : ""}</b>` : `<span class="cr-no">tarkibsiz</span>`}</button>`; }).join("") || `<p class="hint">Mahsulot topilmadi.</p>`;
+  const box = $("#crEdit");
+  if (!calcProd) { box.innerHTML = `<p class="hint cr-empty">Chapdan mahsulotni tanlang — uning tarkibini (qaysi xomashyodan qancha ketishini) kiritasiz. Ro'yxatda yo'q mahsulot (masalan, sotilmaydigan yarim tayyor beton) uchun yuqoridagi qidiruvga nomini yozib, «+ Yangi» ni bosing.</p>`; return; }
+  const vers = recipesOf(calcProd), unit = prodUnit(calcProd) || "birlik";
+  if (!calcDraft || !same(calcDraft.product, calcProd)) {
+    const cur = recipeFor(calcProd, today()) || vers[vers.length - 1];
+    calcDraft = cur ? JSON.parse(JSON.stringify(cur)) : { id: null, product: calcProd, from: "", base: 1, lines: [] };
+  }
+  const d = calcDraft, money = cMoney(), canEdit = !VIEWING();
+  const items = [...calc.items].sort((a, b) => a.name.localeCompare(b.name)), prods = calcProducts().filter(n => !same(n, calcProd));
+  const per = {}, warn = new Set(), tmp = { ...d, from: d.from };
+  // ko'rinish: shu qoralama bo'yicha 1 birlikka xomashyo
+  (d.lines || []).forEach(l => { const q = (Number(l.qty) || 0) / (d.base > 0 ? d.base : 1); if (!q) return; if (l.t === "p") calcExpand(l.ref, q, d.from || today(), per, warn, 1); else if (l.ref) per[l.ref] = (per[l.ref] || 0) + q; });
+  let cost = 0, costOk = true; Object.entries(per).forEach(([id, q]) => { const p = itemPrice(id, d.from || today()); if (p == null) costOk = false; else cost += q * p; });
+  box.innerHTML = `<div class="cr-head"><h3>${esc(calcProd)}</h3><span class="dim">birligi: ${esc(unit)}</span></div>
+    ${vers.length ? `<div class="cr-vers">${vers.map(v => `<button type="button" class="sm${v.id === d.id ? " on" : ""}" data-cr-ver="${v.id}">${v.from ? fmtDate(v.from) + " dan" : "Boshidan"}</button>`).join("")}${canEdit ? `<button type="button" class="sm ghost" id="crNewVer">+ Me'yor o'zgardi (yangi versiya)</button>` : ""}</div>` : ""}
+    <div class="cr-meta">
+      <div class="f"><label for="crFrom">Qaysi sanadan amal qiladi</label><input type="date" id="crFrom" value="${esc(d.from || "")}"><span class="hint">${d.from ? "" : "bo'sh — boshidan (barcha eski sotuvlarga ham)"}</span></div>
+      <div class="f"><label for="crBase">Qancha mahsulot uchun yozilgan</label><span class="cr-base"><input id="crBase" class="num" inputmode="decimal" value="${esc(String(d.base ?? 1).replace(".", ","))}"> <span>${esc(unit)}</span></span><span class="hint">masalan, zavod 0,5 m³ uchun bergan bo'lsa — 0,5</span></div>
+    </div>
+    <div class="tbl"><table class="cr-lines"><thead><tr><th>Turi</th><th>Nomi</th><th class="r">Miqdori</th><th>Birligi</th><th></th></tr></thead><tbody>
+    ${(d.lines || []).map((l, i) => `<tr><td><select data-crl="${i}" data-k="t"><option value="i"${l.t !== "p" ? " selected" : ""}>Xomashyo</option><option value="p"${l.t === "p" ? " selected" : ""}>Yarim tayyor mahsulot</option></select></td>
+      <td>${l.t === "p" ? `<select data-crl="${i}" data-k="ref"><option value="">— mahsulot —</option>${prods.map(n => `<option${same(n, l.ref) ? " selected" : ""}>${esc(n)}</option>`).join("")}</select>`
+        : `<select data-crl="${i}" data-k="ref"><option value="">— xomashyo —</option>${items.map(x => `<option value="${x.id}"${x.id === l.ref ? " selected" : ""}>${esc(x.name)}</option>`).join("")}</select>`}</td>
+      <td class="r"><input data-crl="${i}" data-k="qty" class="num cr-q" inputmode="decimal" value="${esc(l.qty === "" || l.qty == null ? "" : String(l.qty).replace(".", ","))}" placeholder="0"></td>
+      <td class="dim">${esc(l.t === "p" ? prodUnit(l.ref) : (ciById(l.ref) || {}).unit || "")}</td>
+      <td class="r"><button type="button" class="ghost danger sm" data-crl-del="${i}" aria-label="Qatorni olib tashlash">×</button></td></tr>`).join("") || `<tr><td colspan="5" class="empty">Hali qator yo'q — pastdagi tugmalar bilan xomashyo qo'shing.</td></tr>`}
+    </tbody></table></div>
+    <div class="btns cr-add"><button type="button" class="sm" data-crl-add="i">+ Xomashyo</button><button type="button" class="sm" data-crl-add="p">+ Yarim tayyor mahsulot</button>${items.length ? "" : `<span class="hint">Avval «🧱 Xomashyolar» bo'limida xomashyolarni kiriting.</span>`}</div>
+    <div class="cr-sum"><b>1 ${esc(unit)} uchun jami xomashyo:</b> ${Object.keys(per).length ? Object.entries(per).map(([id, q]) => `<span class="cr-chip">${esc((ciById(id) || {}).name || "?")} — <b class="num">${fq(q)}</b> ${esc((ciById(id) || {}).unit || "")}</span>`).join("") : `<span class="dim">—</span>`}
+      ${money && Object.keys(per).length ? `<div class="cr-cost">Xomashyo tannarxi: <b class="num">${fmt(cost)}</b> so'm / ${esc(unit)}${costOk ? "" : ` <span class="warn-t">(ayrim xomashyolarning narxi kiritilmagan)</span>`}</div>` : ""}
+      ${warn.size ? `<div class="warn-t">⚠ Tarkibi kiritilmagan yarim tayyor mahsulot: ${esc([...warn].join(", "))}</div>` : ""}</div>
+    ${canEdit ? `<div class="btns cr-act">${d.id ? `<button type="button" class="ghost danger" id="crDel">Shu versiyani o'chirish</button>` : ""}<button type="button" class="primary" id="crSave">Tarkibni saqlash</button></div>` : ""}`;
+}
+$("#crSearch").addEventListener("input", renderCalcRec);
+$("#crNew").addEventListener("click", () => { const n = $("#crSearch").value.trim(); if (!n) { toast("Mahsulot nomini yozing"); $("#crSearch").focus(); return; } calcProd = calcProducts().find(x => same(x, n)) || n; calcDraft = null; $("#crSearch").value = ""; renderCalcRec(); });
+$("#crList").addEventListener("click", e => { const b = e.target.closest("[data-cr-p]"); if (!b) return; calcProd = b.dataset.crP; calcDraft = null; renderCalcRec(); });
+const crSync = () => { if (!calcDraft) return; const f = $("#crFrom"), b = $("#crBase"); if (f) calcDraft.from = f.value || ""; if (b) calcDraft.base = parseNum(b.value) || 1; };
+$("#crEdit").addEventListener("change", e => {
+  const t = e.target, i = t.dataset.crl; crSync();
+  if (i !== undefined) { const l = calcDraft.lines[+i]; if (!l) return;
+    if (t.dataset.k === "t") { l.t = t.value; l.ref = ""; } else if (t.dataset.k === "ref") l.ref = t.value; else if (t.dataset.k === "qty") l.qty = parseNum(t.value); }
+  renderCalcRec();
+});
+$("#crEdit").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.crlAdd) { crSync(); calcDraft.lines.push({ t: b.dataset.crlAdd, ref: "", qty: "" }); renderCalcRec(); const q = $$("#crEdit [data-k='ref']"); if (q.length) q[q.length - 1].focus(); }
+  else if (b.dataset.crlDel) { crSync(); calcDraft.lines.splice(+b.dataset.crlDel, 1); renderCalcRec(); }
+  else if (b.dataset.crVer) { const v = calc.recipes.find(r => r.id === b.dataset.crVer); if (v) { calcDraft = JSON.parse(JSON.stringify(v)); renderCalcRec(); } }
+  else if (b.id === "crNewVer") { crSync(); calcDraft = { ...JSON.parse(JSON.stringify(calcDraft)), id: null, from: today() }; renderCalcRec(); toast("Yangi versiya: sanani va o'zgargan miqdorlarni yozib, «Tarkibni saqlash»ni bosing"); }
+  else if (b.id === "crDel") { if (!confirm(`«${calcProd}» tarkibining ${calcDraft.from ? fmtDate(calcDraft.from) + " dan" : "boshidan"} amal qiluvchi versiyasi o'chirilsinmi?`)) return;
+    calc.recipes = calc.recipes.filter(r => r.id !== calcDraft.id); calcDraft = null; if (await calcSave("Versiya o'chirildi")) renderCalcRec(); }
+  else if (b.id === "crSave") {
+    crSync(); const d = calcDraft;
+    const lines = (d.lines || []).filter(l => l.ref && Number(l.qty) > 0).map(l => ({ t: l.t === "p" ? "p" : "i", ref: l.ref, qty: Number(l.qty) }));
+    if (!lines.length) { toast("Kamida bitta xomashyo va uning miqdorini kiriting"); return; }
+    if (!(d.base > 0)) { toast("«Qancha mahsulot uchun» ni yozing"); return; }
+    // o'zini o'zi ichiga olmasin
+    const out = {}, warn = new Set(); const tmpId = "__tmp"; const save = { id: d.id || newId(), product: calcProd, from: d.from || "", base: d.base, lines, at: new Date().toISOString() };
+    const clash = calc.recipes.find(r => same(r.product, calcProd) && (r.from || "") === save.from && r.id !== save.id);
+    if (clash && !confirm(`${save.from ? fmtDate(save.from) + " dan" : "Boshidan"} amal qiluvchi versiya allaqachon bor. Uning o'rniga yozilsinmi?`)) return;
+    const prev = calc.recipes; calc.recipes = calc.recipes.filter(r => r.id !== save.id && r !== clash); calc.recipes.push(save);
+    calcExpand(calcProd, 1, save.from || today(), out, warn, 0);
+    if ([...warn].some(w => /takrorlaydi/.test(w))) { calc.recipes = prev; toast("Tarkib o'zini o'zi o'z ichiga olyapti — tekshiring"); return; }
+    calcDraft = JSON.parse(JSON.stringify(save));
+    if (await calcSave(`«${calcProd}» tarkibi saqlandi`)) renderCalcRec(); else calc.recipes = prev;
+  }
+});
+
+/* ---------- 📊 hisobot ---------- */
+function calcCompute(){
+  const from = $("#cFrom").value, to = $("#cTo").value, site = SITES_OK ? $("#cSite").value : "", ex = new Set(calcEx.map(fkey));
+  const rs = rows.filter(r => r.date && r.product && (!from || r.date >= from) && (!to || r.date <= to) && !ex.has(fkey(r.firm)) && (!site || (site === "__none" ? !r.site : r.site === site)));
+  const prods = new Map(), mat = {}, miss = new Map();
+  rs.forEach(r => {
+    const k = fkey(r.product), p = prods.get(k) || { name: r.product.trim(), unit: r.unit || prodUnit(r.product), qty: 0, sum: 0, mat: {}, cost: 0, costOk: true, noRec: false, wb: new Set() };
+    p.qty += r.qty; p.sum += r.total || 0; p.wb.add(gk(r));
+    const out = {}, warn = new Set(); calcExpand(r.product, r.qty, r.date, out, warn, 0);
+    if (warn.size) { warn.forEach(w => { const m = miss.get(fkey(w)) || { name: w, qty: 0, top: same(w, r.product), unit: r.unit }; if (same(w, r.product)) m.qty += r.qty; miss.set(fkey(w), m); }); if (warn.has(r.product) || [...warn].some(w => same(w, r.product))) p.noRec = true; }
+    for (const [id, q] of Object.entries(out)) {
+      p.mat[id] = (p.mat[id] || 0) + q;
+      const m = mat[id] || (mat[id] = { q: 0, qp: 0, cost: 0, noPrice: false }); m.q += q;
+      const pr = itemPrice(id, r.date); if (pr == null) { m.noPrice = true; p.costOk = false; } else { m.qp += q; m.cost += q * pr; p.cost += q * pr; }
+    }
+    prods.set(k, p);
+  });
+  return { rs, prods: [...prods.values()].sort((a, b) => b.sum - a.sum || a.name.localeCompare(b.name)), mat, miss: [...miss.values()], from, to, site };
+}
+function renderCalcReport(){
+  // filtrlar
+  if (SITES_OK) { const v = $("#cSite").value; $("#cSite").innerHTML = `<option value="">Barcha obyektlar</option>` + [...sites].sort((a, b) => a.name.localeCompare(b.name)).map(x => `<option value="${x.id}">${esc(x.name)}${x.active ? "" : " (arxivda)"}</option>`).join("") + `<option value="__none">Obyekt belgilanmagan</option>`; $("#cSite").value = v; }
+  $("#cSiteBox").hidden = !SITES_OK;
+  const firms = [...new Set(rows.map(r => r.firm).filter(Boolean).map(f => f.trim()))].sort((a, b) => a.localeCompare(b)), fq2 = ($("#cExQ").value || "").trim().toLowerCase();
+  $("#cExN").textContent = calcEx.length ? `${calcEx.length} ta firma chiqarilgan` : "hech biri";
+  $("#cExList").innerHTML = firms.filter(f => !fq2 || f.toLowerCase().includes(fq2)).map(f => `<label class="chk"><input type="checkbox" data-cex="${esc(f)}"${calcEx.some(x => same(x, f)) ? " checked" : ""}> ${esc(f)}</label>`).join("") || `<p class="hint">Firma topilmadi.</p>`;
+  const R = calcCompute(), money = cMoney(), nW = new Set(R.rs.map(gk)).size;
+  const totSum = R.prods.reduce((s, p) => s + p.sum, 0), totCost = Object.values(R.mat).reduce((s, m) => s + m.cost, 0), anyPrice = Object.values(R.mat).some(m => m.cost > 0);
+  const matList = Object.entries(R.mat).map(([id, m]) => ({ id, it: ciById(id) || { name: "?", unit: "" }, ...m })).sort((a, b) => a.it.name.localeCompare(b.it.name));
+  const missTop = R.miss.filter(m => m.top);
+  $("#calcBody").innerHTML = !R.rs.length ? `<p class="hint calc-none">Tanlangan davrda (va shartlarda) sotuv yo'q.</p>` : `
+    <div class="acc-kpis calc-kpis">
+      <div class="acc-kpi"><span>Yuk xatlari</span><b class="num">${fmt(nW)}</b><small>ta · ${R.prods.length} xil mahsulot</small></div>
+      <div class="acc-kpi"><span>Xomashyo turlari</span><b class="num">${matList.length}</b><small>sarflangan</small></div>
+      ${money ? `<div class="acc-kpi"><span>Sotuv summasi</span><b class="num">${fmt(totSum)}</b><small>so'm</small></div>
+      <div class="acc-kpi"><span>Xomashyo tannarxi</span><b class="num">${anyPrice ? fmt(totCost) : "—"}</b><small>${anyPrice ? "so'm" : "narxlar kiritilmagan"}</small></div>
+      ${anyPrice ? `<div class="acc-kpi k-profit"><span>Taxminiy foyda</span><b class="num">${fmt(totSum - totCost)}</b><small>so'm · sotuv − xomashyo</small></div>` : ""}` : ""}
+    </div>
+    ${missTop.length || R.miss.length > missTop.length ? `<div class="calc-warn">⚠ <b>Tarkibi kiritilmagan mahsulotlar</b> — ularning xomashyosi hisobga kirmadi:
+      ${R.miss.map(m => `<button type="button" class="up-chip" data-cr-go="${esc(m.name)}">${esc(m.name)}${m.top ? ` <small>· ${fq(m.qty)} ${esc(m.unit || "")}</small>` : ` <small>· yarim tayyor</small>`}</button>`).join("")}</div>` : ""}
+    ${!money ? `<p class="hint">🔒 Summa, tannarx va foyda — hisob-kitob ochilganda ko'rinadi.</p>` : ""}
+    <h2 class="calc-h">🧱 Xomashyo sarfi</h2>
+    <div class="tbl"><table><thead><tr><th>Xomashyo</th><th>Birligi</th><th class="r">Sarf</th>${money ? `<th class="r">O'rtacha narx</th><th class="r">Summa, so'm</th>` : ""}</tr></thead><tbody>
+      ${matList.map(m => `<tr><td><b>${esc(m.it.name)}</b></td><td>${esc(m.it.unit)}</td><td class="r num"><b>${fq(m.q)}</b>${/^kg$/i.test(m.it.unit) && m.q >= 1000 ? `<div class="dim">≈ ${fq(m.q / 1000)} tonna</div>` : ""}</td>
+        ${money ? `<td class="r num">${m.cost > 0 ? fmt(m.cost / m.qp) : `<span class="dim">narx yo'q</span>`}</td><td class="r num">${m.cost > 0 ? fmt(m.cost) : "—"}${m.noPrice && m.cost > 0 ? " *" : ""}</td>` : ""}</tr>`).join("") || `<tr><td colspan="5" class="empty">Xomashyo hisoblanmadi — mahsulotlar tarkibini kiriting.</td></tr>`}
+    </tbody>${money && anyPrice ? `<tfoot><tr><td colspan="4">JAMI</td><td class="r num">${fmt(totCost)}</td></tr></tfoot>` : ""}</table></div>
+    <h2 class="calc-h">📦 Mahsulotlar bo'yicha</h2>
+    <div class="tbl"><table><thead><tr><th>Mahsulot</th><th class="r">Sotildi</th>${money ? `<th class="r">Sotuv summasi</th><th class="r">Tannarx</th><th class="r">Taxminiy foyda</th>` : ""}<th>Ketgan xomashyo</th></tr></thead><tbody>
+      ${R.prods.map(p => `<tr${p.noRec ? ' class="calc-norec"' : ""}><td><b>${esc(p.name)}</b>${p.noRec ? ` <span class="warn-t">tarkibsiz</span>` : ""}</td><td class="r num">${fq(p.qty)} ${esc(p.unit || "")}</td>
+        ${money ? `<td class="r num">${fmt(p.sum)}</td><td class="r num">${p.cost > 0 ? fmt(p.cost) + (p.costOk ? "" : " *") : "—"}</td><td class="r num">${p.cost > 0 ? fmt(p.sum - p.cost) : "—"}</td>` : ""}
+        <td class="calc-mat">${Object.entries(p.mat).sort((a, b) => ((ciById(a[0]) || {}).name || "").localeCompare((ciById(b[0]) || {}).name || "")).map(([id, q]) => `<span class="cr-chip">${esc((ciById(id) || {}).name || "?")} <b class="num">${fq(q)}</b> ${esc((ciById(id) || {}).unit || "")}</span>`).join("") || `<span class="dim">—</span>`}</td></tr>`).join("")}
+    </tbody></table></div>
+    ${money && Object.values(R.mat).some(m => m.noPrice) ? `<p class="hint">* ayrim xomashyolarning narxi kiritilmagan — tannarx to'liq emas.</p>` : ""}`;
+}
+["#cFrom", "#cTo", "#cSite"].forEach(s => $(s).addEventListener("change", () => { if (calcTab === "report") renderCalcReport(); }));
+$("#cExQ").addEventListener("input", () => renderCalcReport());
+$("#cExList").addEventListener("change", e => {
+  const c = e.target.closest("[data-cex]"); if (!c) return;
+  const f = c.dataset.cex; calcEx = calcEx.filter(x => !same(x, f)); if (c.checked) calcEx.push(f);
+  try { localStorage.setItem(calcExKey(), JSON.stringify(calcEx)); } catch(e2) {}
+  renderCalcReport();
+});
+$("#cExClear").addEventListener("click", () => { calcEx = []; try { localStorage.setItem(calcExKey(), "[]"); } catch(e) {} renderCalcReport(); });
+$("#calcBody").addEventListener("click", e => { const b = e.target.closest("[data-cr-go]"); if (!b) return; calcTab = "rec"; calcProd = calcProducts().find(x => same(x, b.dataset.crGo)) || b.dataset.crGo; calcDraft = null; renderCalc(); });
+$("#calcPresets").addEventListener("click", e => {
+  const b = e.target.closest("[data-cp]"); if (!b) return;
+  const t = today(), y = +t.slice(0, 4), m = +t.slice(5, 7), pad = n => String(n).padStart(2, "0"), last = (yy, mm) => `${yy}-${pad(mm)}-${pad(new Date(yy, mm, 0).getDate())}`;
+  if (b.dataset.cp === "month") { $("#cFrom").value = `${y}-${pad(m)}-01`; $("#cTo").value = t; }
+  else if (b.dataset.cp === "prev") { const py = m === 1 ? y - 1 : y, pm = m === 1 ? 12 : m - 1; $("#cFrom").value = `${py}-${pad(pm)}-01`; $("#cTo").value = last(py, pm); }
+  else if (b.dataset.cp === "year") { $("#cFrom").value = `${y}-01-01`; $("#cTo").value = t; }
+  renderCalcReport();
+});
+$("#calcXl").addEventListener("click", () => {
+  if (typeof XLSX === "undefined") { toast("Excel yozuvchi yuklanmadi"); return; }
+  const R = calcCompute(), money = cMoney();
+  if (!R.rs.length) { toast("Tanlangan davrda sotuv yo'q"); return; }
+  const matList = Object.entries(R.mat).map(([id, m]) => ({ id, it: ciById(id) || { name: "?", unit: "" }, ...m })).sort((a, b) => a.it.name.localeCompare(b.it.name));
+  const head = [["Kalkulyatsiya: xomashyo sarfi"], [`Davr: ${fmtDate(R.from) || "boshidan"} — ${fmtDate(R.to) || "bugungacha"}`],
+    [`Obyekt: ${R.site ? (R.site === "__none" ? "obyekt belgilanmagan" : siteLbl(R.site)) : "barcha obyektlar"}`], [`Chiqarib tashlangan firmalar: ${calcEx.length ? calcEx.join("; ") : "yo'q"}`], []];
+  const num = ws => Object.keys(ws).forEach(k => { if (k[0] !== "!" && typeof ws[k].v === "number") ws[k].z = Number.isInteger(ws[k].v) ? "#,##0" : "#,##0.###"; });
+  const s1 = XLSX.utils.aoa_to_sheet([...head, ["Xomashyo", "Birligi", "Sarf", ...(money ? ["O'rtacha narx, so'm", "Summa, so'm"] : [])],
+    ...matList.map(m => [m.it.name, m.it.unit, Math.round(m.q * 1000) / 1000, ...(money ? [m.cost > 0 ? Math.round(m.cost / m.qp * 100) / 100 : "", m.cost > 0 ? Math.round(m.cost) : ""] : [])]),
+    ...(money ? [["JAMI", "", "", "", Math.round(matList.reduce((s, m) => s + m.cost, 0))]] : [])]);
+  s1["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 16 }, { wch: 18 }, { wch: 18 }]; num(s1);
+  const s2 = XLSX.utils.aoa_to_sheet([...head, ["Mahsulot", "Birligi", "Sotildi", ...(money ? ["Sotuv summasi, so'm", "Xomashyo tannarxi, so'm", "Taxminiy foyda, so'm"] : []), "Tarkibi"],
+    ...R.prods.map(p => [p.name, p.unit || "", Math.round(p.qty * 1000) / 1000, ...(money ? [Math.round(p.sum), p.cost > 0 ? Math.round(p.cost) : "", p.cost > 0 ? Math.round(p.sum - p.cost) : ""] : []), p.noRec ? "kiritilmagan" : ""])]);
+  s2["!cols"] = [{ wch: 32 }, { wch: 9 }, { wch: 14 }, { wch: 18 }, { wch: 20 }, { wch: 18 }, { wch: 14 }]; num(s2);
+  const s3 = XLSX.utils.aoa_to_sheet([...head, ["Mahsulot", "Sotildi", "Birligi", ...matList.map(m => `${m.it.name}, ${m.it.unit}`)],
+    ...R.prods.map(p => [p.name, Math.round(p.qty * 1000) / 1000, p.unit || "", ...matList.map(m => p.mat[m.id] ? Math.round(p.mat[m.id] * 1000) / 1000 : "")]),
+    ["JAMI", "", "", ...matList.map(m => Math.round(m.q * 1000) / 1000)]]);
+  s3["!cols"] = [{ wch: 32 }, { wch: 12 }, { wch: 9 }, ...matList.map(() => ({ wch: 14 }))]; num(s3);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, s1, "Xomashyo sarfi"); XLSX.utils.book_append_sheet(wb, s2, "Mahsulotlar"); XLSX.utils.book_append_sheet(wb, s3, "Mahsulot x xomashyo");
+  saveFile(`Kalkulyatsiya ${R.from || ""} — ${R.to || ""}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+});
+$("#calcUnlock").addEventListener("click", async () => { if (await unlockMoney("Narx, tannarx va foydani ko'rish uchun o'z parolingizni kiriting.")) renderCalc(); });
 
 /* ---------- Ishga tushirish ---------- */
 connect();
