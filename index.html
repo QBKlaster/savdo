@@ -715,6 +715,19 @@ body:not(.locked) .money-hide{display:none!important}
 .acc-kpi.k-profit b{color:#17794a}
 .calc-panel td.num{white-space:nowrap}
 .calc-panel #ciFrom{width:150px}
+/* ---- telegram bot sahifasi ---- */
+.tg-steps{display:grid;gap:10px;margin:14px 0}
+.tg-step{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tg-step.ok{border-left:4px solid #1f9d55}
+.tg-n{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--surface-2);color:var(--muted)}
+.tg-step.ok .tg-n{background:#1f9d55;color:#fff}
+.tg-sb{margin-top:6px;font-size:13.5px;line-height:1.6}.tg-sb .tg-code,.tg-sb .tg-set{margin:6px 0}
+.tg-code{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tg-code code{font-size:18px;padding:6px 12px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-weight:700}
+.tg-set{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.tg-set label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.tg-set label.chk{flex-direction:row;align-items:center;color:var(--ink)}
+.tg-warn{padding:14px;border-radius:10px;background:color-mix(in srgb,#f2b705 14%,var(--surface));display:grid;gap:8px;justify-items:start}
 </style>
 
 </head>
@@ -787,6 +800,7 @@ body:not(.locked) .money-hide{display:none!important}
     <div class="user-menu" id="userMenu" hidden>
       <button type="button" data-um="users" class="users-only">👥 Foydalanuvchilar</button>
       <button type="button" data-um="brand" class="admin-only">🧾 Yuk xati blanki</button>
+      <button type="button" data-um="tgbot" class="admin-only">🤖 Telegram bot</button>
       <button type="button" data-um="ai" id="umAi">🤖 AI kalitim</button>
       <button type="button" data-um="pass">🔑 Parolim</button>
       <hr>
@@ -1007,6 +1021,8 @@ body:not(.locked) .money-hide{display:none!important}
       </div>
     </div>
   </details>
+
+  <section class="panel admin-only tg-panel" id="tgPanel" data-page="tgbot"><div id="tgBody"><p class="hint">Yuklanmoqda…</p></div></section>
 
   <section class="panel priv-only calc-panel" id="calcPanel" data-page="calc">
     <div class="calc-top">
@@ -5640,6 +5656,7 @@ const PAGES = {
   calc:  ["wb", "Kalkulyatsiya", "Xomashyo me'yorlari va davr bo'yicha sarf"],
   users: ["gen", "Foydalanuvchilar", "Login, parol va huquqlar"],
   brand: ["gen", "Yuk xati blanki", "Chop etiladigan blank ko'rinishi"],
+  tgbot: ["gen", "Telegram bot", "Rahbariyat guruhiga kunlik hisobot"],
   "p-objects": ["pay", "Obyektlar va xodimlar"],
   "p-advance": ["pay", "Avans berish"],
   "p-loans":   ["pay", "Qarzlar"],
@@ -5688,6 +5705,7 @@ function showPage(id){
     document.body.dataset.page = id;
     if (id === "stats" && typeof stRender === "function") setTimeout(() => { try { stRender(); } catch(e) {} }, 0);
     if (id === "calc" && typeof calcOpen === "function") calcOpen();
+    if (id === "tgbot" && typeof tgOpen === "function") tgOpen();
     scrollTo(0, 0);
   }
   try { localStorage.setItem("savdo-page-" + me.id, id); } catch(e) {}
@@ -5707,7 +5725,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") { userMenu(f
 $("#userMenu").addEventListener("click", async e => {
   const b = e.target.closest("[data-um]"); if (!b) return; userMenu(false);
   const k = b.dataset.um;
-  if (k === "users" || k === "brand") showPage(k);
+  if (k === "users" || k === "brand" || k === "tgbot") showPage(k);
   else if (k === "ai") $("#myAiBtn").click();
   else if (k === "pass") $("#myPassBtn").click();
   else if (k === "out") { await sb.auth.signOut(); location.reload(); }
@@ -6457,6 +6475,56 @@ $("#calcXl").addEventListener("click", () => {
   saveFile(`Kalkulyatsiya ${R.from || ""} — ${R.to || ""}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 });
 $("#calcUnlock").addEventListener("click", async () => { if (await unlockMoney("Narx, tannarx va foydani ko'rish uchun o'z parolingizni kiriting.")) renderCalc(); });
+
+/* ---------- 🤖 Telegram bot: ulash, sozlamalar, sinov hisoboti (bosh admin) ---------- */
+let tgSt = null, tgBusy = false;
+async function tgCall(action, extra){
+  const { data, error } = await sb.functions.invoke("savdo-bot", { body: { action, ...(extra || {}) } });
+  if (error) { const j = await error.context?.json?.().catch(() => null); const e = new Error(j?.error || error.message); e.missing = !j && /404|not found|Failed to send/i.test(String(error.message) + String(error.context?.status || "")); throw e; }
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+async function tgOpen(){
+  $("#tgBody").innerHTML = `<p class="hint">Bot holati tekshirilmoqda…</p>`;
+  try { tgSt = await tgCall("status"); renderTg(); }
+  catch(e) { tgSt = null; renderTg(e); }
+}
+function renderTg(err){
+  const st = tgSt, step = (ok, n, title, body) => `<div class="tg-step ${ok ? "ok" : ""}"><span class="tg-n">${ok ? "✓" : n}</span><div><b>${title}</b>${body ? `<div class="tg-sb">${body}</div>` : ""}</div></div>`;
+  if (!st) {
+    $("#tgBody").innerHTML = `<div class="tg-warn"><b>Bot funksiyasi bilan bog'lanib bo'lmadi.</b><p class="hint">${err?.missing ? "«savdo-bot» funksiyasi hali Supabase'ga qo'yilmagan (Edge Functions)." : esc(err?.message || "")}</p><button type="button" id="tgRetry">Qayta tekshirish</button></div>`;
+    return;
+  }
+  const hours = Array.from({ length: 24 }, (_, h) => `<option value="${h}"${h === st.report_hour ? " selected" : ""}>${String(h).padStart(2, "0")}:00</option>`).join("");
+  $("#tgBody").innerHTML = `
+    <p class="hint">Bot har kuni belgilangan soatda guruhga bugungi savdoni <b>har obyekt bo'yicha alohida</b> xabar qilib, so'ng umumiy xabar (qarzdorlar va ogohlantirishlar) bilan yuboradi. Guruhda <code>/bugun</code>, <code>/qarzdorlar</code>, <code>/qarz firma</code> buyruqlari ishlaydi.</p>
+    <div class="tg-steps">
+      ${step(st.token && st.bot, 1, "Bot kaliti", st.token && st.bot ? `Bot: <b>@${esc(st.bot)}</b>` : st.token ? `<span class="warn-t">Kalit noto'g'ri: ${esc(st.botErr || "")}</span>` : "Supabase → Edge Functions → Secrets'ga <b>TELEGRAM_BOT_TOKEN</b> qo'yilmagan.")}
+      ${step(st.hook, 2, "Bot ishga tushirilgan", st.hook ? (st.hookErr ? `<span class="warn-t">Oxirgi xato: ${esc(st.hookErr)}</span>` : "Telegram xabarlari saytga keladi.") : `<button type="button" class="primary" id="tgSetup"${st.token ? "" : " disabled"}>Botni ishga tushirish</button>`)}
+      ${step(!!st.chat, 3, "Guruh ulangan", st.chat ? `Guruh: <b>${esc(st.chat.title || "—")}</b> <button type="button" class="sm ghost danger" id="tgUnlink">Uzish</button>`
+        : st.code ? `Telegram guruhiga quyidagini yozib yuboring:<div class="tg-code"><code id="tgCodeTxt">/ulash ${esc(st.code)}</code><button type="button" class="sm" id="tgCopy">Nusxa olish</button></div><span class="dim">Yozgach, «Qayta tekshirish»ni bosing.</span> <button type="button" class="sm ghost" id="tgRetry">Qayta tekshirish</button>`
+        : st.hook ? `<button type="button" id="tgSetup">Ulash kodini olish</button>` : "Avval botni ishga tushiring.")}
+      ${step(!!st.last_sent, 4, "Kunlik hisobot", `
+        <div class="tg-set">
+          <label>Soat <select id="tgHour">${hours}</select></label>
+          <label>Qarz chegarasi, so'm <input id="tgLimit" class="num" inputmode="decimal" value="${st.debt_limit ? fmt(st.debt_limit) : ""}" placeholder="masalan, 100 000 000"></label>
+          <label class="chk"><input type="checkbox" id="tgOn"${st.enabled ? " checked" : ""}> Yoqilgan</label>
+          <button type="button" id="tgSave">Saqlash</button>
+        </div>
+        <span class="dim">Qarz chegarasi — shundan oshgan firmalar «🚨 Diqqat» qismida ko'rsatiladi (bo'sh — tekshirilmaydi). ${st.last_sent ? `Oxirgi kunlik hisobot: <b>${fmtDate(st.last_sent)}</b>.` : "Avtomatik jo'natish uchun Supabase'da bir martalik SQL (bot_cron.sql) kerak."}</span>`)}
+    </div>
+    <div class="btns tg-act"><button type="button" class="primary" id="tgTest"${st.chat ? "" : " disabled"}>📨 Hozir sinov hisobotini yuborish</button><button type="button" class="ghost" id="tgRetry2">Holatni yangilash</button></div>`;
+}
+$("#tgPanel").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b || tgBusy) return;
+  const run = async (fn, ok) => { tgBusy = true; b.disabled = true; try { await fn(); if (ok) toast(ok); } catch(err) { toast(err.message); } tgBusy = false; b.disabled = false; };
+  if (b.id === "tgRetry" || b.id === "tgRetry2") tgOpen();
+  else if (b.id === "tgSetup") run(async () => { const r = await tgCall("setup"); tgSt = await tgCall("status"); renderTg(); }, "Bot ishga tushdi — endi kodni guruhga yozing");
+  else if (b.id === "tgCopy") { try { await navigator.clipboard.writeText($("#tgCodeTxt").textContent); toast("Nusxa olindi — guruhga qo'yib yuboring"); } catch(err) { toast("Nusxa olib bo'lmadi — qo'lda yozing"); } }
+  else if (b.id === "tgUnlink") { if (!confirm("Guruh botdan uzilsinmi? Kunlik hisobot to'xtaydi.")) return; run(async () => { await tgCall("unlink"); tgSt = await tgCall("status"); renderTg(); }, "Guruh uzildi"); }
+  else if (b.id === "tgSave") run(async () => { await tgCall("settings", { report_hour: +$("#tgHour").value, debt_limit: parseNum($("#tgLimit").value), enabled: $("#tgOn").checked }); tgSt = await tgCall("status"); renderTg(); }, "Sozlamalar saqlandi");
+  else if (b.id === "tgTest") run(async () => { const r = await tgCall("test"); toast(`Guruhga ${r.messages} ta xabar yuborildi`); }, "");
+});
 
 /* ---------- Ishga tushirish ---------- */
 connect();
