@@ -6098,7 +6098,11 @@ $("#aiKeyForm").addEventListener("submit", async e => {
   busy($("#aiKeyOk"), true, "Tekshirilmoqda…");
   const { data, error } = await sb.functions.invoke("read-waybill", { body: { action: "setkey", key: k, provider: $("#aiProv").value } });
   busy($("#aiKeyOk"), false, "Saqlash");
-  if (error || data?.error) { $("#aiKeyErr").textContent = data?.error || "Saqlab bo'lmadi — read-waybill funksiyasi yangilanganini tekshiring"; return; }
+  if (error || data?.error) {
+    let msg = data?.error;
+    if (error) { const st = error.context?.status, j = await error.context?.json?.().catch(() => null);
+      msg = j?.error || j?.message || (st === 404 ? "«read-waybill» funksiyasi Supabase'da topilmadi" : st ? `Server xatosi (${st}): ${error.message}` : "Server bilan bog'lanib bo'lmadi — internetni tekshiring"); }
+    $("#aiKeyErr").textContent = msg; return; }
   await aiStatus(); $("#aiKey").hidden = true; toast("Kalit saqlandi — beton rasmlari endi o'zi o'qiladi");
 });
 $("#aiKeyDel").addEventListener("click", async () => {
