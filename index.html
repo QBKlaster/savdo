@@ -800,6 +800,24 @@ body:not(.locked) .money-hide{display:none!important}
 .reys-tbl td,.reys-tbl th{white-space:nowrap}
 @media (max-width:820px){.kar-cols{grid-template-columns:1fr}.kar-firm .entry-sub .c2,.kar-firm .entry-sub .c3,.kar-firm .entry-sub .c5{grid-column:span 12}}
 @media (max-width:560px){.kar-item{grid-template-columns:1fr auto}.ki-act{grid-column:1/-1;justify-content:flex-start}.kar-act .btns{width:100%}.kar-act .btns button{flex:1 1 100%}.kar-seg button{flex:1 1 40%}}
+
+/* yon menyu: yig'iladigan guruhlar */
+.side-h{display:flex;align-items:center;gap:6px;cursor:pointer;border-radius:8px;user-select:none}
+.side-h:hover{background:rgba(255,255,255,.06);color:var(--band-ink)}
+.side-h:focus-visible{outline:2px solid #9fd4ea;outline-offset:-2px}
+.side-h::after{content:"▾";margin-left:auto;font-size:12px;transition:transform .15s}
+.side-grp.shut>.side-h::after{transform:rotate(-90deg)}
+.side-grp.shut>button{display:none}
+.side-grp.shut>.side-h{padding-bottom:8px}
+body.side-single .side-h{cursor:default}
+body.side-single .side-h::after{display:none}
+.side-hb{min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#f2b705;color:#3a2a00;font-size:11px;font-weight:700;display:inline-grid;place-items:center;letter-spacing:0;text-transform:none}
+.side-hb[hidden]{display:none}
+.side-nav{gap:6px}
+.kar-cats{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
+.kar-catlist{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.kar-cat{display:inline-flex;align-items:center;gap:4px;padding:5px 6px 5px 12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);font-size:14px}
+.kar-catform{max-width:520px}
 </style>
 
 </head>
@@ -1257,6 +1275,12 @@ body:not(.locked) .money-hide{display:none!important}
       <div class="c12 kar-act"><span class="btns"><button type="button" id="qsCancel" hidden>Bekor qilish</button><button type="submit" class="primary" id="qsSave">Karyerni qo'shish</button></span></div>
     </form>
     <div id="qsList"></div>
+    <div class="kar-cats">
+      <h2>🧾 Xarajat turlari</h2>
+      <p class="hint">Karyer kassasida xarajat yozilganda turi shu ro'yxatdan tanlanadi va hisobotda shu turlar bo'yicha guruhlanadi. Kerakli turni qo'shing, keraksizini × bilan olib tashlang (eski yozuvlar o'zgarmaydi).</p>
+      <div class="kar-catlist" id="qsCats"></div>
+      <form class="ref-add kar-catform" id="qsCatForm" autocomplete="off"><input id="qsCatIn" placeholder="Yangi xarajat turi, masalan: Ehtiyot qismlar" aria-label="Yangi xarajat turi"><button type="submit">Qo'shish</button></form>
+    </div>
   </section>
 
   <!-- 📹 Kameralar -->
@@ -5911,6 +5935,7 @@ function showPage(id){
   $$("#side [data-page]").forEach(b => { const on = b.dataset.page === id; b.classList.toggle("on", on); if (on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   $("#tbCrumb").innerHTML = (P[0] === "wb" ? "📦 Yuk xatlari › " : P[0] === "kar" ? "⛏ Karyerlar › " : P[0] === "reys" ? "🚚 Haydovchilar › " : pay ? "💰 Oylik maoshlar › " : "") + `<b>${esc(P[1])}</b>`;
   sideOpen(false);
+  { const gg = sideGrpOf(id); if (gg) sideShut(gg); else sideBadge(); }
   if (pay) {
     $("#oylikBox").hidden = false;
     let f = $("#oylikFrame");
@@ -5934,11 +5959,32 @@ function showPage(id){
   try { localStorage.setItem("savdo-page-" + me.id, id); } catch(e) {}
 }
 // oylik ichidagi oyna (avans/korxonalar) yopilganda menyuda «Obyektlar va xodimlar» belgilanadi
-window.sideMark = id => { const pid = "p-" + id; if (!PAGES[pid] || curPage === pid) return; curPage = pid;
+window.sideMark = id => { const pid = "p-" + id; if (!PAGES[pid] || curPage === pid) return; curPage = pid; sideShut(sideGrpOf(pid));
   $$("#side [data-page]").forEach(b => b.classList.toggle("on", b.dataset.page === pid));
   $("#tbCrumb").innerHTML = `💰 Oylik maoshlar › <b>${esc(PAGES[pid][1])}</b>`; };
+// Yon menyu guruhlari: faqat ochilgan guruh bo'limlari ko'rinadi (sarlavhani bosib ochiladi/yopiladi)
+function sideGrpOf(id){ const b = $(`#side [data-page="${id}"]`); return b ? b.closest(".side-grp") : null; }
+function sideShut(open){
+  const grps = $$("#side .side-grp").filter(g => !g.hidden), single = grps.length < 2;
+  grps.forEach(g => { const shut = !single && g !== open; g.classList.toggle("shut", shut); const h = g.querySelector(".side-h"); if (h) h.setAttribute("aria-expanded", !shut); });
+  document.body.classList.toggle("side-single", single);
+  sideBadge();
+}
+function sideBadge(){
+  $$("#side .side-grp").forEach(g => { const h = g.querySelector(".side-h"); if (!h) return; let n = 0;
+    g.querySelectorAll("button .side-badge").forEach(x => { if (!x.hidden) n += +x.textContent || 0; });
+    let s = h.querySelector(".side-hb"); if (!s) { s = document.createElement("span"); s.className = "side-hb"; h.appendChild(s); }
+    s.hidden = !(n && g.classList.contains("shut")); s.textContent = n; });
+}
+$$("#side .side-h").forEach(h => {
+  h.setAttribute("role", "button"); h.tabIndex = 0;
+  const go = () => { const g = h.closest(".side-grp"); sideShut(g.classList.contains("shut") ? g : null); };
+  h.addEventListener("click", go);
+  h.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+});
+{ const ub = $("#sbUp"); if (ub) new MutationObserver(sideBadge).observe(ub, { attributes: true, childList: true, characterData: true, subtree: true }); }
 function sideOpen(on){ document.body.classList.toggle("side-open", on); $("#sideDim").hidden = !on; $("#sideToggle").setAttribute("aria-expanded", on); }
-$("#side").addEventListener("click", e => { const b = e.target.closest("[data-page]"); if (b) showPage(b.dataset.page); });
+$("#side").addEventListener("click", e => { const b = e.target.closest("button[data-page]"); if (b && b.closest("#side")) showPage(b.dataset.page); });
 $("#sideToggle").addEventListener("click", () => sideOpen(!document.body.classList.contains("side-open")));
 $("#sideDim").addEventListener("click", () => sideOpen(false));
 function userMenu(on){ $("#userMenu").hidden = !on; $("#userBtn").setAttribute("aria-expanded", on); }
@@ -6752,7 +6798,7 @@ $("#tgPanel").addEventListener("click", async e => {
 /* ---------- ⛏ KARYERLAR: yuklash (firma / jismoniy shaxs), kassa, ro'yxat, oylik hisobot, karyerlar, kameralar ----------
    Firmaga sotuv — oddiy yuk xati (sales, kind = "karyer"): raqami firmaning boshqa yuk xatlari bilan davom etadi, firma hisob-kitobiga qo'shiladi.
    Jismoniy shaxsga sotuv — quarry_sales (naqd yoki qarzga, qarz mashina raqami bo'yicha). Kassa — quarry_cash. */
-let quarries = [], qSales = [], qCash = [], Q_OK = null;
+let quarries = [], qSales = [], qCash = [], Q_OK = null, qCats = null;
 let qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
 const KX_ITEMS = {};                         // jismoniy shaxs yuk xatini chop etish uchun vaqtinchalik qatorlar
 const Q_CATS = ["Oziq-ovqat", "Xo'jalik mollari", "Yoqilg'i", "Ta'mirlash va ehtiyot qismlar", "Kommunal to'lovlar", "Transport", "Boshqa"];
@@ -6762,6 +6808,14 @@ const Q_CAT_WORDS = [["Oziq-ovqat", /\b(non|suv|produkt|abed|abet|ovqat|go'sht|g
   ["Ta'mirlash va ehtiyot qismlar", /\b(remont|ta'mir|tamir|zapchast|ehtiyot|podshipnik|shina|balon|filtr|moy|masl|svarka|payvand)\b/i],
   ["Kommunal to'lovlar", /\b(svet|elektr|tok|internet|telefon|paynet|kommunal)\b/i],
   ["Transport", /\b(taksi|kira|yo'lkira|yolkira|transport|dostavka)\b/i]];
+// xarajat turlari: rahbariyat ro'yxati (sozlamalarda) + kassada ishlatilganlari
+const qCatBase = () => Array.isArray(qCats) ? qCats : Q_CATS;
+function qCatList(){ const m = new Map(); [...qCatBase(), ...qCash.filter(x => x.kind === "expense" && x.category).map(x => x.category)].forEach(c => { const k = c.trim().toLowerCase(); if (k && !m.has(k)) m.set(k, c.trim()); }); return [...m.values()]; }
+async function qCatsSave(list){
+  const { error } = await sb.from("settings").upsert({ key: "q_cats", value: { list } });
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return false; }
+  qCats = list; return true;
+}
 const qById = id => quarries.find(q => q.id === id);
 const qMine = () => me ? quarries.filter(q => q.active && (q.staff || []).includes(me.id)) : [];
 const Q_STAFF = () => !!me && !PRIV() && qMine().length > 0;
@@ -6784,6 +6838,7 @@ async function qLoad(){
       products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false }));
     Q_OK = true;
   } catch(e) { quarries = []; Q_OK = false; return; }
+  try { const { data: st } = await sb.from("settings").select("value").eq("key", "q_cats").maybeSingle(); qCats = st && st.value && Array.isArray(st.value.list) ? st.value.list : null; } catch(e) {}
   if (!PRIV() && !qMine().length) { qSales = []; qCash = []; return; }
   try {
     const [a, b] = await Promise.all([fetchAll("quarry_sales", "*", q => q.order("date").order("created_at")), fetchAll("quarry_cash", "*", q => q.order("date").order("created_at"))]);
@@ -7060,7 +7115,8 @@ function renderQCash(){
   $("#qcCarBox").hidden = qcKind !== "debt_back"; $("#qcCatBox").hidden = qcKind !== "expense"; $("#qcPersonBox").hidden = qcKind !== "salary"; $("#qcFirmBox").hidden = qcKind !== "firm_cash";
   $("#qcNoteLbl").textContent = qcKind === "expense" ? "Nima uchun *" : "Izoh";
   $("#qcNote").placeholder = qcKind === "expense" ? "masalan: non, suv, produkta" : "ixtiyoriy";
-  if (!$("#qcCat").options.length) $("#qcCat").innerHTML = `<option value="">— tanlang —</option>` + Q_CATS.map(c => `<option>${esc(c)}</option>`).join("");
+  { const cv = $("#qcCat").value; $("#qcCat").innerHTML = `<option value="">— tanlang —</option>` + qCatList().map(c => `<option>${esc(c)}</option>`).join("") + `<option value="__new">＋ Yangi tur qo'shish…</option>`;
+    if (cv && cv !== "__new") { if (![...$("#qcCat").options].some(o => o.value === cv)) $("#qcCat").insertAdjacentHTML("beforeend", `<option>${esc(cv)}</option>`); $("#qcCat").value = cv; } }
   if (!$("#qcDate").value) $("#qcDate").value = today();
   $("#qcCancel").hidden = !qcEdit; $("#qcSave").textContent = qcEdit ? "O'zgarishni saqlash" : "Saqlash";
   const debts = qDebts(qid).filter(d => d.left > 0.5);
@@ -7092,8 +7148,18 @@ $("#qcKind").addEventListener("click", e => { const b = e.target.closest("[data-
 $("#qcQ").addEventListener("change", () => { qRemember($("#qcQ").value); renderQCash(); });
 $("#qcCar").addEventListener("change", qcDebtInfo);
 $("#qcNote").addEventListener("input", () => { if (qcKind !== "expense" || $("#qcCat").dataset.manual) return;
-  const t = $("#qcNote").value, hit = Q_CAT_WORDS.find(([, re]) => re.test(t)); if (hit) $("#qcCat").value = hit[0]; });
-$("#qcCat").addEventListener("change", () => { $("#qcCat").dataset.manual = "1"; });
+  const t = $("#qcNote").value, hit = Q_CAT_WORDS.find(([c, re]) => re.test(t) && qCatList().some(x => same(x, c)));
+  if (hit) $("#qcCat").value = qCatList().find(x => same(x, hit[0])); });
+$("#qcCat").addEventListener("change", async () => {
+  $("#qcCat").dataset.manual = "1";
+  if ($("#qcCat").value !== "__new") return;
+  const v = await askText({ title: "Yangi xarajat turi", hint: "Masalan: Ehtiyot qismlar, Ijara, Soliq", label: "Turi", ok: "Qo'shish" });
+  if (!v || !v.trim()) { $("#qcCat").value = ""; return; }
+  const name = v.trim(), have = qCatList().find(c => same(c, name));
+  if (!have && PRIV() && !VIEWING()) await qCatsSave([...qCatBase(), name]);
+  if (![...$("#qcCat").options].some(o => same(o.value, name))) $("#qcCat").insertAdjacentHTML("beforeend", `<option>${esc(have || name)}</option>`);
+  $("#qcCat").value = have || name;
+});
 function qcReset(){ qcEdit = null; $("#qcForm").reset(); $("#qcDate").value = today(); delete $("#qcCat").dataset.manual; }
 $("#qcCancel").addEventListener("click", () => { qcReset(); renderQCash(); });
 function qcStartEdit(id){
@@ -7115,7 +7181,7 @@ $("#qcForm").addEventListener("submit", async e => {
   if (!qid) return bad("Karyerni tanlang");
   if (qcKind === "debt_back" && !d.car) return bad("Qaysi mashina qarzini qaytardi — raqamini yozing", "#qcCar");
   if (qcKind === "expense" && !d.note) return bad("Nima uchun xarajat qilinganini yozing", "#qcNote");
-  if (qcKind === "expense" && !d.category) return bad("Xarajat turini tanlang", "#qcCat");
+  if (qcKind === "expense" && (!d.category || d.category === "__new")) return bad("Xarajat turini tanlang", "#qcCat");
   if (qcKind === "salary" && !d.person) return bad("Ishchining ismini yozing", "#qcPerson");
   if (qcKind === "firm_cash" && !d.firm) return bad("Firma nomini yozing", "#qcFirm");
   if (!(amt > 0)) return bad("Summani yozing", "#qcAmt");
@@ -7351,6 +7417,8 @@ function renderQSetup(){
     <td>${q.staff.map(id => esc(qWho(id) || "?")).join(", ") || `<span class="warn-t">belgilanmagan</span>`}</td><td class="r num">${qFmtQ(q.kovsh)}</td><td>${esc(q.products.join(", "))}</td>
     <td class="r nw">${VIEWING() ? "" : `<button type="button" class="sm ghost" data-qsed="${q.id}">Tahrirlash</button> <button type="button" class="sm ghost" data-qsarc="${q.id}">${q.active ? "📦 Arxivga olish" : "Arxivdan qaytarish"}</button>`}</td></tr>`;
   const list = quarries.slice().sort((a, b) => (b.active - a.active) || a.name.localeCompare(b.name));
+  $("#qsCats").innerHTML = qCatBase().map((c, i) => `<span class="kar-cat">${esc(c)}${VIEWING() ? "" : `<button type="button" class="pr-x" data-qcat-del="${i}" title="Olib tashlash" aria-label="${esc(c)} — olib tashlash">×</button>`}</span>`).join("") || `<span class="hint">Ro'yxat bo'sh.</span>`;
+  $("#qsCatForm").hidden = VIEWING();
   $("#qsList").innerHTML = list.length ? `<div class="tbl kar-tbl"><table><thead><tr><th>Karyer</th><th>Qaysi firmaga qarashli</th><th>Ish yurituvchi</th><th class="r">1 kovsh, m³</th><th>Mahsulotlar</th><th></th></tr></thead><tbody>${list.map(row).join("")}</tbody></table></div>`
     : `<p class="empty">Hali karyer qo'shilmagan.</p>`;
 }
@@ -7444,6 +7512,20 @@ $("#reysXl").addEventListener("click", () => {
   reysSheets.forEach(s => { let n = s.name.replace(/[\\/?*[\]:]/g, " ").slice(0, 31) || "Varaq"; while (used.has(n)) n = n.slice(0, 28) + "_" + used.size; used.add(n);
     const ws = XLSX.utils.aoa_to_sheet(reysTrim(s.data)); XLSX.utils.book_append_sheet(wb, ws, n); });
   saveFile(`Reys hisobi ${today()}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+});
+
+$("#qsCats").addEventListener("click", async e => {
+  const b = e.target.closest("[data-qcat-del]"); if (!b) return;
+  const list = [...qCatBase()], c = list[+b.dataset.qcatDel]; if (c == null) return;
+  if (!confirm(`«${c}» xarajat turi ro'yxatdan olib tashlansinmi?\n\nShu turdagi eski yozuvlar o'zgarmaydi.`)) return;
+  list.splice(+b.dataset.qcatDel, 1);
+  if (await qCatsSave(list)) { toast("Olib tashlandi"); renderQSetup(); }
+});
+$("#qsCatForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const v = $("#qsCatIn").value.trim(); if (!v) { $("#qsCatIn").focus(); return; }
+  if (qCatBase().some(c => same(c, v))) { toast("Bu tur ro'yxatda bor"); return; }
+  if (await qCatsSave([...qCatBase(), v])) { $("#qsCatIn").value = ""; toast(`«${v}» qo'shildi`); renderQSetup(); }
 });
 
 /* ---------- Ishga tushirish ---------- */
