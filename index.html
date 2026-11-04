@@ -248,6 +248,115 @@ button.sm.danger:hover{background:color-mix(in srgb,var(--danger) 10%,transparen
 .pv-frow button{min-width:36px;padding:5px 9px}
 .pv-fonts-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:13px;opacity:.9}
 .pv-warn{color:#ffd38a}
+/* ---- Karyer yuk xati: kichik blanklar ---- */
+.pv-fmt{display:inline-flex;align-items:center;gap:6px;color:#dbe7ee;font-size:14px}
+.pv-fmt select{width:auto;padding:6px 8px;border-radius:8px;max-width:270px}
+.qwb-wrap{display:grid;gap:16px;justify-items:center;margin:0 auto;padding-bottom:20px}
+.qpage{background:#fff;color:#111;box-shadow:0 4px 24px rgba(0,0,0,.25);overflow:hidden;box-sizing:border-box;font-family:Arial,"Segoe UI",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;line-height:1.25}
+.qpage *{box-sizing:border-box}
+.qp-a5{width:210mm;height:147.5mm;padding:4mm}
+.qp-a5-in{display:grid;grid-template-columns:1fr 0 1fr;column-gap:4mm;height:100%}
+.qp-a5-in.stub{grid-template-columns:62mm 0 1fr;column-gap:0}
+.qp-a4{width:210mm;height:296.5mm;padding:3mm;display:grid;grid-template-rows:repeat(4,minmax(0,1fr))}
+.qp-row{display:grid;grid-template-columns:1fr 0 1fr;column-gap:3mm;padding:1.5mm 0;min-height:0}
+.qp-row.stub{grid-template-columns:62mm 0 1fr;column-gap:0}
+.qp-row + .qp-row{border-top:1px dashed #9aa5ad}
+.qp-row.empty{border-color:transparent}
+.qp-rc{width:80mm;padding:2mm 4mm}
+.qw-cutv{border-left:1px dashed #555}
+.qw-full{border:1px solid #111;height:100%;padding:4mm 4.5mm 3mm;display:flex;flex-direction:column;gap:2mm;font-size:8.5pt;overflow:hidden;min-height:0}
+.qw-head{border-bottom:1.5px solid #111;padding-bottom:1.6mm;display:flex;align-items:center;gap:2.5mm}
+.qw-logo{width:16mm;height:11mm;object-fit:contain;filter:grayscale(1);flex:none}
+.qw-name{font-weight:700;text-transform:uppercase;font-size:9pt;line-height:1.15}
+.qw-sub{font-size:7pt;color:#333}
+.qw-title{display:flex;justify-content:space-between;align-items:baseline}
+.qw-title b{font-size:12.5pt;letter-spacing:.14em}
+.qw-title .no{font-size:12.5pt;font-weight:700}.qw-title .no span{font-weight:400;margin-right:1mm}
+.qw-date{font-size:8.5pt;margin-top:-1mm}
+.qw-req{width:100%;border-collapse:collapse}
+.qw-req th{text-align:left;font-weight:400;color:#333;padding:.8mm 1.5mm .8mm 0;white-space:nowrap;width:26mm;vertical-align:bottom;font-size:8pt;border:0;background:none;text-transform:none;letter-spacing:0}
+.qw-req td{border:0;border-bottom:1px solid #111;padding:.8mm 1mm;font-weight:700;vertical-align:bottom;font-size:inherit}
+.qw-tbl{width:100%;border-collapse:collapse}
+.qw-tbl th,.qw-tbl td{border:1px solid #111;padding:1.3mm 1.6mm;color:#111}
+.qw-tbl th{background:#e9e9e9;font-size:7.5pt;text-align:center;text-transform:none;letter-spacing:0}
+.qw-tbl td{font-size:11pt;font-weight:700}
+.qw-tbl td.c{width:6mm;text-align:center;font-size:9pt;font-weight:400}
+.qw-tbl td.r{text-align:right;white-space:nowrap}.qw-tbl td.r small{font-weight:400;font-size:8pt}
+.qw-tbl .k{display:block;font-size:7.5pt;font-weight:400;color:#333}
+.qw-note{font-size:8pt}
+.qw-cp{font-size:7.5pt;color:#333;text-align:right;font-weight:700}
+.qw-signs{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:3mm;font-size:7.5pt}
+.qw-signs .ln{border-bottom:1px solid #111;height:6mm}.qw-signs small{display:block;color:#555;font-size:6.5pt;text-align:center}
+.qp-a5-in.stub .qw-full{border-left:0}
+.qp-a5 .qw-full{font-size:9.5pt;gap:3mm;padding:5mm 5mm 4mm}.qp-a5 .qw-name{font-size:10.5pt}.qp-a5 .qw-sub{font-size:8pt}.qp-a5 .qw-title b,.qp-a5 .qw-title .no{font-size:15pt}.qp-a5 .qw-date{font-size:9.5pt}.qp-a5 .qw-req th{font-size:9pt;width:30mm;padding:1.4mm 1.5mm 1.4mm 0}.qp-a5 .qw-req td{padding:1.4mm 1mm;font-size:10.5pt}.qp-a5 .qw-tbl th{font-size:8.5pt}.qp-a5 .qw-tbl td{font-size:14pt;padding:2mm}.qp-a5 .qw-tbl .k{font-size:8.5pt}.qp-a5 .qw-signs{font-size:8.5pt}.qp-a5 .qw-signs .ln{height:8mm}.qp-a5 .qw-cp{font-size:8.5pt}
+.qw-small{border:1px solid #111;height:100%;padding:2.4mm 3mm 2mm;display:grid;grid-template-columns:minmax(0,1fr) 36mm;grid-template-rows:auto 1fr auto;gap:1.4mm 3mm;font-size:7pt;line-height:1.2;overflow:hidden;min-height:0}
+.qw-top{grid-column:1/3;display:flex;justify-content:space-between;align-items:center;border-bottom:1.3px solid #111;padding-bottom:1.2mm;gap:2mm}
+.qw-top .nm{font-weight:700;text-transform:uppercase;font-size:7.3pt;min-width:0}
+.qw-top .nm small{display:block;font-weight:400;text-transform:none;color:#333;font-size:6.3pt}
+.qw-top .tt{text-align:right;white-space:nowrap}.qw-top .tt b{font-size:10pt;letter-spacing:.08em}.qw-top .tt div{font-size:6.8pt}
+.qw-small .qw-req th{width:19mm;font-size:6.6pt;padding:.5mm 1mm .5mm 0}
+.qw-small .qw-req td{padding:.5mm .8mm;font-size:7pt}
+.qw-q{border:1px solid #111;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:1mm;min-height:0;overflow:hidden}
+.qw-q .p{font-weight:700;font-size:10pt}.qw-q .v{font-weight:700;font-size:15pt;line-height:1.1}.qw-q .v small{font-size:8pt;font-weight:400}.qw-q .k{font-size:6.8pt;color:#333}
+.qw-q .pl{display:flex;justify-content:space-between;gap:2mm;width:100%;font-size:8pt}
+.qw-sg{grid-column:1/3;display:grid;grid-template-columns:1fr 1fr auto;gap:3mm;align-items:end;font-size:6.5pt}
+.qw-sg .ln{border-bottom:1px solid #111;height:4.5mm}.qw-sg .cp{color:#333;font-size:6.3pt;white-space:nowrap;font-weight:700}
+.qp-row.stub .qw-small{border-left:0}
+.qw-stub{border:1px solid #111;border-right:0;height:100%;padding:2.4mm 2.6mm 2mm;display:flex;flex-direction:column;gap:1.1mm;font-size:6.8pt;line-height:1.2;overflow:hidden;background:#fafafa;min-height:0}
+.qw-stub .h{font-weight:700;font-size:8.5pt;border-bottom:1.2px solid #111;padding-bottom:1mm}.qw-stub .h small{display:block;font-weight:400;font-size:6.3pt}
+.qw-stub .r{display:flex;justify-content:space-between;gap:2mm;border-bottom:1px solid #bbb;padding:.4mm 0}
+.qw-stub .r span:first-child{color:#333}.qw-stub .r span:last-child{font-weight:700;text-align:right;overflow-wrap:anywhere}
+.qw-stub .big{font-size:10pt;font-weight:700;text-align:center;margin:1mm 0}.qw-stub .big small{font-weight:400;font-size:6.5pt}
+.qw-stub .sg{margin-top:auto}.qw-stub .sg .ln{border-bottom:1px solid #111;height:4.5mm}
+.qw-stub .cp{font-size:6.3pt;color:#333;text-align:center;margin-top:.8mm;font-weight:700}
+.qp-a5 .qw-stub{font-size:8.3pt;padding:4mm 3.5mm 3mm;gap:2mm}.qp-a5 .qw-stub .h{font-size:11pt}.qp-a5 .qw-stub .h small{font-size:8pt}.qp-a5 .qw-stub .big{font-size:12.5pt;margin:3mm 0}.qp-a5 .qw-stub .sg .ln{height:7mm}.qp-a5 .qw-stub .cp{font-size:7.5pt}
+.qw-rc{font-family:"Courier New",monospace;font-size:9pt;line-height:1.3;padding:2mm 0}
+.qw-rc .c{text-align:center}.qw-rc .big{font-size:12pt;font-weight:700;letter-spacing:.1em}.qw-rc .nm{font-weight:700;font-size:9.5pt;text-transform:uppercase}
+.qw-rc hr{border:0;border-top:1px dashed #111;margin:2mm 0}
+.qw-rc .kv{display:flex;justify-content:space-between;gap:3mm}.qw-rc .kv span:first-child{color:#333}.qw-rc .kv span:last-child{font-weight:700;text-align:right}
+.qw-rc .prod{font-size:11pt;font-weight:700}
+.qw-rc .sig{margin-top:6mm;display:flex;justify-content:space-between;gap:4mm;font-size:8pt}.qw-rc .sig div{flex:1;border-top:1px solid #111;padding-top:1mm;text-align:center}
+.qw-rc .cp{font-size:8pt;margin-top:2mm;font-weight:700}
+.qw-tear{text-align:center;color:#555;font-size:8pt;margin:4mm 0;letter-spacing:.1em}
+.qwb-old{display:grid;gap:16px}
+.kar-selrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 8px}
+.ki-sel{display:flex;align-items:center;padding:0 4px 0 0;cursor:pointer}.ki-sel input{width:18px;height:18px;accent-color:var(--accent)}
+.kar-item.sel{outline:2px solid var(--accent);outline-offset:-2px}
+/* ---- 🔁 Ichki hisob, 📥 kirim, 📦 ombor ---- */
+.inv-panel h2{margin-bottom:10px}
+.inv-new{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px;background:var(--surface-2)}
+.inv-new > summary{cursor:pointer;list-style:none;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:15px}
+.inv-new > summary::-webkit-details-marker{display:none}
+.inv-new > summary::before{content:"▸";color:var(--accent);transition:transform .15s}
+.inv-new[open] > summary::before{transform:rotate(90deg)}
+.inv-new[open] > summary{margin-bottom:12px}
+.inv-seg{margin-bottom:12px}
+.inv-lines{display:grid;gap:6px}
+.inv-lh,.inv-line{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1.2fr) minmax(0,1fr) 36px;gap:8px;align-items:center}
+.inv-lh.kir,.inv-line.kir{grid-template-columns:minmax(0,2.6fr) minmax(0,1.3fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,1.2fr) 36px}
+body.role-staff .inv-lh.kir,body.role-staff .inv-line.kir{grid-template-columns:minmax(0,2.6fr) minmax(0,1.3fr) minmax(0,1fr) minmax(0,.9fr) 36px}
+body.role-staff .money-col{display:none!important}
+.inv-lh{font-size:12px;color:var(--muted);font-weight:500}
+.inv-line .il-x{font-size:20px;line-height:1;padding:4px 8px}
+.inv-filters{margin-top:4px}
+.inv-need{margin-bottom:12px}
+.inv-need:not([hidden]){display:block;padding:12px 14px;border-radius:10px;border-left:4px solid var(--warn,#9a6a00);background:var(--surface-2)}
+.inv-item{border-left-color:#7a5cc4}
+.kir-item{border-left-color:#2f7a4f}
+.arc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}.arc-head h2{margin:0}
+.arc-sel{float:left;margin:2px 6px 0 0;cursor:pointer}.arc-sel input{width:17px;height:17px;accent-color:var(--accent)}
+#rows tr.sel td{background:color-mix(in srgb,var(--accent-soft) 80%,transparent)}
+.neg{color:var(--danger)}.ok-t{color:var(--ok,#2f7a4f)}
+@media (max-width:820px){.inv-lh{display:none}.inv-line,.inv-line.kir,body.role-staff .inv-line.kir{grid-template-columns:1fr 1fr;padding-bottom:8px;border-bottom:1px dashed var(--line)}.inv-line .il-p{grid-column:1 / -1}.inv-line .il-x{justify-self:end}}
+
+.kar-item:has(> .ki-sel){grid-template-columns:auto 1fr auto auto}
+@media (max-width:560px){.kar-item:has(> .ki-sel){grid-template-columns:auto 1fr auto}.kar-item:has(> .ki-sel) .ki-act{grid-column:2 / -1}}
+@media print{
+  #sheet.qwb-wrap{display:block;width:auto!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;box-shadow:none!important;overflow:visible!important;background:none!important}
+  .qpage{box-shadow:none!important;margin:0!important;break-after:page;page-break-after:always}
+  .qpage:last-child{break-after:auto;page-break-after:auto}
+  .qwb-old > .sheet{break-after:page;page-break-after:always}.qwb-old > .sheet:last-child{break-after:auto;page-break-after:auto}
+}
 .wb-table .c{width:9mm;text-align:center}
 .wb-table td.c{font-size:calc(12pt*var(--g-qty,var(--k)))}
 .wb-table .r{width:32mm;text-align:right;white-space:nowrap}
@@ -816,6 +925,7 @@ body.side-single .side-h::after{display:none}
 .side-nav{gap:6px}
 .kar-cats{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
 .kar-catlist{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.qc-catrow{display:flex;gap:6px;align-items:stretch}.qc-catrow select{flex:1 1 auto;min-width:0}.qc-catrow button{flex:none;white-space:nowrap}
 .kar-cat{display:inline-flex;align-items:center;gap:4px;padding:5px 6px 5px 12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);font-size:14px}
 .kar-catform{max-width:520px}
 </style>
@@ -878,6 +988,12 @@ body.side-single .side-h::after{display:none}
       <button type="button" data-page="q-rep"><i aria-hidden="true">📊</i>Karyer hisoboti</button>
       <button type="button" data-page="q-setup"><i aria-hidden="true">⛏</i>Karyerlar</button>
       <button type="button" data-page="q-cam"><i aria-hidden="true">📹</i>Kameralar<span class="side-soon">tez kunda</span></button>
+    </div>
+    <div class="side-grp" id="sgInv" hidden>
+      <div class="side-h"><span aria-hidden="true">🔁</span> Ichki hisob va ombor</div>
+      <button type="button" data-page="int"><i aria-hidden="true">🔁</i>Ichki yuk xatlari</button>
+      <button type="button" data-page="kirim"><i aria-hidden="true">📥</i>Olingan mahsulotlar</button>
+      <button type="button" data-page="ombor"><i aria-hidden="true">📦</i>Ombor qoldig'i</button>
     </div>
     <div class="side-grp" id="sgReys" hidden>
       <div class="side-h"><span aria-hidden="true">🚚</span> Haydovchilar</div>
@@ -945,6 +1061,7 @@ body.side-single .side-h::after{display:none}
       <div class="f c4"><label for="fFirm">Xaridor firma (kimga sotildi)</label><input id="fFirm" list="firmList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
       <div class="f c2"><label for="fTime">Vaqti (24 soat)</label><input type="time" id="fTime" step="60"></div>
       <div class="f c4 site-f" id="fSiteBox"><label for="fSite">📍 Obyekt (qaysi ish uchun) *</label><select id="fSite"></select></div>
+      <div class="f c4" id="fFromBox" hidden><label for="fFrom">📦 Qaysi ombordan chiqdi</label><select id="fFrom"></select></div>
       <div class="f c3"><label for="fLoad">Yuk ortiladigan manzil</label><input id="fLoad" list="loadList" placeholder="Qayerdan ortiladi"></div>
       <div class="f c3"><label for="fUnload">Yuk tushiriladigan manzil</label><input id="fUnload" list="unloadList" placeholder="Qayerga tushiriladi"></div>
       <div class="c12 bal" id="fBal" hidden role="status"></div>
@@ -1224,7 +1341,7 @@ body.side-single .side-h::after{display:none}
     <form class="entry kar-form" id="qcForm" autocomplete="off" novalidate>
       <p class="hint c12" id="qcHint"></p>
       <div class="f c4" id="qcCarBox"><label for="qcCar">Mashina raqami (qarzdor) *</label><input id="qcCar" list="qDebtList" placeholder="70 A 123 BC" autocapitalize="characters"><span class="hint" id="qcDebtInfo"></span></div>
-      <div class="f c4" id="qcCatBox"><label for="qcCat">Xarajat turi *</label><select id="qcCat"></select></div>
+      <div class="f c4" id="qcCatBox"><label for="qcCat">Xarajat turi *</label><div class="qc-catrow"><select id="qcCat"></select><button type="button" class="sm" id="qcCatAdd" title="Ro'yxatda yo'q turni qo'shish">＋ Yangi tur</button></div></div>
       <div class="f c4" id="qcPersonBox"><label for="qcPerson">Ishchi (F.I.Sh) *</label><input id="qcPerson" list="qPersonList" placeholder="Familiya Ism"></div>
       <div class="f c4" id="qcFirmBox"><label for="qcFirm">Firma nomi *</label><input id="qcFirm" list="firmList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
       <div class="f c4"><label for="qcAmt">Summa, so'm *</label><input id="qcAmt" class="num" inputmode="decimal" placeholder="0"></div>
@@ -1271,6 +1388,7 @@ body.side-single .side-h::after{display:none}
       <div class="f c3"><label for="qsKovsh">1 kovsh, m³</label><input id="qsKovsh" class="num" inputmode="decimal" value="3"></div>
       <div class="f c6"><label for="qsProds">Mahsulotlar (vergul bilan)</label><input id="qsProds" value="Qum, Sheben, Sechka"></div>
       <div class="f c6"><label class="chk kar-blank"><input type="checkbox" id="qsOwnBlank" checked> Yuk xatida bizning blank (logotip, telefon) chiqsin</label><span class="hint">Boshqa firmaga qarashli karyer uchun belgini olib tashlang — yuk xati tepasida o'sha firma nomi chiqadi.</span></div>
+      <div class="f c6"><label for="qsFmt">Yuk xati blanki (odatiy)</label><select id="qsFmt"><option value="a5_eq">A5 — teng ikkiga (bizda / xaridorga)</option><option value="a5_stub">A5 — koreshokli</option><option value="a4x4_eq">A4 ga 4 ta — teng ikkiga</option><option value="a4x4_stub">A4 ga 4 ta — koreshokli</option><option value="receipt">Chek printeri — 80 mm lenta</option><option value="a4_old">Hozirgi A4 (butun varaq)</option></select><span class="hint">Chop etish oynasida har safar boshqasini tanlasa ham bo'ladi.</span></div>
       <div class="f c12"><label>Ish yurituvchi(lar)</label><div class="kar-staff" id="qsStaff"></div></div>
       <div class="c12 kar-act"><span class="btns"><button type="button" id="qsCancel" hidden>Bekor qilish</button><button type="submit" class="primary" id="qsSave">Karyerni qo'shish</button></span></div>
     </form>
@@ -1374,13 +1492,131 @@ body.side-single .side-h::after{display:none}
   </section>
 
   <section class="panel" id="archive" data-page="archive">
-      <h2>Yuk xatlari arxivi</h2>
+      <div class="arc-head"><h2>Yuk xatlari arxivi</h2>
+        <label class="chk priv-only" hidden><input type="checkbox" id="arcSelAll"> Ko'rinayotganlarning hammasini belgilash</label>
+        <span class="selbar" id="arcSelBar" hidden><b>Belgilangan: <span id="arcSelN">0</span></b><button type="button" class="sm primary" id="arcToInt">🔁 Ichki hisobga o'tkazish</button><button type="button" class="sm ghost" id="arcSelClear">Bekor qilish</button></span></div>
       <div class="tbl">
         <table>
           <thead><tr><th>Sana</th><th>Yuk xati / firma</th><th>Mahsulotlar</th><th>Yetkazib berish</th><th class="r money">Summa</th><th>Amallar</th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
+  </section>
+
+  <!-- 🔁 ICHKI HISOB: o'z firmalarimiz va joylarimiz o'rtasidagi yuk xatlari -->
+  <section class="panel inv-panel" id="intPanel" data-page="int">
+    <div class="inv-need" id="intNeed" hidden></div>
+    <details class="inv-new" id="intNewBox">
+      <summary><b id="intFormT">＋ Yangi ichki yuk xati</b> <span class="hint">bir joydan boshqa joyga yoki o'z firmalarimiz o'rtasida</span></summary>
+      <div class="kar-seg inv-seg" id="intType" role="group" aria-label="Ichki yuk xati turi">
+        <button type="button" data-it="place" class="on">📍 Joylar o'rtasida (obyekt / karyer)</button><button type="button" data-it="firm">🏢 O'z firmalarimiz o'rtasida</button>
+      </div>
+      <form class="entry" id="intForm" autocomplete="off" novalidate>
+        <div class="f c3"><label for="intDate">Sana</label><input type="date" id="intDate"></div>
+        <div class="f c3"><label for="intNo">Ichki yuk xati №</label><input id="intNo" placeholder="avtomatik"></div>
+        <div class="f c3 it-firm"><label for="intFromFirm">Kimdan (firmamiz) *</label><select id="intFromFirm"></select></div>
+        <div class="f c3 it-firm"><label for="intToFirm">Kimga (firmamiz) *</label><select id="intToFirm"></select></div>
+        <div class="f c3"><label for="intFrom">Qayerdan (ombor) <span class="it-place req">*</span></label><select id="intFrom"></select></div>
+        <div class="f c3"><label for="intTo">Qayerga (ombor) <span class="it-place req">*</span></label><select id="intTo"></select></div>
+        <div class="c12 inv-lines">
+          <div class="inv-lh"><span>Mahsulot *</span><span>Miqdori *</span><span>Birligi</span><span></span></div>
+          <div id="intLines"></div>
+          <button type="button" class="add-line sm" id="intAddLine">＋ Mahsulot qo'shish</button>
+        </div>
+        <div class="f c3"><label for="intCar">Avtomobil raqami</label><input id="intCar" list="carList" autocapitalize="characters" placeholder="70 A 123 BC"></div>
+        <div class="f c3"><label for="intDriver">Haydovchi</label><input id="intDriver" list="driverList"></div>
+        <div class="f c6"><label for="intNote">Izoh</label><input id="intNote" placeholder="ixtiyoriy"></div>
+        <div class="c12 kar-act"><span class="hint" id="intCost"></span><span class="btns"><button type="button" id="intCancel" hidden>Bekor qilish</button><button type="button" id="intSavePrint">Saqlash va chop etish</button><button type="submit" class="primary" id="intSave">Saqlash</button></span></div>
+      </form>
+    </details>
+    <div class="kar-filters inv-filters">
+      <div class="f"><label for="intKind">Turi</label><select id="intKind"><option value="">Hammasi</option><option value="place">Joylar o'rtasida</option><option value="firm">Firmalar o'rtasida</option></select></div>
+      <div class="f"><label for="intFromD">Sanadan</label><input type="date" id="intFromD"></div>
+      <div class="f"><label for="intToD">Sanagacha</label><input type="date" id="intToD"></div>
+      <div class="f grow"><label for="intQ">Qidirish</label><input type="search" id="intQ" placeholder="Firma, joy, mahsulot, mashina, №"></div>
+    </div>
+    <div class="chips" id="intChips"><button type="button" class="chip" data-ip="month">Shu oy</button><button type="button" class="chip" data-ip="prev">O'tgan oy</button><button type="button" class="chip" data-ip="year">Shu yil</button><button type="button" class="chip" data-ip="all">Hammasi</button></div>
+    <div id="intBody"></div>
+  </section>
+  <section class="panel inv-panel priv-only" id="intSetup" data-page="int">
+    <h2>🏢 O'z firmalarimiz</h2>
+    <p class="hint">Bu firmalar o'rtasidagi yuk xatlari ichki hisob bo'ladi. Ro'yxatga yangi firma qo'shing yoki keraksizini × bilan olib tashlang.</p>
+    <div class="kar-catlist" id="ownFirms"></div>
+    <form class="ref-add kar-catform" id="ownFirmForm" autocomplete="off"><input id="ownFirmIn" list="firmList" placeholder="Firma nomi, masalan: &quot;QARSHI BETON KLASTER&quot; MCHJ" aria-label="O'z firmamiz"><button type="submit">Qo'shish</button></form>
+    <h2 class="kar-h">🔁 Butun firmani ichki hisobga o'tkazish</h2>
+    <p class="hint">Firmaning barcha yuk xatlari va to'lovlari tashqi hisob-kitobdan chiqib, shu yerga o'tadi (qarzdorlar ro'yxatiga, Telegram hisobotiga va statistikaga kirmaydi). Keyin «Qaytarish» bilan joyiga qaytarsa bo'ladi. Faqat bitta-ikkita yuk xatini o'tkazish uchun — Arxivda belgilang.</p>
+    <form class="ref-add" id="intFirmForm" autocomplete="off"><select id="intFirmSel" aria-label="Firma"></select><button type="submit">🔁 Ichki hisobga o'tkazish</button></form>
+    <div id="intFirmList"></div>
+  </section>
+
+  <!-- 📥 KIRIM: olingan mahsulotlar, yetkazib beruvchilar -->
+  <section class="panel inv-panel" id="kirPanel" data-page="kirim">
+    <div class="inv-need" id="kirNeed" hidden></div>
+    <details class="inv-new" id="kirNewBox" open>
+      <summary><b id="kirFormT">＋ Yangi kirim (olingan mahsulot)</b></summary>
+      <form class="entry" id="kirForm" autocomplete="off" novalidate>
+        <div class="f c3"><label for="kirDate">Sana</label><input type="date" id="kirDate"></div>
+        <div class="f c5"><label for="kirSup">Yetkazib beruvchi (kimdan olindi) *</label><input id="kirSup" list="supList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
+        <div class="f c4"><label for="kirTo">Qaysi omborga keldi *</label><select id="kirTo"></select></div>
+        <div class="c12 inv-lines">
+          <div class="inv-lh kir"><span>Mahsulot *</span><span>Turi</span><span>Miqdori *</span><span>Birligi</span><span class="money-col">Narxi (1 birlik)</span><span></span></div>
+          <div id="kirLines"></div>
+          <button type="button" class="add-line sm" id="kirAddLine">＋ Mahsulot qo'shish</button>
+          <p class="hint">«Xomashyo» — beton va boshqa mahsulot tayyorlashga ketadi: sotilganda kalkulyatsiyadagi tarkib bo'yicha ombordan o'zi ayiriladi. «Qayta sotiladi» — shu mahsulotning o'zi sotiladi.</p>
+        </div>
+        <div class="f c3"><label for="kirWb">Hujjat (yuk xati) №</label><input id="kirWb"></div>
+        <div class="f c3"><label for="kirCar">Avtomobil raqami</label><input id="kirCar" list="carList" autocapitalize="characters"></div>
+        <div class="f c3"><label for="kirDriver">Haydovchi</label><input id="kirDriver" list="driverList"></div>
+        <div class="f c3"><label for="kirNote">Izoh</label><input id="kirNote" placeholder="ixtiyoriy"></div>
+        <div class="c12 kar-act"><span class="hint" id="kirSum"></span><span class="btns"><button type="button" id="kirCancel" hidden>Bekor qilish</button><button type="submit" class="primary" id="kirSave">Saqlash</button></span></div>
+      </form>
+    </details>
+    <datalist id="supList"></datalist><datalist id="kirProdList"></datalist>
+    <div class="kar-filters inv-filters">
+      <div class="f"><label for="kirFSup">Yetkazib beruvchi</label><select id="kirFSup"></select></div>
+      <div class="f"><label for="kirFFrom">Sanadan</label><input type="date" id="kirFFrom"></div>
+      <div class="f"><label for="kirFTo">Sanagacha</label><input type="date" id="kirFTo"></div>
+      <div class="f grow"><label for="kirQ">Qidirish</label><input type="search" id="kirQ" placeholder="Mahsulot, mashina, №, izoh"></div>
+    </div>
+    <div class="chips" id="kirChips"><button type="button" class="chip" data-kp="month">Shu oy</button><button type="button" class="chip" data-kp="prev">O'tgan oy</button><button type="button" class="chip" data-kp="year">Shu yil</button><button type="button" class="chip" data-kp="all">Hammasi</button></div>
+    <div id="kirBody"></div>
+  </section>
+  <section class="panel inv-panel priv-only" id="supPanel" data-page="kirim">
+    <h2>🚛 Yetkazib beruvchilar hisobi</h2>
+    <div id="supBody"></div>
+    <h2 class="kar-h" id="supPayH">💰 Yetkazib beruvchiga to'lov</h2>
+    <form class="entry" id="supPayForm" autocomplete="off" novalidate>
+      <div class="f c4"><label for="spSup">Yetkazib beruvchi *</label><input id="spSup" list="supList"></div>
+      <div class="f c2"><label for="spAmt">Summa, so'm *</label><input id="spAmt" class="num" inputmode="decimal" placeholder="0"></div>
+      <div class="f c2"><label for="spMethod">Qanday</label><select id="spMethod"><option value="bank">Hisob raqam</option><option value="cash">Naqd</option></select></div>
+      <div class="f c2"><label for="spDate">Sana</label><input type="date" id="spDate"></div>
+      <div class="f c2"><label for="spNote">Izoh</label><input id="spNote"></div>
+      <div class="c12 kar-act"><span></span><span class="btns"><button type="submit" class="primary" id="spSave">To'lovni yozish</button></span></div>
+    </form>
+    <h2 class="kar-h">🏷 Yetkazib beruvchi narxlari</h2>
+    <p class="hint">Xodim kirimni narxsiz yozadi — narx shu ro'yxatdan (sanasi bo'yicha) o'zi qo'yiladi. Ro'yxatda bo'lmasa — shu yetkazib beruvchidan oxirgi olingan narx.</p>
+    <form class="entry" id="supPriceForm" autocomplete="off" novalidate>
+      <div class="f c4"><label for="sprSup">Yetkazib beruvchi *</label><input id="sprSup" list="supList"></div>
+      <div class="f c3"><label for="sprProd">Mahsulot *</label><input id="sprProd" list="kirProdList"></div>
+      <div class="f c2"><label for="sprPrice">Narxi *</label><input id="sprPrice" class="num" inputmode="decimal"></div>
+      <div class="f c2"><label for="sprFrom">Qaysi sanadan</label><input type="date" id="sprFrom"></div>
+      <div class="f c1"><label>&nbsp;</label><button type="submit" class="primary">Qo'shish</button></div>
+      <label class="chk c12"><input type="checkbox" id="sprApply" checked> Shu sanadan keyingi narxsiz yoki eski narxli kirimlarga ham qo'llansin</label>
+    </form>
+    <div id="supPriceList"></div>
+  </section>
+
+  <!-- 📦 OMBOR QOLDIG'I -->
+  <section class="panel inv-panel" id="omborPanel" data-page="ombor">
+    <div class="inv-need" id="omNeed" hidden></div>
+    <div class="kar-filters inv-filters">
+      <div class="f"><label for="omPlace">Ombor</label><select id="omPlace"></select></div>
+      <div class="f"><label for="omTo">Qaysi sanagacha</label><input type="date" id="omTo"></div>
+      <div class="f"><label for="omDef">Tashqi sotuv odatda qaysi ombordan chiqadi</label><select id="omDef"></select></div>
+      <div class="f"><label>&nbsp;</label><button type="button" id="omXl">Excel</button></div>
+    </div>
+    <p class="hint">Faqat kirim qilingan (sotib olingan) mahsulotlar hisoblanadi. Karyer sotuvlari o'z karyeridan, ichki yuk xatlari «Qayerdan» omboridan chiqadi. Beton va boshqa tayyorlanadigan mahsulot sotilganda tarkibidagi xomashyo kalkulyatsiya bo'yicha ayiriladi.</p>
+    <div id="omBody"></div>
   </section>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -1434,6 +1670,7 @@ body.side-single .side-h::after{display:none}
   <div class="pv-bar">
     <span class="hint" id="pvHint"></span>
     <div class="btns">
+      <label class="pv-fmt" id="pvFmtBox" hidden>Blank turi: <select id="pvFmt" aria-label="Yuk xati blanki turi"></select></label>
       <button type="button" id="pvFontsBtn" aria-expanded="false" aria-controls="pvFonts">Aa  Yozuv o'lchamlari</button>
       <button type="button" id="pvClose">Yopish</button>
       <button type="button" class="primary" id="pvPrint">Chop etish</button>
@@ -3023,6 +3260,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
+// ichki hisob, kirim va ombor holati (pastdagi «🔁 ICHKI HISOB» bo'limida ishlatiladi)
+let irows = [], INT_OK = null, ownFirms = [], stockDef = "", purch = [], supPrices = [], supPays = [], INV_OK = null;
+let intType = "place", intEdit = null, intPreset = "month", kirEdit = null, kirPreset = "month";
+const arcSel = new Set();
 const MONTHS = ["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
 const NO_FIRM = "__nofirm__";
 let rows = [], pays = [], ref = {firms:[], sellers:[], products:[], prices:[], lastGiver:"", lastSeller:""}, editId = null;
@@ -3122,7 +3363,9 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 const hasPrice = r => r.price!==null && r.price!==undefined && r.price!=="";
 const sortKey = r => (r.date||"0000-00-00") + (r.created||"");
 const gk = r => r.batch ? "b:"+r.batch : (r.waybill ? "w:"+r.waybill : "i:"+r.id);
-const groupItems = key => (typeof KX_ITEMS !== "undefined" && KX_ITEMS[key]) || rows.filter(r => gk(r)===key).sort((a,b)=>(a.created||"").localeCompare(b.created||""));
+const groupItems = key => { if (typeof KX_ITEMS !== "undefined" && KX_ITEMS[key]) return KX_ITEMS[key];
+  let l = rows.filter(r => gk(r)===key); if (!l.length && typeof irows !== "undefined") l = irows.filter(r => gk(r)===key);
+  return l.sort((a,b)=>(a.created||"").localeCompare(b.created||"")); };
 const newId = () => "r" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 const same = (a,b) => String(a||"").trim().toLowerCase() === String(b||"").trim().toLowerCase();
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>t.hidden=true,2400); }
@@ -3174,6 +3417,7 @@ const fromDb = s => {
     waybill: s.waybill || "", giver: s.giver || "", receiver: s.receiver || "", driver: s.driver || "", phone: s.phone || "", car: s.car || "", note: s.note || "",
     loadAddr: s.load_addr || "", unloadAddr: s.unload_addr || "", product: s.product, qty: Number(s.qty), unit: s.unit || "",
     hasPhoto: !!s.has_photo, created: s.created_at, createdBy: s.created_by, payMethod: s.pay_method || "bank", site: s.site_id || "", quarry: s.quarry_id || "", kovsh: s.kovsh == null ? null : Number(s.kovsh),
+    internal: !!s.internal, fromPlace: s.from_place || "", toPlace: s.to_place || "",
     price: m && m.price != null ? Number(m.price) : null, total: m ? Number(m.total || 0) : 0 };
 };
 const toDb = (r, withCreated) => {
@@ -3186,6 +3430,7 @@ const toDb = (r, withCreated) => {
   if (withCreated && r.created) d.created_at = r.created;
   // obyekt faqat berilganda yoziladi (aks holda eski qiymat o'zgarmaydi); baza yangilanmagan bo'lsa yuborilmaydi
   if (SITES_OK && "site" in r) d.site_id = r.site && siteById(r.site) ? r.site : null;
+  if (typeof INT_OK !== "undefined" && INT_OK && "fromPlace" in r) d.from_place = r.fromPlace || "";
   return d;
 };
 async function fetchAll(table, select, build){
@@ -3207,7 +3452,7 @@ async function reloadAll(silent){
       fetchAll("refs", "*", q => q.order("id")),
       fetchAll("settings", "*", q => q.order("key"))
     ]);
-    rows = sales.map(fromDb);
+    { const all = sales.map(fromDb); if (typeof INT_OK !== "undefined") { INT_OK = !sales.length ? INT_OK !== false : "internal" in sales[0]; irows = all.filter(r => r.internal); } rows = all.filter(r => !r.internal); }
     // obyektlar ro'yxati (baza hali yangilanmagan bo'lsa — jim o'tkazib yuboriladi)
     try { sites = (await fetchAll("sites", "*", q => q.order("created_at"))).map(x => ({ id: x.id, region: x.region, name: x.name, active: x.active !== false })); SITES_OK = true; }
     catch(e) { sites = []; SITES_OK = false; }
@@ -3218,6 +3463,7 @@ async function reloadAll(silent){
       sellers: refsRows.filter(x => x.kind === "seller").map(x => x.name),
       products: refsRows.filter(x => x.kind === "product").map(x => ({ name: x.name, unit: x.unit || "" })),
       colOrder: st.excel?.colOrder, colHead: st.excel?.colHead, brand: st.brand });
+    if (typeof ownFirms !== "undefined") { ownFirms = st.own_firms && Array.isArray(st.own_firms.list) ? st.own_firms.list : []; stockDef = st.stock_place && st.stock_place.place || ""; }
     accProj = st.acc_projects && typeof st.acc_projects === "object" && !Array.isArray(st.acc_projects) ? st.acc_projects : {};
     ["firms", "sellers"].forEach(k => ref[k].sort((a, b) => a.localeCompare(b)));
     ref.products.sort((a, b) => a.name.localeCompare(b.name));
@@ -3230,6 +3476,7 @@ async function reloadAll(silent){
       profilesById = Object.fromEntries(pf.map(p => [p.id, p]));
     } else { ref.prices = []; pays = []; fares = {}; profilesById = { [me.id]: me }; }
     render(); if (typeof renderBeton === "function") renderBeton();
+    if (typeof invRenderAll === "function") invRenderAll();
     if (typeof scheduleSync === "function") scheduleSync();
   } catch(e) { if (!silent) toast("Ma'lumotni yuklab bo'lmadi: " + (e.message || "internetni tekshiring")); }
   loading = false;
@@ -3528,6 +3775,7 @@ function resetForm(){
   $("#lines").innerHTML = ""; addLine();
   autoDriver = ""; $("#fPay").value = getPm(); pmMark($("#fPay"));
   if (typeof fillSiteSel === "function") { fillSiteSel("#fSite", getLastSite()); autoSite = $("#fSite").value; }
+  if (typeof fFromFill === "function") fFromFill();
   if (typeof fillAddr === "function") fillAddr("#fSeller", "seller", "#fLoad");
   $("#formTitle").textContent = "Yangi yuk xati"; $("#saveBtn").textContent = "Saqlash"; $("#cancelEdit").hidden = true;
   if (typeof updateBalance === "function") updateBalance();
@@ -3552,8 +3800,10 @@ $("#entry").addEventListener("submit", async e => {
     date: $("#fDate").value, time: $("#fTime").value || (old?.time ?? (editId ? "" : nowTime())), seller: $("#fSeller").value.trim(), firm: $("#fFirm").value.trim(), waybill: $("#fWaybill").value.trim(),
     giver: $("#fGiver").value.trim(), receiver: $("#fReceiver").value.trim(), driver: $("#fDriver").value.trim(), phone: $("#fPhone").value.trim(), loadAddr: $("#fLoad").value.trim(), unloadAddr: $("#fUnload").value.trim(), car: $("#fCar").value.trim().toUpperCase(),
     note: $("#fNote").value.trim(), payMethod: $("#fPay").value, batch: old?.batch || newId(),
-    ...(SITES_OK ? { site: siteById($("#fSite").value) ? $("#fSite").value : "" } : {})
+    ...(SITES_OK ? { site: siteById($("#fSite").value) ? $("#fSite").value : "" } : {}),
+    ...(INT_OK && !$("#fFromBox").hidden ? { fromPlace: $("#fFrom").value } : {})
   };
+  if ("fromPlace" in head) { try { localStorage.setItem(fFromKey(), head.fromPlace || ""); } catch(e) {} }
   setLastSite(head.site);
   const wantPrint = e.submitter && e.submitter.id === "savePrintBtn";
   const now = Date.now(), ids = [];
@@ -3596,7 +3846,7 @@ function startEdit(key){
   const r = items[0];
   editId = key;
   $("#fDate").value=r.date||""; $("#fTime").value=r.time||""; timeTouched = true; $("#fFirm").value=r.firm||""; $("#fWaybill").value=r.waybill||"";
-  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank"; pmMark($("#fPay")); autoDriver = ""; fillSiteSel("#fSite", r.site || ""); autoSite = "";
+  $("#fGiver").value=r.giver||""; $("#fReceiver").value=r.receiver||""; $("#fDriver").value=r.driver||""; $("#fPhone").value=r.phone||""; $("#fCar").value=r.car||""; $("#fNote").value=r.note||""; $("#fSeller").value=r.seller||""; $("#fLoad").value=r.loadAddr||""; $("#fUnload").value=r.unloadAddr||""; $("#fPay").value = r.payMethod || "bank"; pmMark($("#fPay")); autoDriver = ""; fillSiteSel("#fSite", r.site || ""); autoSite = ""; if (typeof fFromFill === "function") fFromFill(r.fromPlace || "");
   $("#fFare").value = fares[r.batch] != null ? fares[r.batch] : "";
   $("#lines").innerHTML = ""; items.forEach(it => addLine(it));
   updateBalance();
@@ -3669,6 +3919,7 @@ function render(){
     { const v = $("#qSite").value; $("#qSite").innerHTML = `<option value="">Barcha obyektlar</option>` + [...sites].sort((a, b) => siteLbl(a.id).localeCompare(siteLbl(b.id))).map(x => `<option value="${x.id}">${esc(siteLbl(x.id))}</option>`).join("") + (rows.some(r => !r.site) ? `<option value="__none">Obyekt belgilanmagan</option>` : ""); $("#qSite").value = v; if ($("#qSite").value !== v) $("#qSite").value = ""; }
   }
   renderSites();
+  if (typeof fFromFill === "function") fFromFill();
   if (typeof curPage !== "undefined" && /^q-/.test(String(curPage)) && typeof qRenderAll === "function" && Q_OK) { try { qRenderAll(); } catch(e) {} }
   if (typeof curPage !== "undefined" && curPage === "calc" && typeof renderCalc === "function" && CALC_OK && calcTab !== "rec") renderCalc();
 
@@ -3721,7 +3972,7 @@ function render(){
         ? `<div class="acts"><span class="hint">O'chirilsinmi?</span><button class="danger-solid sm" data-del-yes="${esc(g.key)}">Ha, o'chir</button><button class="sm" data-del-no>Yo'q</button></div>`
         : `<div class="acts"><button class="wb sm" data-print="${esc(g.key)}">Yuk xati</button><button class="sm conf${r.hasPhoto ? " has" : ""}" data-conf="${esc(g.key)}" title="Imzolangan/muhrlangan yuk xati rasmini yuklang — u Excel'ga tushadi">${r.hasPhoto ? "✓ Tasdiqlangan" : "📎 Tasdiqlanganini yuklash"}</button><button class="sm" data-edit="${esc(g.key)}">Tahrirlash</button>${PRIV() ? `<button class="sm danger" data-del="${esc(g.key)}">O'chirish</button>` : ""}</div>`;
       html += `<tr>
-        <td class="dcell">${r.date ? `<span class="d1">«${r.date.slice(8)}» ${OYLAR[+r.date.slice(5,7)-1]}</span><span class="d2">${r.date.slice(0,4)}-yil${r.time ? `, ${r.time}` : ""}</span>` : '<span class="dim">—</span>'}</td>
+        <td class="dcell">${PRIV() && INT_OK && !VIEWING() ? `<label class="arc-sel" title="Belgilash (ichki hisobga o'tkazish uchun)"><input type="checkbox" data-arcsel="${esc(g.key)}"${arcSel.has(g.key) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}${r.date ? `<span class="d1">«${r.date.slice(8)}» ${OYLAR[+r.date.slice(5,7)-1]}</span><span class="d2">${r.date.slice(0,4)}-yil${r.time ? `, ${r.time}` : ""}</span>` : '<span class="dim">—</span>'}</td>
         <td>${r.waybill ? `<span class="wbno">№ ${esc(r.waybill)}</span>` : ""}
             ${r.firm ? `<button class="firm-link" data-firm="${esc(r.firm)}">${esc(r.firm)}</button>` : '<span class="dim">Xaridor ko\'rsatilmagan</span>'}
             ${r.unloadAddr ? `<span class="sub">Tushirish: ${esc(r.unloadAddr)}</span>` : ""}
@@ -3735,6 +3986,7 @@ function render(){
     }
     $("#rows").innerHTML = html;
   }
+  if (typeof arcSelBar === "function") { [...arcSel].forEach(k => { if (!keys.includes(k)) arcSel.delete(k); }); arcSelBar(); const sa = $("#arcSelAll"); if (sa) { sa.closest("label").hidden = !(PRIV() && INT_OK && !VIEWING() && keys.length); sa.checked = keys.length > 0 && keys.every(k => arcSel.has(k)); } }
 
   renderAccounts();
   updateBalance();
@@ -3840,7 +4092,7 @@ function waybillSheet(key){
         ${(b.phone || b.address) ? `<div class="wb-contacts">${b.phone ? `<span>Tel.: ${esc(b.phone)}</span>` : ""}${b.address ? `<span>Manzil: ${esc(b.address)}</span>` : ""}</div>` : ""}</div>
       </header>`;
     }
-    h += `<div class="wb-titlebar"><div class="wb-tline"><div class="wb-title">YUK XATI</div>${wbNo.length ? `<div class="wb-tno"><span>№</span>${j(wbNo)}</div>` : ""}</div>
+    h += `<div class="wb-titlebar"><div class="wb-tline"><div class="wb-title">${h0.internal ? "ICHKI YUK XATI" : "YUK XATI"}</div>${wbNo.length ? `<div class="wb-tno"><span>№</span>${j(wbNo)}</div>` : ""}</div>
       ${when ? `<div class="wb-sub"><span>Sana: <b>${when}</b></span></div>` : ""}</div>`;
 
     const rows = [];
@@ -3886,6 +4138,8 @@ function fitWaybill(root){
 }
 function openWaybill(key){
   const items = groupItems(key); if (!items.length) return;
+  if (items[0].kind === "karyer" && typeof qwbOpen === "function") { qwbOpen([key]); return; }
+  if (typeof qwbOff === "function") qwbOff();
   const b = brand();
   pvKey = key;
   $("#pv").hidden = false;
@@ -3956,6 +4210,150 @@ $("#pvFontRows").addEventListener("click", e => {
 $("#pvFontsReset").addEventListener("click", () => { try { localStorage.removeItem(WB_FONTS); localStorage.removeItem("savdo-daftari-wbfont"); } catch(e) {} refitPreview(); });
 const showFonts = on => { $("#pvFonts").hidden = !on; $("#pvFontsBtn").setAttribute("aria-expanded", on); try { localStorage.setItem("savdo-daftari-wbfonts-open", on ? "1" : ""); } catch(e) {} };
 $("#pvFontsBtn").addEventListener("click", () => showFonts($("#pvFonts").hidden));
+
+/* ---------- ⛏ Karyer yuk xati: kichik blanklar (A5, A4 ga 4 ta, chek printeri) ----------
+   Har yuk xati ikkiga bo'linadi: biri bizda qoladi, biri xaridorga. Odatiy tur karyer sozlamasida,
+   chop etish oynasida o'zgartirsa bo'ladi (har kompyuter oxirgi tanlovni eslab qoladi). */
+const QWB_FMTS = [
+  { id: "a5_eq",     label: "A5 — teng ikkiga (bizda / xaridorga)", per: 1, page: "A5 landscape", paper: "A5 (148×210 mm), yotiq" },
+  { id: "a5_stub",   label: "A5 — koreshokli",                      per: 1, page: "A5 landscape", paper: "A5 (148×210 mm), yotiq" },
+  { id: "a4x4_eq",   label: "A4 ga 4 ta — teng ikkiga",             per: 4, page: "A4 portrait",  paper: "A4, tik" },
+  { id: "a4x4_stub", label: "A4 ga 4 ta — koreshokli",              per: 4, page: "A4 portrait",  paper: "A4, tik" },
+  { id: "receipt",   label: "Chek printeri — 80 mm lenta",          per: 1, page: "80mm 200mm",   paper: "80 mm chek lentasi" },
+  { id: "a4_old",    label: "Hozirgi A4 (butun varaq)",             per: 1, page: "A4 landscape", paper: "A4, yotiq" }
+];
+const qwbFmt = id => QWB_FMTS.find(f => f.id === id);
+let pvKeys = null, pvFmt = null;
+const qwbIsKar = key => { const it = groupItems(key)[0]; return !!it && it.kind === "karyer"; };
+const qwbLsKey = qid => "savdo-qfmt-" + (qid || "x");
+function qwbDefault(qid, many){
+  let v = ""; try { v = localStorage.getItem(qwbLsKey(qid) + (many ? "-many" : "")) || ""; } catch(e) {}
+  if (qwbFmt(v)) return v;
+  const base = (qById(qid) || {}).wbFormat;
+  const d = qwbFmt(base) ? base : "a5_eq";
+  if (!many) return d;
+  return d.endsWith("_stub") ? "a4x4_stub" : "a4x4_eq";
+}
+function qwbData(key){
+  const items = groupItems(key), h = items[0] || {}, q = qById(h.quarry) || {}, b0 = brand(), own = q.ownBlank !== false;
+  return { no: h.waybill || "—", date: fmtDate(h.date) + (h.time ? ", " + h.time : ""),
+    owner: own ? (b0.name || h.seller || q.owner || "") : (h.seller || q.owner || ""), logo: own ? (b0.logo || "") : "", phone: own ? (b0.phone || "") : "",
+    quarry: q.name ? q.name + " karyeri" : (h.loadAddr || ""), buyer: h.firm || "Jismoniy shaxs", car: h.car || "", driver: h.driver || "", giver: h.giver || "",
+    note: h.note || "", unload: h.unloadAddr || "", perK: Number(q.kovsh) || 0,
+    items: items.map(r => ({ product: r.product, qty: Number(r.qty) || 0, unit: r.unit || "m³", kovsh: r.kovsh == null ? null : Number(r.kovsh) })) };
+}
+const qwKv = it => it.kovsh ? `${qFmtQ(it.kovsh)} kovsh` : "";
+// tik blank (A5 yarmi): to'liq yuk xati
+function qwFull(d, cp){
+  const head = `<div class="qw-head">${d.logo ? `<img class="qw-logo" src="${d.logo}" alt="">` : ""}<div><div class="qw-name">${esc(d.owner)}</div><div class="qw-sub">${esc(d.quarry)}${d.phone ? " · tel.: " + esc(d.phone) : ""}</div></div></div>`;
+  const req = [["Qabul qiluvchi", d.buyer], ["Avtomobil", d.car], ["Haydovchi", d.driver], d.unload ? ["Tushirish joyi", d.unload] : null].filter(Boolean)
+    .map(([k, v]) => `<tr><th>${k}:</th><td>${esc(v)}</td></tr>`).join("");
+  const tb = d.items.map((it, i) => `<tr><td class="c">${i + 1}</td><td>${esc(it.product)}${qwKv(it) ? `<span class="k">${qwKv(it)}${d.perK ? ` × ${qFmtQ(d.perK)} m³` : ""}</span>` : ""}</td><td class="r">${qFmtQ(it.qty)} <small>${esc(it.unit)}</small></td></tr>`).join("");
+  return `<div class="qw-full">${head}<div class="qw-title"><b>YUK XATI</b><span class="no"><span>№</span>${esc(d.no)}</span></div><div class="qw-date">Sana: <b>${esc(d.date)}</b></div>
+    <table class="qw-req"><tbody>${req}</tbody></table>
+    <table class="qw-tbl"><thead><tr><th>№</th><th>Mahsulot</th><th>Miqdori</th></tr></thead><tbody>${tb}</tbody></table>
+    ${d.note ? `<div class="qw-note">Izoh: ${esc(d.note)}</div>` : ""}<div class="qw-cp">${cp}</div>
+    <div class="qw-signs"><div>Topshirdi: <b>${esc(d.giver)}</b><div class="ln"></div><small>(imzo)</small></div><div>Qabul qildi:<div class="ln"></div><small>(imzo)</small></div></div></div>`;
+}
+// yotiq kichik blank (105×74)
+function qwSmall(d, cp){
+  const req = [["Qabul qiluvchi", d.buyer], ["Avtomobil", d.car], ["Haydovchi", d.driver], ["Topshirdi", d.giver]].map(([k, v]) => `<tr><th>${k}:</th><td>${esc(v)}</td></tr>`).join("");
+  const q = d.items.length === 1 ? `<div class="p">${esc(d.items[0].product)}</div><div class="v">${qFmtQ(d.items[0].qty)} <small>${esc(d.items[0].unit)}</small></div>${qwKv(d.items[0]) ? `<div class="k">${qwKv(d.items[0])}${d.perK ? ` × ${qFmtQ(d.perK)} m³` : ""}</div>` : ""}`
+    : d.items.map(it => `<div class="pl"><span>${esc(it.product)}</span><b>${qFmtQ(it.qty)} ${esc(it.unit)}</b></div>`).join("");
+  return `<div class="qw-small"><div class="qw-top"><div class="nm">${esc(d.owner)}<small>${esc(d.quarry)}</small></div><div class="tt"><b>YUK XATI № ${esc(d.no)}</b><div>${esc(d.date)}</div></div></div>
+    <div><table class="qw-req"><tbody>${req}</tbody></table></div><div class="qw-q">${q}</div>
+    <div class="qw-sg"><div>Topshirdi<div class="ln"></div></div><div>Qabul qildi<div class="ln"></div></div><span class="cp">${cp}</span></div></div>`;
+}
+// koreshok: bizda qoladigan tor qism
+function qwStub(d){
+  const prod = d.items.map(it => `${esc(it.product)} · ${qFmtQ(it.qty)} ${esc(it.unit)}${it.kovsh ? ` <small>(${qFmtQ(it.kovsh)} kovsh)</small>` : ""}`).join("<br>");
+  return `<div class="qw-stub"><div class="h">№ ${esc(d.no)}<small>${esc(d.date)}</small></div>
+    <div class="r"><span>Avto</span><span>${esc(d.car)}</span></div><div class="r"><span>Haydovchi</span><span>${esc(d.driver)}</span></div><div class="r"><span>Xaridor</span><span>${esc(d.buyer.replace(/\s+MCHJ$/i, ""))}</span></div>
+    <div class="big">${prod}</div><div class="sg">Oldim (xaridor imzosi)<div class="ln"></div></div><div class="cp">✔ Bizda qoladi</div></div>`;
+}
+function qwReceipt(d, cp){
+  const kv = (k, v) => v ? `<div class="kv"><span>${k}</span><span>${esc(v)}</span></div>` : "";
+  return `<div class="qw-rc"><div class="c nm">${esc(d.owner)}</div><div class="c">${esc(d.quarry)}</div><hr><div class="c big">YUK XATI № ${esc(d.no)}</div><div class="c">${esc(d.date)}</div><hr>
+    ${kv("Qabul qiluvchi", d.buyer)}${kv("Avtomobil", d.car)}${kv("Haydovchi", d.driver)}<hr>
+    ${d.items.map(it => `<div class="kv prod"><span>${esc(it.product)}</span><span>${qFmtQ(it.qty)} ${esc(it.unit)}</span></div>${it.kovsh ? `<div class="kv"><span>Kovsh</span><span>${qFmtQ(it.kovsh)}${d.perK ? ` × ${qFmtQ(d.perK)} m³` : ""}</span></div>` : ""}`).join("")}<hr>
+    ${kv("Topshirdi", d.giver)}${d.note ? kv("Izoh", d.note) : ""}<div class="sig"><div>Topshirdi</div><div>Qabul qildi</div></div><div class="c cp">${cp}</div></div>`;
+}
+const QW_US = "✔ Bizda qoladi", QW_THEM = "➜ Xaridorga";
+function qwbPages(keys, fid){
+  const ds = keys.map(qwbData), out = [];
+  if (fid === "a5_eq" || fid === "a5_stub") ds.forEach(d => out.push(`<div class="qpage qp-a5"><div class="qp-a5-in ${fid === "a5_stub" ? "stub" : ""}">${fid === "a5_stub" ? qwStub(d) : qwFull(d, QW_US)}<div class="qw-cutv"></div>${qwFull(d, QW_THEM)}</div></div>`));
+  else if (fid === "a4x4_eq" || fid === "a4x4_stub") for (let i = 0; i < ds.length; i += 4) {
+    const row = d => !d ? `<div class="qp-row empty"></div>` : fid === "a4x4_stub" ? `<div class="qp-row stub">${qwStub(d)}<div class="qw-cutv"></div>${qwSmall(d, QW_THEM)}</div>`
+      : `<div class="qp-row">${qwSmall(d, QW_US)}<div class="qw-cutv"></div>${qwSmall(d, QW_THEM)}</div>`;
+    out.push(`<div class="qpage qp-a4">${[0, 1, 2, 3].map(j => row(ds[i + j])).join("")}</div>`);
+  }
+  else if (fid === "receipt") ds.forEach(d => out.push(`<div class="qpage qp-rc">${qwReceipt(d, "— " + QW_US + " —")}<div class="qw-tear">✂ - - - - - - - - - - ✂</div>${qwReceipt(d, "— " + QW_THEM + " —")}</div>`));
+  return out.join("");
+}
+function qwbSetPage(fid){
+  let st = $("#qwbPage"); if (!st) { st = document.createElement("style"); st.id = "qwbPage"; document.head.appendChild(st); }
+  const f = qwbFmt(fid); st.textContent = f && pvKeys ? `@page{size:${f.page};margin:0}` : "";
+}
+// karyer yuk xati(lar)ini oynada ochish
+function qwbOpen(keys, fid){
+  keys = (keys || []).filter(k => groupItems(k).length); if (!keys.length) return;
+  const qid = (groupItems(keys[0])[0] || {}).quarry;
+  pvKeys = keys; pvFmt = qwbFmt(fid) ? fid : qwbDefault(qid, keys.length > 1);
+  pvKey = keys[0];
+  $("#pv").hidden = false; $("#pvFmtBox").hidden = false;
+  $("#pvFmt").innerHTML = QWB_FMTS.map(f => `<option value="${f.id}"${f.id === pvFmt ? " selected" : ""}>${esc(f.label)}</option>`).join("");
+  qwbRender(); $("#pvPrint").focus();
+}
+function qwbRender(){
+  const f = qwbFmt(pvFmt), old = pvFmt === "a4_old";
+  $("#pvFontsBtn").hidden = !old; if (!old) $("#pvFonts").hidden = true;
+  const sh = $("#sheet");
+  if (old) {
+    sh.className = "sheet"; qwbSetPage(null);
+    if (pvKeys.length > 1) { sh.className = "qwb-wrap qwb-old"; sh.innerHTML = pvKeys.map(k => `<div class="sheet">${waybillSheet(k)}</div>`).join(""); fitWaybill(sh); }
+    else { pvKey = pvKeys[0]; refitPreview(); }
+  } else {
+    sh.className = "qwb-wrap"; sh.innerHTML = qwbPages(pvKeys, pvFmt); qwbSetPage(pvFmt);
+  }
+  const nPages = old ? pvKeys.length : f.per === 4 ? Math.ceil(pvKeys.length / 4) : pvKeys.length;
+  $("#pvHint").innerHTML = `🖨 Printerda qog'oz: <b>${esc(f.paper)}</b>, chetlar (margins): <b>yo'q / minimal</b> · ${pvKeys.length} ta yuk xati, ${nPages} varaq`
+    + (f.per === 4 && pvKeys.length % 4 ? ` · <span class="pv-warn">${4 - pvKeys.length % 4} ta joy bo'sh qoladi</span>` : "");
+}
+// oddiy (beton/savdo) yuk xatiga qaytish
+function qwbOff(){ pvKeys = null; pvFmt = null; const sh = $("#sheet"); if (sh) sh.className = "sheet"; qwbSetPage(null); if ($("#pvFmtBox")) $("#pvFmtBox").hidden = true; $("#pvFontsBtn").hidden = false; }
+$("#pvFmt").addEventListener("change", () => {
+  pvFmt = $("#pvFmt").value; const qid = (groupItems(pvKeys[0])[0] || {}).quarry;
+  try { localStorage.setItem(qwbLsKey(qid) + (pvKeys.length > 1 ? "-many" : ""), pvFmt); } catch(e) {}
+  qwbRender();
+});
+// jismoniy shaxs sotuvi: chop etish uchun vaqtinchalik kalit (raqami bo'lmasa — beriladi)
+async function qPersonKey(id){
+  const it = qSales.find(x => x.id === id); if (!it) return null;
+  if (!it.waybill) {
+    const wb = qPersonNextWb(it.quarry);
+    const { error } = await sb.from("quarry_sales").update({ waybill: wb }).eq("id", id);
+    if (error) { toast(error.message); return null; }
+    it.waybill = wb;
+  }
+  const q = qById(it.quarry) || {}, key = "kx:" + it.id;
+  KX_ITEMS[key] = [{ id: it.id, batch: key, kind: "karyer", quarry: it.quarry, date: it.date, time: it.time, seller: q.owner || "", firm: "Jismoniy shaxs", waybill: it.waybill,
+    giver: qWho(it.createdBy), receiver: "", driver: it.driver, phone: "", car: it.car, note: it.note, loadAddr: (q.name || "") + " karyeri", unloadAddr: "",
+    product: it.product, qty: it.qty, unit: it.unit || "m³", kovsh: it.kovsh, created: it.created }];
+  return key;
+}
+// yuklashlar ro'yxatida belgilanganlarni birga chop etish
+const qlSel = new Set();
+function qlSelBar(){
+  const n = qlSel.size, el = $("#qlSelBar"); if (!el) return;
+  el.hidden = !n; $("#qlSelN").textContent = n;
+}
+async function qlPrintSel(){
+  const keys = [];
+  for (const v of qlSel) { const [t, id] = v.split(":"); if (t === "firm") { const r = rows.find(x => x.id === id); if (r) keys.push(gk(r)); } else { const k = await qPersonKey(id); if (k) keys.push(k); } }
+  const uniq = [...new Set(keys)]; if (!uniq.length) { toast("Yuk xati tanlanmagan"); return; }
+  qwbOpen(uniq);
+}
+
 
 /* ---------- Blank sozlamalari ---------- */
 function fillBrandForm(){
@@ -5112,7 +5510,7 @@ $("#exportBtn").addEventListener("click", async () => {
 });
 $("#backupBtn").addEventListener("click", () => {
   if (!rows.length && !ref.firms.length && !ref.products.length) { toast("Hali saqlanadigan ma'lumot yo'q"); return; }
-  saveFile(`savdo-zaxira-${today()}.json`, JSON.stringify({app:"savdo-daftari", saved:new Date().toISOString(), rows, ref, pays, fares}, null, 1), "application/json");
+  saveFile(`savdo-zaxira-${today()}.json`, JSON.stringify({app:"savdo-daftari", saved:new Date().toISOString(), rows, ref, pays, fares, internalRows: irows, purchases: purch, supplierPays: supPays, supplierPrices: supPrices, ownFirms}, null, 1), "application/json");
   toast("Zaxira fayli yuklab olindi");
 });
 $("#restoreBtn").addEventListener("click", () => $("#restoreFile").click());
@@ -5874,8 +6272,11 @@ async function afterLogin(user){
     await reloadAll();
     resetForm();
     aiStatus();
+    if (typeof invLoad === "function") invLoad().then(() => { if (typeof setupInvMenu === "function") setupInvMenu(); fFromFill(); });
     sb.channel("savdo").on("postgres_changes", { event: "*", schema: "public", table: "sales" }, reloadSoon)
-      .on("postgres_changes", { event: "*", schema: "public", table: "payments" }, reloadSoon).subscribe();
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments" }, reloadSoon)
+      .on("postgres_changes", { event: "*", schema: "public", table: "purchases" }, () => invReloadSoon())
+      .on("postgres_changes", { event: "*", schema: "public", table: "supplier_pays" }, () => invReloadSoon()).subscribe();
   }
   if (CAN_USERS()) loadUsers();
 }
@@ -5899,6 +6300,9 @@ const PAGES = {
   "q-rep":   ["kar", "Karyer hisoboti", "Oylik sotuv, kassa, xarajat, foyda va qarzdorlar"],
   "q-setup": ["kar", "Karyerlar", "Karyerlar, qaysi firmaga qarashli, ish yurituvchilar"],
   "q-cam":   ["kar", "Kameralar", "Karyer kameralari hisoboti — tez kunda"],
+  int:       ["inv", "Ichki yuk xatlari", "O'z firmalarimiz va joylarimiz (obyekt, karyer) o'rtasida — tashqi hisob-kitobga kirmaydi"],
+  kirim:     ["inv", "Olingan mahsulotlar", "Kirim: kimdan, nima, qancha; yetkazib beruvchilar bilan hisob"],
+  ombor:     ["inv", "Ombor qoldig'i", "Har obyekt va karyer bo'yicha: kirim, ichki harakat, sotuv va qoldiq"],
   reys:      ["reys", "Haydovchilar reysi", "«Reys hisobi» jadvalidan: reyslar, yoqilg'i, ta'mir, haydovchilar"],
   "p-objects": ["pay", "Obyektlar va xodimlar"],
   "p-advance": ["pay", "Avans berish"],
@@ -5911,6 +6315,7 @@ const pageOk = id => { const P = PAGES[id]; if (!P) return false;
   if (P[0] === "wb") return CAN_WB() && (["new", "beton", "archive"].includes(id) ? !(typeof Q_STAFF === "function" && Q_STAFF()) : PRIV());
   if (P[0] === "kar") return CAN_WB() && Q_OK !== null && (PRIV() || (!["q-setup", "q-cam"].includes(id) && qMine().length > 0));
   if (P[0] === "reys") return CAN_WB() && PRIV();
+  if (P[0] === "inv") return CAN_WB() && (id === "ombor" ? PRIV() : true);
   if (P[0] === "pay") return CAN_PAY();
   return id === "users" ? CAN_USERS() : ADMIN(); };
 function setupMenu(){
@@ -5923,6 +6328,7 @@ function setupMenu(){
   $("#amView").hidden = !VIEWING(); $("#amViewName").textContent = VIEWING() ? org.name : "";
   if (!wb && !pay) { $("#noSec").hidden = false; document.body.classList.add("sec-none"); $("#tbCrumb").textContent = ""; return; }
   if (typeof setupKarMenu === "function") setupKarMenu();
+  if (typeof setupInvMenu === "function") setupInvMenu();
   let want = ""; try { want = localStorage.getItem("savdo-page-" + me.id) || ""; } catch(e) {}
   if (!pageOk(want) || want === "p-advance" || want === "p-firms") want = wb ? (Q_STAFF() ? "q-new" : "new") : "p-objects";
   showPage(want);
@@ -5933,7 +6339,7 @@ function showPage(id){
   curPage = id;
   document.body.classList.toggle("sec-pay", pay);
   $$("#side [data-page]").forEach(b => { const on = b.dataset.page === id; b.classList.toggle("on", on); if (on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
-  $("#tbCrumb").innerHTML = (P[0] === "wb" ? "📦 Yuk xatlari › " : P[0] === "kar" ? "⛏ Karyerlar › " : P[0] === "reys" ? "🚚 Haydovchilar › " : pay ? "💰 Oylik maoshlar › " : "") + `<b>${esc(P[1])}</b>`;
+  $("#tbCrumb").innerHTML = (P[0] === "wb" ? "📦 Yuk xatlari › " : P[0] === "kar" ? "⛏ Karyerlar › " : P[0] === "reys" ? "🚚 Haydovchilar › " : P[0] === "inv" ? "🔁 Ichki hisob va ombor › " : pay ? "💰 Oylik maoshlar › " : "") + `<b>${esc(P[1])}</b>`;
   sideOpen(false);
   { const gg = sideGrpOf(id); if (gg) sideShut(gg); else sideBadge(); }
   if (pay) {
@@ -5954,6 +6360,7 @@ function showPage(id){
     if (id === "calc" && typeof calcOpen === "function") calcOpen();
     if (id === "tgbot" && typeof tgOpen === "function") tgOpen();
     if ((P[0] === "kar" || P[0] === "reys") && typeof qOpen === "function") qOpen(id);
+    if (P[0] === "inv" && typeof invOpen === "function") invOpen(id);
     scrollTo(0, 0);
   }
   try { localStorage.setItem("savdo-page-" + me.id, id); } catch(e) {}
@@ -6802,7 +7209,7 @@ $("#tgPanel").addEventListener("click", async e => {
 /* ---------- ⛏ KARYERLAR: yuklash (firma / jismoniy shaxs), kassa, ro'yxat, oylik hisobot, karyerlar, kameralar ----------
    Firmaga sotuv — oddiy yuk xati (sales, kind = "karyer"): raqami firmaning boshqa yuk xatlari bilan davom etadi, firma hisob-kitobiga qo'shiladi.
    Jismoniy shaxsga sotuv — quarry_sales (naqd yoki qarzga, qarz mashina raqami bo'yicha). Kassa — quarry_cash. */
-let quarries = [], qSales = [], qCash = [], Q_OK = null, qCats = null;
+let quarries = [], qSales = [], qCash = [], Q_OK = null, qCats = null, Q_FMT_OK = null;
 let qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
 const KX_ITEMS = {};                         // jismoniy shaxs yuk xatini chop etish uchun vaqtinchalik qatorlar
 const Q_CATS = ["Oziq-ovqat", "Xo'jalik mollari", "Yoqilg'i", "Ta'mirlash va ehtiyot qismlar", "Kommunal to'lovlar", "Transport", "Boshqa"];
@@ -6838,8 +7245,9 @@ async function qLoad(){
   try {
     const { data, error } = await sb.from("quarries").select("*").order("created_at");
     if (error) throw error;
+    Q_FMT_OK = !(data || []).length || "wb_format" in data[0];
     quarries = (data || []).map(q => ({ id: q.id, name: q.name, owner: q.owner || "", staff: q.staff || [], kovsh: Number(q.kovsh) || 3,
-      products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false }));
+      products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false, wbFormat: q.wb_format || "" }));
     Q_OK = true;
   } catch(e) { quarries = []; Q_OK = false; return; }
   try { const { data: st } = await sb.from("settings").select("value").eq("key", "q_cats").maybeSingle(); qCats = st && st.value && Array.isArray(st.value.list) ? st.value.list : null; } catch(e) {}
@@ -7024,6 +7432,7 @@ function qPersonNextWb(qid){
 }
 function qPrintPerson(it){
   const q = qById(it.quarry) || {}, key = "kx:" + it.id;
+  if (typeof qwbOpen === "function") { qPersonKey(it.id).then(k => { if (k) qwbOpen([k]); }); return; }
   KX_ITEMS[key] = [{ id: it.id, batch: key, kind: "karyer", quarry: it.quarry, date: it.date, time: it.time, seller: q.owner || "", firm: "Jismoniy shaxs", waybill: it.waybill,
     giver: qWho(it.createdBy), receiver: "", driver: it.driver, phone: "", car: it.car, note: it.note, loadAddr: (q.name || "") + " karyeri", unloadAddr: "",
     product: it.product, qty: it.qty, unit: it.unit || "m³", created: it.created }];
@@ -7052,8 +7461,9 @@ function qItemCard(it, opts = {}){
   const money = qMoney();
   const who = it.t === "firm" ? `🏢 <b>${esc(it.firm)}</b> <span class="dim">· № ${esc(it.waybill || "—")} · ${PM[it.pm] || ""}</span>`
     : `👤 Jismoniy shaxs · ${it.pay === "debt" ? `<span class="pill debt">Qarzga</span>` : `<span class="pill zero">Naqd</span>`}${it.waybill ? ` <span class="dim">· № ${esc(it.waybill)}</span>` : ""}`;
-  return `<div class="kar-item${it.t === "person" && it.pay === "debt" ? " is-debt" : ""}">
-    <div class="ki-main"><div class="ki-top"><b>${esc(it.product)}</b> · <b class="num">${qFmtQ(it.qty)} m³</b>${it.kovsh ? ` <span class="dim">(${qFmtQ(it.kovsh)} kovsh)</span>` : ""} · <span class="plate">${esc(it.car)}</span></div>
+  const sk = it.t + ":" + it.id;
+  return `<div class="kar-item${it.t === "person" && it.pay === "debt" ? " is-debt" : ""}${opts.sel && qlSel.has(sk) ? " sel" : ""}">
+    ${opts.sel ? `<label class="ki-sel" title="Birga chop etish uchun belgilash"><input type="checkbox" data-qlsel="${sk}"${qlSel.has(sk) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}<div class="ki-main"><div class="ki-top"><b>${esc(it.product)}</b> · <b class="num">${qFmtQ(it.qty)} m³</b>${it.kovsh ? ` <span class="dim">(${qFmtQ(it.kovsh)} kovsh)</span>` : ""} · <span class="plate">${esc(it.car)}</span></div>
       <div class="ki-who">${who}</div>
       <div class="ki-meta dim">${opts.date ? `${fmtDate(it.date)} ` : ""}${esc(it.time || "")}${opts.quarry ? ` · ⛏ ${esc(qName(it.quarry))}` : ""}${it.driver ? ` · ${esc(it.driver)}` : ""}${it.createdBy ? ` · ✍ ${esc(qWho(it.createdBy))}` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</div></div>
     <div class="ki-sum">${money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? fmt(it.price) + " × m³" : ""}</small>` : "<b>•••</b>"}</div>
@@ -7154,16 +7564,30 @@ $("#qcCar").addEventListener("change", qcDebtInfo);
 $("#qcNote").addEventListener("input", () => { if (qcKind !== "expense" || $("#qcCat").dataset.manual) return;
   const t = $("#qcNote").value, hit = Q_CAT_WORDS.find(([c, re]) => re.test(t) && qCatList().some(x => same(x, c)));
   if (hit) $("#qcCat").value = qCatList().find(x => same(x, hit[0])); });
+// yangi xarajat turi: rahbariyat ham, karyer xodimi ham qo'sha oladi (server q_cat_add orqali), ro'yxatga hamma uchun qo'shiladi
+async function qcCatNew(){
+  const v = await askText({ title: "Yangi xarajat turi", hint: "Masalan: Ehtiyot qismlar, Ijara, Soliq. Bu tur shu korxonaning barcha karyerlarida ro'yxatga qo'shiladi.", label: "Turi", ok: "Qo'shish" });
+  const prev = $("#qcCat").dataset.prev || "";
+  if (!v || !v.trim()) { $("#qcCat").value = prev; return; }
+  const name = v.trim().replace(/\s+/g, " "), have = qCatList().find(c => same(c, name));
+  if (name.length < 2) { toast("Tur nomi juda qisqa"); $("#qcCat").value = prev; return; }
+  if (!qCatBase().some(c => same(c, name)) && !VIEWING()) {
+    const { data, error } = await sb.rpc("q_cat_add", { p_name: name, p_base: qCatBase() });
+    if (error) { if (/q_cat_add/i.test(error.message || "")) { if (PRIV()) await qCatsSave([...qCatBase(), name]); else toast("Bazani yangilash kerak (yangilash.sql) — hozircha tur faqat shu yozuvda saqlanadi"); }
+      else { toast("Turni qo'shib bo'lmadi: " + error.message); $("#qcCat").value = prev; return; } }
+    else { qCats = Array.isArray(data) ? data : [...qCatBase(), name]; toast(`«${name}» xarajat turi qo'shildi`); }
+  }
+  if (![...$("#qcCat").options].some(o => same(o.value, name))) $("#qcCat").insertAdjacentHTML("beforeend", `<option>${esc(have || name)}</option>`);
+  $("#qcCat").value = have || name; $("#qcCat").dataset.prev = $("#qcCat").value; $("#qcCat").dataset.manual = "1";
+  if (curPage === "q-setup") renderQSetup();
+}
+$("#qcCat").addEventListener("focus", () => { if ($("#qcCat").value !== "__new") $("#qcCat").dataset.prev = $("#qcCat").value; });
 $("#qcCat").addEventListener("change", async () => {
   $("#qcCat").dataset.manual = "1";
-  if ($("#qcCat").value !== "__new") return;
-  const v = await askText({ title: "Yangi xarajat turi", hint: "Masalan: Ehtiyot qismlar, Ijara, Soliq", label: "Turi", ok: "Qo'shish" });
-  if (!v || !v.trim()) { $("#qcCat").value = ""; return; }
-  const name = v.trim(), have = qCatList().find(c => same(c, name));
-  if (!have && PRIV() && !VIEWING()) await qCatsSave([...qCatBase(), name]);
-  if (![...$("#qcCat").options].some(o => same(o.value, name))) $("#qcCat").insertAdjacentHTML("beforeend", `<option>${esc(have || name)}</option>`);
-  $("#qcCat").value = have || name;
+  if ($("#qcCat").value !== "__new") { $("#qcCat").dataset.prev = $("#qcCat").value; return; }
+  await qcCatNew();
 });
+$("#qcCatAdd").addEventListener("click", () => { if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; } qcCatNew(); });
 function qcReset(){ qcEdit = null; $("#qcForm").reset(); $("#qcDate").value = today(); delete $("#qcCat").dataset.manual; }
 $("#qcCancel").addEventListener("click", () => { qcReset(); renderQCash(); });
 function qcStartEdit(id){
@@ -7241,14 +7665,26 @@ function renderQList(){
   const m3 = D.items.reduce((s, x) => s + x.qty, 0), sum = D.items.reduce((s, x) => s + (x.total || 0), 0);
   $("#qlBody").innerHTML = (PRIV() && !money ? `<p class="hint">🔒 Summalar yopiq. <button type="button" class="sm primary" data-qunlock>Parol bilan ochish</button></p>` : "")
     + `<p class="kar-sum">Topildi: <b>${D.items.length}</b> ta yuklash · <b class="num">${qFmtQ(m3)} m³</b>${money ? ` · <b class="num">${fmt(sum)}</b> so'm` : ""}${D.cash.length ? ` · kassa yozuvlari: <b>${D.cash.length}</b>` : ""}</p>`
-    + D.items.map(it => qItemCard(it, { date: true, quarry: !D.qid })).join("")
+    + (D.items.length ? `<div class="kar-selrow"><label class="chk"><input type="checkbox" id="qlSelAll"${D.items.length && D.items.every(it => qlSel.has(it.t + ":" + it.id)) ? " checked" : ""}> Hammasini belgilash</label>
+        <span class="selbar" id="qlSelBar" hidden><b>Belgilangan: <span id="qlSelN">0</span></b><button type="button" class="sm primary" id="qlSelPrint">🖨 Birga chop etish</button><button type="button" class="sm ghost" id="qlSelClear">Bekor qilish</button></span></div>` : "")
+    + D.items.map(it => qItemCard(it, { date: true, quarry: !D.qid, sel: true })).join("")
     + (D.cash.length ? `<h2 class="kar-h">Kassa yozuvlari</h2>` + D.cash.map(qcCard).join("") : "")
     + (!D.items.length && !D.cash.length ? `<p class="empty">Tanlangan davrda yozuv yo'q.</p>` : "");
+  qlSelBar();
 }
 $("#qlChips").addEventListener("click", e => { const c = e.target.closest("[data-qp]"); if (!c) return; qlPreset = c.dataset.qp; renderQList(); });
 ["#qlQ", "#qlType"].forEach(s => $(s).addEventListener("change", renderQList));
 ["#qlFrom", "#qlTo"].forEach(s => $(s).addEventListener("change", () => { qlPreset = ""; renderQList(); }));
 $("#qlSearch").addEventListener("input", renderQList);
+$("#qlBody").addEventListener("change", e => {
+  const c = e.target.closest("[data-qlsel]");
+  if (c) { if (c.checked) qlSel.add(c.dataset.qlsel); else qlSel.delete(c.dataset.qlsel); c.closest(".kar-item").classList.toggle("sel", c.checked); qlSelBar(); return; }
+  if (e.target.id === "qlSelAll") { const on = e.target.checked; qlData().items.forEach(it => { const k = it.t + ":" + it.id; if (on) qlSel.add(k); else qlSel.delete(k); }); renderQList(); }
+});
+$("#qlBody").addEventListener("click", e => {
+  if (e.target.closest("#qlSelPrint")) qlPrintSel();
+  else if (e.target.closest("#qlSelClear")) { qlSel.clear(); renderQList(); }
+});
 
 /* ---------- Oylik hisobot ---------- */
 function qCompute(qid, from, to){
@@ -7435,8 +7871,11 @@ $("#qsForm").addEventListener("submit", async e => {
   if (!owner) { toast("Qaysi firmaga qarashli ekanini yozing"); $("#qsOwner").focus(); return; }
   if (quarries.some(q => q.id !== qsEdit && same(q.name, name))) { toast("Bu nomdagi karyer bor"); return; }
   const d = { name, owner, kovsh, products: products.length ? products : ["Qum", "Sheben", "Sechka"], staff, own_blank: $("#qsOwnBlank").checked };
+  if (Q_FMT_OK !== false) d.wb_format = $("#qsFmt").value || "a5_eq";
   $("#qsSave").disabled = true;
-  const { error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d);
+  let { error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d);
+  if (error && d.wb_format && /wb_format/.test(error.message || "")) { Q_FMT_OK = false; delete d.wb_format; toast("Blank turini saqlash uchun bazani yangilang (yangilash.sql)");
+    ({ error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d)); }
   $("#qsSave").disabled = false;
   if (error) { toast("Saqlab bo'lmadi: " + error.message); return; }
   if (rememberSeller(owner)) saveRef();
@@ -7448,7 +7887,7 @@ $("#qsCancel").addEventListener("click", () => { qsEdit = null; $("#qsForm").res
 $("#qsList").addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.qsed) { const q = qById(b.dataset.qsed); if (!q) return; qsEdit = q.id;
-    $("#qsName").value = q.name; $("#qsOwner").value = q.owner; $("#qsKovsh").value = String(q.kovsh); $("#qsProds").value = q.products.join(", "); $("#qsOwnBlank").checked = q.ownBlank;
+    $("#qsName").value = q.name; $("#qsOwner").value = q.owner; $("#qsKovsh").value = String(q.kovsh); $("#qsProds").value = q.products.join(", "); $("#qsOwnBlank").checked = q.ownBlank; $("#qsFmt").value = qwbFmt(q.wbFormat) ? q.wbFormat : "a5_eq";
     renderQSetup(); $("#qsForm").scrollIntoView({ block: "start", behavior: "smooth" }); }
   if (b.dataset.qsarc) { const q = qById(b.dataset.qsarc); if (!q) return;
     if (q.active && !confirm(`«${q.name}» karyeri arxivga olinsinmi?\n\nIsh yurituvchilar unga yoza olmaydi, ro'yxatlarda chiqmaydi. Yozuvlari va hisoboti saqlanib qoladi — kerak bo'lsa, arxivdan qaytarish mumkin.`)) return;
@@ -7531,6 +7970,603 @@ $("#qsCatForm").addEventListener("submit", async e => {
   if (qCatBase().some(c => same(c, v))) { toast("Bu tur ro'yxatda bor"); return; }
   if (await qCatsSave([...qCatBase(), v])) { $("#qsCatIn").value = ""; toast(`«${v}» qo'shildi`); renderQSetup(); }
 });
+
+/* ---------- 🔁 ICHKI HISOB, 📥 KIRIM (olingan mahsulotlar), 📦 OMBOR ----------
+   Ichki yuk xati — sales jadvalida internal = true: narx/summa yo'q, tashqi hisob-kitobga, qarzdorlarga, botga, statistikaga kirmaydi.
+   Joy (ombor) kodi: "s:<obyekt id>" yoki "q:<karyer id>". Tannarx kalkulyatsiyadan (tarkibi yo'q bo'lsa — oxirgi kirim narxi).
+   Kirim — purchases (narxi purchase_money'da, xodim ko'rmaydi), yetkazib beruvchiga to'lov — supplier_pays, narxlar — supplier_prices. */
+const INV_NEED = `<b>Bu bo'lim uchun bazani yangilash kerak.</b><p class="hint">Supabase → SQL Editor'da <b>yangilash.sql</b> faylini bir marta ishga tushiring, so'ng sahifani yangilang.</p>`;
+
+/* ---------- joylar (omborlar): obyektlar va karyerlar ---------- */
+function placeList(all){
+  const s = (typeof SITES_OK !== "undefined" && SITES_OK ? sites : []).filter(x => all || x.active).map(x => ({ id: "s:" + x.id, name: "📍 " + x.name }));
+  const q = (typeof quarries !== "undefined" ? quarries : []).filter(x => all || x.active).map(x => ({ id: "q:" + x.id, name: "⛏ " + x.name + " karyeri" }));
+  return [...s, ...q].sort((a, b) => a.name.localeCompare(b.name));
+}
+function placeName(id){
+  if (!id) return "Ombor ko'rsatilmagan";
+  const t = id.slice(0, 2), x = id.slice(2);
+  if (t === "s:") { const s = siteById(x); return s ? s.name : "Noma'lum obyekt"; }
+  if (t === "q:") { const q = typeof qById === "function" ? qById(x) : null; return q ? q.name + " karyeri" : "Noma'lum karyer"; }
+  return id;
+}
+function placeOpts(val, empty){
+  const l = placeList();
+  return (empty !== undefined ? `<option value="">${esc(empty)}</option>` : "") + l.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")
+    + (val && !l.some(p => p.id === val) ? `<option value="${esc(val)}">${esc(placeName(val))}</option>` : "");
+}
+function fillPlace(sel, val, empty){ const el = $(sel); if (!el) return; el.innerHTML = placeOpts(val, empty); el.value = val || ""; if (el.value !== (val || "")) el.value = ""; }
+const inOwn = f => !!f && ownFirms.some(x => same(x, f));
+const intIsFirm = r => inOwn(r.firm) && (!r.fromPlace || !r.toPlace);
+const intRoute = r => r.fromPlace || r.toPlace ? `${placeName(r.fromPlace)} → ${placeName(r.toPlace)}` : `${r.seller || "—"} → ${r.firm || "—"}`;
+const intFirmRoute = r => (r.seller || r.firm) && (inOwn(r.firm) || inOwn(r.seller)) ? `${r.seller || "—"} → ${r.firm || "—"}` : "";
+const presetRange = p => {
+  const t = today(), m = t.slice(0, 7);
+  if (p === "month") return [m + "-01", t];
+  if (p === "year") return [t.slice(0, 4) + "-01-01", t];
+  if (p === "prev") { const d = new Date(+m.slice(0, 4), +m.slice(5) - 2, 1), pm = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); return [pm + "-01", pm + "-" + String(new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()).padStart(2, "0")]; }
+  return ["", ""];
+};
+
+/* ---------- tannarx: kalkulyatsiya bo'yicha (tarkibi yo'q bo'lsa — oxirgi kirim narxi) ---------- */
+function lastBuyPrice(name, date){
+  let best = null;
+  purch.forEach(p => { if (p.price != null && p.price > 0 && same(p.product, name) && (!date || !p.date || p.date <= date) && (!best || (p.date + p.created) > (best.date + best.created))) best = p; });
+  return best ? best.price : null;
+}
+function unitCost(product, date){
+  if (typeof CALC_OK !== "undefined" && CALC_OK && recipeFor(product, date)) {
+    const out = {}, warn = new Set(); calcExpand(product, 1, date, out, warn, 0);
+    let c = 0, ok = !warn.size;
+    for (const [id, q] of Object.entries(out)) { const it = ciById(id); let pr = itemPrice(id, date); if (pr == null && it) pr = lastBuyPrice(it.name, date); if (pr == null) ok = false; else c += q * pr; }
+    return { cost: c, ok };
+  }
+  const lp = lastBuyPrice(product, date);
+  return lp != null ? { cost: lp, ok: true } : null;
+}
+function rowCost(r){ const u = unitCost(r.product, r.date); return u ? { sum: u.cost * (Number(r.qty) || 0), ok: u.ok } : null; }
+
+/* ---------- yuklash ---------- */
+async function invLoad(){
+  if (!sb || !me || !CAN_WB()) return;
+  try {
+    const p = await fetchAll("purchases", PRIV() ? "*, purchase_money(price,total)" : "*", q => q.order("created_at"));
+    purch = p.map(x => { const m = Array.isArray(x.purchase_money) ? x.purchase_money[0] : x.purchase_money;
+      return { id: x.id, batch: x.batch, date: x.date || "", time: x.time || "", supplier: x.supplier || "", product: x.product, kind: x.kind === "resale" ? "resale" : "raw", qty: Number(x.qty) || 0,
+        unit: x.unit || "", to: x.to_place || "", car: x.car || "", driver: x.driver || "", waybill: x.waybill || "", note: x.note || "", created: x.created_at, createdBy: x.created_by,
+        price: m && m.price != null ? Number(m.price) : null, total: m ? Number(m.total || 0) : 0 }; });
+    if (PRIV()) {
+      const [a, b] = await Promise.all([fetchAll("supplier_prices", "*", q => q.order("created_at")), fetchAll("supplier_pays", "*", q => q.order("created_at"))]);
+      supPrices = a.map(x => ({ id: x.id, supplier: x.supplier, product: x.product, price: Number(x.price), from: x.from_date, at: x.created_at }));
+      supPays = b.map(x => ({ id: x.id, supplier: x.supplier, date: x.date || "", amount: Number(x.amount) || 0, method: x.method || "bank", note: x.note || "", at: x.created_at, by: x.created_by }));
+      if (typeof CALC_OK !== "undefined" && CALC_OK === null) { try { await calcLoad(); } catch(e) {} }
+    }
+    INV_OK = true;
+  } catch(e) { INV_OK = false; purch = []; supPrices = []; supPays = []; }
+  invRenderAll();
+}
+let invT = null;
+const invReloadSoon = () => { clearTimeout(invT); invT = setTimeout(invLoad, 700); };
+function invRenderAll(){
+  if (typeof curPage === "undefined") return;
+  if (curPage === "int") renderInt();
+  else if (curPage === "kirim") renderKir();
+  else if (curPage === "ombor") renderOmbor();
+}
+async function invOpen(id){
+  if (INV_OK === null) await invLoad(); else invRenderAll();
+}
+async function saveSetting(key, value){
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return false; }
+  const { error } = await sb.from("settings").upsert({ key, value, updated_at: new Date().toISOString() });
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return false; }
+  return true;
+}
+function setupInvMenu(){
+  const show = id => { const b = $(`#side [data-page="${id}"]`); if (b) b.hidden = !pageOk(id); return !!b && !b.hidden; };
+  $("#sgInv").hidden = ![show("int"), show("kirim"), show("ombor")].some(Boolean);
+}
+
+/* ======================= 🔁 ICHKI YUK XATLARI ======================= */
+function intNextNo(){
+  const n = irows.map(r => parseInt(String(r.waybill).replace(/\D/g, ""), 10)).filter(x => x > 0 && x < 1e9);
+  return "I-" + ((n.length ? Math.max(...n) : 0) + 1);
+}
+function intLine(d = {}){
+  const el = document.createElement("div"); el.className = "inv-line";
+  el.innerHTML = `<input class="il-p" list="prodList" placeholder="Mahsulot nomi" value="${esc(d.product || "")}" aria-label="Mahsulot">
+    <input class="il-q num" inputmode="decimal" placeholder="0" value="${d.qty ? esc(String(d.qty).replace(".", ",")) : ""}" aria-label="Miqdori">
+    <input class="il-u" placeholder="m³" value="${esc(d.unit || "")}" aria-label="Birligi">
+    <button type="button" class="ghost danger il-x" aria-label="Qatorni o'chirish">×</button>`;
+  el.querySelector(".il-p").addEventListener("change", e => { const u = el.querySelector(".il-u"); if (!u.value) u.value = prodUnit(e.target.value) || ""; intCostHint(); });
+  el.querySelector(".il-q").addEventListener("input", intCostHint);
+  el.querySelector(".il-x").addEventListener("click", () => { el.remove(); if (!$("#intLines").children.length) $("#intLines").appendChild(intLine()); intCostHint(); });
+  return el;
+}
+function intReadLines(){ return [...$$("#intLines .inv-line")].map(el => ({ el, product: el.querySelector(".il-p").value.trim(), qty: parseNum(el.querySelector(".il-q").value), unit: el.querySelector(".il-u").value.trim() })).filter(l => l.product || l.qty); }
+function intCostHint(){
+  if (!PRIV() || !M()) { $("#intCost").textContent = ""; return; }
+  const d = $("#intDate").value || today(); let s = 0, ok = true, any = false;
+  intReadLines().forEach(l => { if (!l.product || !(l.qty > 0)) return; const u = unitCost(l.product, d); any = true; if (!u) ok = false; else { s += u.cost * l.qty; if (!u.ok) ok = false; } });
+  $("#intCost").innerHTML = any ? `Tannarx: <b class="num">${fmt(s)}</b> so'm${ok ? "" : ` <span class="warn-t">(ba'zi xomashyo narxi yoki tarkibi yo'q)</span>`}` : "";
+}
+function intTypeUi(){
+  $$("#intType [data-it]").forEach(b => b.classList.toggle("on", b.dataset.it === intType));
+  $$("#intForm .it-firm").forEach(x => x.hidden = intType !== "firm");
+  $$("#intForm .it-place").forEach(x => x.hidden = intType !== "place");
+}
+function intFillForm(){
+  const fo = (sel, v) => { const el = $(sel); el.innerHTML = `<option value="">— tanlang —</option>` + ownFirms.map(f => `<option>${esc(f)}</option>`).join("") + (v && !inOwn(v) ? `<option>${esc(v)}</option>` : ""); el.value = v || ""; };
+  fo("#intFromFirm", $("#intFromFirm").value); fo("#intToFirm", $("#intToFirm").value);
+  fillPlace("#intFrom", $("#intFrom").value, intType === "place" ? "— tanlang —" : "— ixtiyoriy —");
+  fillPlace("#intTo", $("#intTo").value, intType === "place" ? "— tanlang —" : "— ixtiyoriy —");
+  if (!$("#intDate").value) $("#intDate").value = today();
+  if (!$("#intLines").children.length) $("#intLines").appendChild(intLine());
+  $("#intCancel").hidden = !intEdit; $("#intSave").textContent = intEdit ? "O'zgarishni saqlash" : "Saqlash";
+  $("#intFormT").textContent = intEdit ? "✏️ Ichki yuk xatini tahrirlash" : "＋ Yangi ichki yuk xati";
+  intTypeUi(); intCostHint();
+}
+function intReset(){
+  intEdit = null; $("#intForm").reset(); $("#intLines").innerHTML = ""; $("#intDate").value = today(); $("#intNo").value = "";
+  intFillForm();
+}
+async function intSave(print){
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
+  if (!INT_OK) { toast("Avval bazani yangilang (yangilash.sql)"); return; }
+  const from = $("#intFrom").value, to = $("#intTo").value, ff = $("#intFromFirm").value.trim(), tf = $("#intToFirm").value.trim();
+  const lines = intReadLines(), bad = (m, el) => { toast(m); if (el) (typeof el === "string" ? $(el) : el).focus(); };
+  if (intType === "place") {
+    if (!from) return bad("Qayerdan olib ketilayotganini tanlang", "#intFrom");
+    if (!to) return bad("Qayerga olib borilayotganini tanlang", "#intTo");
+    if (from === to) return bad("Qayerdan va qayerga bir xil bo'lmasin", "#intTo");
+  } else {
+    if (!ff) return bad("Qaysi firmamizdan ekanini tanlang", "#intFromFirm");
+    if (!tf) return bad("Qaysi firmamizga ekanini tanlang", "#intToFirm");
+    if (same(ff, tf)) return bad("Firmalar bir xil bo'lmasin", "#intToFirm");
+    if (from && to && from === to) return bad("Qayerdan va qayerga bir xil bo'lmasin", "#intTo");
+  }
+  if (!lines.length) return bad("Kamida bitta mahsulot yozing", $("#intLines .il-p"));
+  for (const l of lines) { if (!l.product) return bad("Mahsulot nomini yozing", l.el.querySelector(".il-p")); if (!(l.qty > 0)) return bad(`«${l.product}» miqdorini yozing`, l.el.querySelector(".il-q")); }
+  const old = intEdit ? irows.filter(r => r.batch === intEdit) : [];
+  const batch = intEdit || newId(), date = $("#intDate").value || today(), no = $("#intNo").value.trim() || (old[0] ? old[0].waybill : "") || intNextNo();
+  const brandName = (brand().name || ref.lastSeller || "").trim();
+  const base = { batch, kind: old[0] ? old[0].kind : "", date, time: old[0] ? old[0].time : nowTime(), seller: intType === "firm" ? ff : (old[0]?.seller || brandName), firm: intType === "firm" ? tf : placeName(to),
+    waybill: no, giver: old[0]?.giver || me.full_name || me.login, receiver: "", driver: $("#intDriver").value.trim(), phone: "", car: $("#intCar").value.trim().toUpperCase(), note: $("#intNote").value.trim(),
+    loadAddr: from ? placeName(from) : "", unloadAddr: to ? placeName(to) : "", payMethod: "bank", hasPhoto: old[0] ? old[0].hasPhoto : false };
+  const btns = [$("#intSave"), $("#intSavePrint")]; btns.forEach(b => b.disabled = true);
+  try {
+    const t0 = old[0]?.created ? Date.parse(old[0].created) || Date.now() : Date.now();
+    const ds = lines.map((l, i) => { const d = toDb({ ...base, product: l.product, qty: l.qty, unit: l.unit || prodUnit(l.product) || "", created: new Date(t0 + i).toISOString() }, !!old[0]);
+      delete d.price_hint; d.internal = true; d.from_place = from || ""; d.to_place = to || ""; return d; });
+    if (old.length) { const { error } = await sb.from("sales").delete().in("id", old.map(r => r.id)); if (error) throw error; irows = irows.filter(r => r.batch !== batch); }
+    const { data, error } = await sb.from("sales").insert(ds).select("*");
+    if (error) throw error;
+    irows.push(...data.map(fromDb));
+    let refCh = false; lines.forEach(l => { if (rememberProduct(l.product, l.unit, null, false)) refCh = true; }); if (refCh) saveRef();
+    toast(old.length ? "Ichki yuk xati o'zgartirildi" : `Saqlandi: ichki yuk xati № ${no}`);
+    intReset(); renderInt();
+    if (print) openWaybill("b:" + batch);
+  } catch(err) { toast("Saqlab bo'lmadi: " + (err.message || err)); }
+  finally { btns.forEach(b => b.disabled = false); }
+}
+function intStartEdit(batch){
+  const its = irows.filter(r => r.batch === batch).sort((a, b) => (a.created || "").localeCompare(b.created || "")); if (!its.length) return;
+  const h = its[0]; intEdit = batch;
+  intType = intIsFirm(h) ? "firm" : "place";
+  $("#intNewBox").open = true; intFillForm();
+  $("#intDate").value = h.date || today(); $("#intNo").value = h.waybill || ""; $("#intCar").value = h.car; $("#intDriver").value = h.driver; $("#intNote").value = h.note;
+  fillPlace("#intFrom", h.fromPlace, "—"); fillPlace("#intTo", h.toPlace, "—");
+  if (intType === "firm") { intFillForm(); $("#intFromFirm").value = h.seller; $("#intToFirm").value = h.firm; fillPlace("#intFrom", h.fromPlace, "— ixtiyoriy —"); fillPlace("#intTo", h.toPlace, "— ixtiyoriy —"); }
+  $("#intLines").innerHTML = ""; its.forEach(it => $("#intLines").appendChild(intLine(it)));
+  intFillForm(); $("#intNewBox").scrollIntoView({ block: "start", behavior: "smooth" });
+}
+function intData(){
+  const k = $("#intKind").value, f = $("#intFromD").value, t = $("#intToD").value, q = $("#intQ").value.trim().toLowerCase();
+  const groups = new Map();
+  irows.forEach(r => { if (f && (!r.date || r.date < f)) return; if (t && (!r.date || r.date > t)) return;
+    const g = groups.get(r.batch) || { batch: r.batch, key: "b:" + r.batch, items: [], head: r }; g.items.push(r); groups.set(r.batch, g); });
+  let list = [...groups.values()];
+  list.forEach(g => g.items.sort((a, b) => (a.created || "").localeCompare(b.created || "")) && (g.head = g.items[0]));
+  if (k) list = list.filter(g => (intIsFirm(g.head) ? "firm" : "place") === k);
+  if (q) list = list.filter(g => [g.head.firm, g.head.seller, g.head.waybill, g.head.car, g.head.driver, g.head.note, placeName(g.head.fromPlace), placeName(g.head.toPlace), ...g.items.map(i => i.product)].join(" ").toLowerCase().includes(q));
+  list.sort((a, b) => ((b.head.date || "") + (b.head.time || "") + (b.head.created || "")).localeCompare((a.head.date || "") + (a.head.time || "") + (a.head.created || "")));
+  return list;
+}
+function renderInt(){
+  const need = INT_OK === false;
+  $("#intNeed").hidden = !need; if (need) { $("#intNeed").innerHTML = INV_NEED; }
+  $("#intNewBox").hidden = need || VIEWING();
+  if (need) { $("#intBody").innerHTML = ""; return; }
+  intFillForm();
+  $$("#intChips [data-ip]").forEach(c => c.classList.toggle("on", c.dataset.ip === intPreset));
+  if (intPreset) { const [a, b] = presetRange(intPreset); $("#intFromD").value = a; $("#intToD").value = b; }
+  const list = intData(), money = PRIV() && M();
+  // yo'nalishlar bo'yicha jamlama
+  const sum = new Map();
+  list.forEach(g => g.items.forEach(r => { const rk = intRoute(r) + "|" + fkey(r.product) + "|" + fkey(r.unit);
+    const x = sum.get(rk) || { route: intRoute(r), firm: intFirmRoute(r), product: r.product, unit: r.unit, qty: 0, wb: new Set(), cost: 0, costOk: true };
+    x.qty += Number(r.qty) || 0; x.wb.add(g.batch); const c = rowCost(r); if (!c) x.costOk = false; else { x.cost += c.sum; if (!c.ok) x.costOk = false; } sum.set(rk, x); }));
+  const S = [...sum.values()].sort((a, b) => a.route.localeCompare(b.route) || a.product.localeCompare(b.product));
+  const totCost = S.reduce((t, x) => t + x.cost, 0);
+  const card = g => {
+    const h = g.head, c = g.items.map(rowCost), cs = c.reduce((t, x) => t + (x ? x.sum : 0), 0), cOk = c.every(x => x && x.ok);
+    const can = PRIV() && !VIEWING();
+    return `<div class="kar-item inv-item">
+      <div class="ki-main"><div class="ki-top"><b>${esc(intRoute(h))}</b>${intFirmRoute(h) && (h.fromPlace || h.toPlace) ? ` <span class="dim">· ${esc(intFirmRoute(h))}</span>` : ""}</div>
+        <div class="ki-who">${g.items.map(i => `${esc(i.product)} — <b class="num">${fmt(i.qty)}</b> ${esc(i.unit || "")}`).join(" · ")}</div>
+        <div class="ki-meta dim">${fmtDate(h.date)} ${esc(h.time || "")}${h.waybill ? ` · № ${esc(h.waybill)}` : ""}${h.car ? ` · <span class="plate">${esc(h.car)}</span>` : ""}${h.driver ? ` · ${esc(h.driver)}` : ""}${h.createdBy ? ` · ✍ ${esc(qWho(h.createdBy))}` : ""}${h.note ? ` · ${esc(h.note)}` : ""}</div></div>
+      <div class="ki-sum">${money ? `<b class="num">${fmt(cs)}</b><small>tannarx${cOk ? "" : " ⚠"}</small>` : PRIV() ? "<b>•••</b>" : ""}</div>
+      <div class="ki-act"><button type="button" class="sm" data-iprint="${esc(g.key)}">Yuk xati</button>${can ? `<button type="button" class="sm" data-iedit="${esc(g.batch)}">Tahrirlash</button><button type="button" class="sm" data-iback="${esc(g.batch)}" title="Tashqi hisob-kitobga (firma hisobiga) qaytarish">↩ Tashqiga</button><button type="button" class="sm ghost danger" data-idel="${esc(g.batch)}">O'chirish</button>` : ""}</div></div>`;
+  };
+  $("#intBody").innerHTML = (PRIV() && !M() ? `<p class="hint">🔒 Tannarx yopiq — yuqoridagi «Hisob-kitob yopiq» tugmasi bilan oching.</p>` : "")
+    + (S.length ? `<h2 class="kar-h">Yo'nalishlar bo'yicha</h2><div class="tbl kar-tbl"><table><thead><tr><th>Qayerdan → qayerga</th><th>Mahsulot</th><th class="r">Miqdori</th><th class="r">Yuk xatlari</th>${money ? `<th class="r">Tannarx, so'm</th>` : ""}</tr></thead><tbody>
+      ${S.map(x => `<tr><td>${esc(x.route)}${x.firm && x.firm !== x.route ? `<span class="sub">${esc(x.firm)}</span>` : ""}</td><td>${esc(x.product)}</td><td class="r num">${fmt(x.qty)} ${esc(x.unit || "")}</td><td class="r num">${x.wb.size}</td>${money ? `<td class="r num">${fmt(x.cost)}${x.costOk ? "" : ` <span class="warn-t" title="Ba'zi xomashyo narxi yoki tarkibi kalkulyatsiyada yo'q">⚠</span>`}</td>` : ""}</tr>`).join("")}
+      </tbody>${money ? `<tfoot><tr><td colspan="4">Jami tannarx</td><td class="r num">${fmt(totCost)}</td></tr></tfoot>` : ""}</table></div>` : "")
+    + `<h2 class="kar-h">Ichki yuk xatlari: ${list.length} ta</h2>`
+    + (list.length ? list.map(card).join("") : `<p class="empty">Tanlangan davrda ichki yuk xati yo'q.</p>`);
+  if (PRIV()) renderIntSetup();
+}
+function renderIntSetup(){
+  $("#ownFirms").innerHTML = ownFirms.map((f, i) => `<span class="kar-cat">${esc(f)}${VIEWING() ? "" : `<button type="button" class="pr-x" data-ofdel="${i}" aria-label="${esc(f)} — olib tashlash">×</button>`}</span>`).join("") || `<span class="hint">Hali qo'shilmagan.</span>`;
+  $("#ownFirmForm").hidden = $("#intFirmForm").hidden = VIEWING();
+  const ext = buyersAll().filter(f => rows.some(r => same(r.firm, f)) || pays.some(p => same(p.firm, f)));
+  const v = $("#intFirmSel").value;
+  $("#intFirmSel").innerHTML = `<option value="">— firmani tanlang —</option>` + ext.map(f => `<option${inOwn(f) ? "" : ""}>${esc(f)}</option>`).join("");
+  if ([...$("#intFirmSel").options].some(o => o.value === v)) $("#intFirmSel").value = v;
+  const m = new Map(); irows.forEach(r => { if (!r.firm || (r.toPlace && r.firm === placeName(r.toPlace))) return; const k = fkey(r.firm); const x = m.get(k) || { firm: r.firm, n: new Set(), ext: rows.some(e => same(e.firm, r.firm)) }; x.n.add(r.batch); m.set(k, x); });
+  const L = [...m.values()].sort((a, b) => a.firm.localeCompare(b.firm));
+  $("#intFirmList").innerHTML = L.length ? `<div class="tbl kar-tbl"><table><thead><tr><th>Ichki hisobdagi firma (qabul qiluvchi)</th><th class="r">Yuk xatlari</th><th></th></tr></thead><tbody>
+    ${L.map(x => `<tr><td>${esc(x.firm)}${inOwn(x.firm) ? ` <span class="pill zero">firmamiz</span>` : ""}</td><td class="r num">${x.n.size}</td><td class="r">${VIEWING() ? "" : `<button type="button" class="sm" data-ifback="${esc(x.firm)}">↩ Hammasini tashqiga qaytarish</button>`}</td></tr>`).join("")}</tbody></table></div>` : "";
+}
+async function intSetBatches(batches, on){
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return false; }
+  const { data, error } = await sb.rpc("set_internal", { p_batches: batches, p_on: on });
+  if (error) { toast(/set_internal/.test(error.message || "") ? "Avval bazani yangilang (yangilash.sql)" : "Bo'lmadi: " + error.message); return false; }
+  await reloadAll(true);
+  toast(on ? `Ichki hisobga o'tkazildi: ${batches.length} ta yuk xati` : "Tashqi hisob-kitobga qaytarildi");
+  return data;
+}
+async function intSetFirm(firm, on){
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
+  const { data, error } = await sb.rpc("set_firm_internal", { p_firm: firm, p_on: on });
+  if (error) { toast(/set_firm_internal/.test(error.message || "") ? "Avval bazani yangilang (yangilash.sql)" : "Bo'lmadi: " + error.message); return; }
+  await reloadAll(true); invRenderAll();
+  toast(on ? `«${firm}» ichki hisobga o'tkazildi (${data || 0} ta qator)` : `«${firm}» tashqi hisob-kitobga qaytarildi`);
+}
+$("#intType").addEventListener("click", e => { const b = e.target.closest("[data-it]"); if (!b) return; intType = b.dataset.it; intFillForm(); });
+$("#intAddLine").addEventListener("click", () => { const l = intLine(); $("#intLines").appendChild(l); l.querySelector(".il-p").focus(); });
+$("#intForm").addEventListener("submit", e => { e.preventDefault(); intSave(false); });
+$("#intSavePrint").addEventListener("click", () => intSave(true));
+$("#intCancel").addEventListener("click", () => { intReset(); });
+$("#intDate").addEventListener("change", intCostHint);
+$("#intChips").addEventListener("click", e => { const c = e.target.closest("[data-ip]"); if (!c) return; intPreset = c.dataset.ip; renderInt(); });
+["#intFromD", "#intToD"].forEach(s => $(s).addEventListener("change", () => { intPreset = ""; renderInt(); }));
+$("#intKind").addEventListener("change", renderInt);
+$("#intQ").addEventListener("input", renderInt);
+$("#intBody").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.iprint) openWaybill(b.dataset.iprint);
+  else if (b.dataset.iedit) intStartEdit(b.dataset.iedit);
+  else if (b.dataset.iback) { if (!confirm("Bu yuk xati tashqi hisob-kitobga (firma hisobiga) qaytarilsinmi?\n\nNarxi avvalgisi yoki firma narxlari bo'yicha qo'yiladi va firma hisobiga qo'shiladi.")) return; if (await intSetBatches([b.dataset.iback], false) !== false) renderInt(); }
+  else if (b.dataset.idel) {
+    const its = irows.filter(r => r.batch === b.dataset.idel); if (!its.length) return;
+    if (!confirm(`Ichki yuk xati № ${its[0].waybill || "—"} o'chirilsinmi?`)) return;
+    const { error } = await sb.from("sales").delete().in("id", its.map(r => r.id)); if (error) { toast(error.message); return; }
+    irows = irows.filter(r => r.batch !== b.dataset.idel); toast("O'chirildi"); renderInt();
+  }
+});
+$("#ownFirmForm").addEventListener("submit", async e => {
+  e.preventDefault(); const v = $("#ownFirmIn").value.trim(); if (!v) return;
+  if (inOwn(v)) { toast("Bu firma ro'yxatda bor"); return; }
+  const list = [...ownFirms, v]; if (await saveSetting("own_firms", { list })) { ownFirms = list; $("#ownFirmIn").value = ""; if (rememberFirm(v)) saveRef(); renderInt(); }
+});
+$("#ownFirms").addEventListener("click", async e => {
+  const b = e.target.closest("[data-ofdel]"); if (!b) return; const f = ownFirms[+b.dataset.ofdel];
+  if (!confirm(`«${f}» o'z firmalarimiz ro'yxatidan olib tashlansinmi?\n\nYuk xatlari o'zgarmaydi.`)) return;
+  const list = ownFirms.filter((x, i) => i !== +b.dataset.ofdel); if (await saveSetting("own_firms", { list })) { ownFirms = list; renderInt(); }
+});
+$("#intFirmForm").addEventListener("submit", async e => {
+  e.preventDefault(); const f = $("#intFirmSel").value; if (!f) { toast("Firmani tanlang"); return; }
+  const n = new Set(rows.filter(r => same(r.firm, f)).map(r => r.batch)).size, np = pays.filter(p => same(p.firm, f)).length;
+  if (!confirm(`«${f}» firmasi butunlay ichki hisobga o'tkazilsinmi?\n\n${n} ta yuk xati va ${np} ta to'lov tashqi hisob-kitobdan, qarzdorlar ro'yxatidan, Telegram hisobotidan va statistikadan chiqadi. Keyin «Qaytarish» bilan joyiga qaytarsa bo'ladi.`)) return;
+  await intSetFirm(f, true);
+});
+$("#intFirmList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-ifback]"); if (!b) return; const f = b.dataset.ifback;
+  if (!confirm(`«${f}» ning barcha ichki yuk xatlari va to'lovlari tashqi hisob-kitobga qaytarilsinmi?`)) return;
+  await intSetFirm(f, false);
+});
+
+/* ---------- Arxivda belgilab ichkiga o'tkazish ---------- */
+function arcSelBar(){ const el = $("#arcSelBar"); if (!el) return; el.hidden = !arcSel.size; $("#arcSelN").textContent = arcSel.size; }
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-arcsel]");
+  if (c) { if (c.checked) arcSel.add(c.dataset.arcsel); else arcSel.delete(c.dataset.arcsel); c.closest("tr").classList.toggle("sel", c.checked); arcSelBar(); }
+  if (e.target.id === "arcSelAll") { $$("#rows [data-arcsel]").forEach(x => { x.checked = e.target.checked; if (x.checked) arcSel.add(x.dataset.arcsel); else arcSel.delete(x.dataset.arcsel); x.closest("tr").classList.toggle("sel", x.checked); }); arcSelBar(); }
+});
+document.addEventListener("click", async e => {
+  if (e.target.closest("#arcSelClear")) { arcSel.clear(); render(); arcSelBar(); return; }
+  if (!e.target.closest("#arcToInt")) return;
+  const batches = [...new Set([...arcSel].map(k => (groupItems(k)[0] || {}).batch).filter(Boolean))];
+  if (!batches.length) return;
+  if (!confirm(`Belgilangan ${batches.length} ta yuk xati ichki hisobga o'tkazilsinmi?\n\nUlar firma hisob-kitobidan, qarzdorlar ro'yxatidan, Telegram hisobotidan va statistikadan chiqadi. «🔁 Ichki yuk xatlari» bo'limida ko'rinadi va kerak bo'lsa «↩ Tashqiga» bilan qaytariladi.`)) return;
+  if (await intSetBatches(batches, true) !== false) { arcSel.clear(); arcSelBar(); }
+});
+
+/* ======================= 📥 KIRIM: OLINGAN MAHSULOTLAR ======================= */
+const KIND_NM = { raw: "Xomashyo", resale: "Qayta sotiladi" };
+const suppliersAll = () => [...new Map([...purch.map(p => p.supplier), ...supPays.map(p => p.supplier), ...supPrices.map(p => p.supplier)].filter(Boolean).map(s => [fkey(s), s.trim()])).values()].sort((a, b) => a.localeCompare(b));
+function kirProdNames(){
+  const m = new Map(); [...(typeof calc !== "undefined" ? calc.items.map(i => i.name) : []), ...purch.map(p => p.product), ...ref.products.map(p => p.name)].filter(Boolean).forEach(n => { const k = fkey(n); if (!m.has(k)) m.set(k, n.trim()); });
+  return [...m.values()].sort((a, b) => a.localeCompare(b));
+}
+function kirGuessKind(name){
+  const last = [...purch].reverse().find(p => same(p.product, name)); if (last) return last.kind;
+  if (typeof calc !== "undefined" && calc.items.some(i => same(i.name, name))) return "raw";
+  if (ref.products.some(p => same(p.name, name)) || rows.some(r => same(r.product, name))) return "resale";
+  return "raw";
+}
+function kirGuessUnit(name){
+  const last = [...purch].reverse().find(p => same(p.product, name) && p.unit); if (last) return last.unit;
+  const it = typeof calc !== "undefined" ? calc.items.find(i => same(i.name, name)) : null; if (it && it.unit) return it.unit;
+  return prodUnit(name) || "";
+}
+function supPriceFor(sup, prod, date){
+  const d = date || today();
+  const l = supPrices.filter(p => same(p.supplier, sup) && same(p.product, prod) && (p.from || "") <= d).sort((a, b) => (a.from || "").localeCompare(b.from || "") || (a.at || "").localeCompare(b.at || ""));
+  if (l.length) return l[l.length - 1].price;
+  const b = purch.filter(p => same(p.supplier, sup) && same(p.product, prod) && p.price != null && (!p.date || p.date <= d)).sort((a, b) => (a.date + a.created).localeCompare(b.date + b.created));
+  return b.length ? b[b.length - 1].price : null;
+}
+function kirLine(d = {}){
+  const el = document.createElement("div"); el.className = "inv-line kir";
+  el.innerHTML = `<input class="il-p" list="kirProdList" placeholder="Mahsulot, masalan: Sement" value="${esc(d.product || "")}" aria-label="Mahsulot">
+    <select class="il-k" aria-label="Turi"><option value="raw">Xomashyo</option><option value="resale">Qayta sotiladi</option></select>
+    <input class="il-q num" inputmode="decimal" placeholder="0" value="${d.qty ? esc(String(d.qty).replace(".", ",")) : ""}" aria-label="Miqdori">
+    <input class="il-u" placeholder="kg, tonna, m³" value="${esc(d.unit || "")}" aria-label="Birligi">
+    <input class="il-pr num money-col" inputmode="decimal" placeholder="avto" value="${d.price != null && d.price !== "" ? esc(String(d.price).replace(".", ",")) : ""}" aria-label="Narxi">
+    <button type="button" class="ghost danger il-x" aria-label="Qatorni o'chirish">×</button>`;
+  const k = el.querySelector(".il-k"); k.value = d.kind || "raw";
+  el.querySelector(".il-p").addEventListener("change", e => { const n = e.target.value.trim(); if (!n) return; if (!d.kind) k.value = kirGuessKind(n); const u = el.querySelector(".il-u"); if (!u.value) u.value = kirGuessUnit(n); kirPriceHints(); kirSumHint(); });
+  ["input", "change"].forEach(ev => { el.querySelector(".il-q").addEventListener(ev, kirSumHint); el.querySelector(".il-pr").addEventListener(ev, kirSumHint); });
+  el.querySelector(".il-x").addEventListener("click", () => { el.remove(); if (!$("#kirLines").children.length) $("#kirLines").appendChild(kirLine()); kirSumHint(); });
+  return el;
+}
+function kirReadLines(){ return [...$$("#kirLines .inv-line")].map(el => { const pv = el.querySelector(".il-pr").value.trim();
+  return { el, product: el.querySelector(".il-p").value.trim(), kind: el.querySelector(".il-k").value, qty: parseNum(el.querySelector(".il-q").value), unit: el.querySelector(".il-u").value.trim(), price: pv ? parseNum(pv) : null }; }).filter(l => l.product || l.qty); }
+function kirPriceHints(){
+  if (!PRIV()) return; const sup = $("#kirSup").value.trim(), d = $("#kirDate").value;
+  $$("#kirLines .inv-line").forEach(el => { const p = el.querySelector(".il-p").value.trim(), auto = sup && p ? supPriceFor(sup, p, d) : null; el.querySelector(".il-pr").placeholder = auto != null ? fmt(auto) + " (avto)" : "narx"; });
+}
+function kirSumHint(){
+  if (!PRIV() || !M()) { $("#kirSum").textContent = ""; return; }
+  const sup = $("#kirSup").value.trim(), d = $("#kirDate").value; let s = 0, miss = 0;
+  kirReadLines().forEach(l => { if (!(l.qty > 0)) return; const p = l.price != null ? l.price : (sup && l.product ? supPriceFor(sup, l.product, d) : null); if (p == null) miss++; else s += p * l.qty; });
+  $("#kirSum").innerHTML = s || miss ? `Jami: <b class="num">${fmt(s)}</b> so'm${miss ? ` <span class="warn-t">(${miss} ta mahsulot narxsiz)</span>` : ""}` : "";
+}
+function kirFillForm(){
+  const sl = suppliersAll(); $("#supList").innerHTML = sl.map(s => `<option value="${esc(s)}">`).join("");
+  $("#kirProdList").innerHTML = kirProdNames().map(n => `<option value="${esc(n)}">`).join("");
+  fillPlace("#kirTo", $("#kirTo").value || kirLastTo(), "— tanlang —");
+  if (!$("#kirDate").value) $("#kirDate").value = today();
+  if (!$("#kirLines").children.length) $("#kirLines").appendChild(kirLine());
+  $("#kirCancel").hidden = !kirEdit; $("#kirSave").textContent = kirEdit ? "O'zgarishni saqlash" : "Saqlash";
+  $("#kirFormT").textContent = kirEdit ? "✏️ Kirimni tahrirlash" : "＋ Yangi kirim (olingan mahsulot)";
+  kirPriceHints(); kirSumHint();
+}
+const kirToKey = () => "savdo-kirto-" + (me?.id || "");
+function kirLastTo(){ try { return localStorage.getItem(kirToKey()) || ""; } catch(e) { return ""; } }
+function kirReset(){ kirEdit = null; $("#kirForm").reset(); $("#kirLines").innerHTML = ""; $("#kirDate").value = today(); kirFillForm(); }
+$("#kirForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
+  if (!INV_OK) { toast("Avval bazani yangilang (yangilash.sql)"); return; }
+  const sup = $("#kirSup").value.trim(), to = $("#kirTo").value, lines = kirReadLines(), bad = (m, el) => { toast(m); if (el) (typeof el === "string" ? $(el) : el).focus(); };
+  if (!sup) return bad("Yetkazib beruvchini yozing — kimdan olindi", "#kirSup");
+  if (!to && placeList().length) return bad("Qaysi omborga kelganini tanlang", "#kirTo");
+  if (!lines.length) return bad("Kamida bitta mahsulot yozing", $("#kirLines .il-p"));
+  for (const l of lines) { if (!l.product) return bad("Mahsulot nomini yozing", l.el.querySelector(".il-p")); if (!(l.qty > 0)) return bad(`«${l.product}» miqdorini yozing`, l.el.querySelector(".il-q")); }
+  const old = kirEdit ? purch.filter(p => p.batch === kirEdit) : [];
+  const batch = kirEdit || newId(), date = $("#kirDate").value || today();
+  const head = { batch, date, time: old[0] ? old[0].time : nowTime(), supplier: sup, to_place: to || "", waybill: $("#kirWb").value.trim(), car: $("#kirCar").value.trim().toUpperCase(), driver: $("#kirDriver").value.trim(), note: $("#kirNote").value.trim() };
+  const ds = lines.map((l, i) => { const d = { ...head, product: l.product, kind: l.kind === "resale" ? "resale" : "raw", qty: l.qty, unit: l.unit || kirGuessUnit(l.product) };
+    if (PRIV()) d.price_hint = l.price != null && l.price > 0 ? l.price : (old[i] && old[i].price != null && l.price == null && same(old[i].product, l.product) && same(old[i].supplier, sup) ? old[i].price : null);
+    if (d.price_hint == null) delete d.price_hint;
+    if (old[0]?.created) d.created_at = new Date((Date.parse(old[0].created) || Date.now()) + i).toISOString();
+    return d; });
+  $("#kirSave").disabled = true;
+  try {
+    if (old.length) { const { error } = await sb.from("purchases").delete().in("id", old.map(p => p.id)); if (error) throw error; purch = purch.filter(p => p.batch !== batch); }
+    const { error } = await sb.from("purchases").insert(ds); if (error) throw error;
+    try { localStorage.setItem(kirToKey(), to); } catch(e) {}
+    toast(old.length ? "Kirim o'zgartirildi" : `Saqlandi: ${sup} — ${lines.length} ta mahsulot`);
+    kirReset(); await invLoad();
+  } catch(err) { toast("Saqlab bo'lmadi: " + (err.message || err)); }
+  $("#kirSave").disabled = false;
+});
+function kirStartEdit(batch){
+  const its = purch.filter(p => p.batch === batch).sort((a, b) => (a.created || "").localeCompare(b.created || "")); if (!its.length) return;
+  const h = its[0]; kirEdit = batch; $("#kirNewBox").open = true;
+  $("#kirDate").value = h.date || today(); $("#kirSup").value = h.supplier; $("#kirWb").value = h.waybill; $("#kirCar").value = h.car; $("#kirDriver").value = h.driver; $("#kirNote").value = h.note;
+  fillPlace("#kirTo", h.to, "— tanlang —");
+  $("#kirLines").innerHTML = ""; its.forEach(it => $("#kirLines").appendChild(kirLine({ ...it, price: PRIV() ? it.price : null })));
+  kirFillForm(); $("#kirNewBox").scrollIntoView({ block: "start", behavior: "smooth" });
+}
+$("#kirAddLine").addEventListener("click", () => { const l = kirLine(); $("#kirLines").appendChild(l); l.querySelector(".il-p").focus(); });
+$("#kirCancel").addEventListener("click", kirReset);
+["#kirSup", "#kirDate"].forEach(s => $(s).addEventListener("change", () => { kirPriceHints(); kirSumHint(); }));
+$("#kirChips").addEventListener("click", e => { const c = e.target.closest("[data-kp]"); if (!c) return; kirPreset = c.dataset.kp; renderKir(); });
+["#kirFFrom", "#kirFTo"].forEach(s => $(s).addEventListener("change", () => { kirPreset = ""; renderKir(); }));
+$("#kirFSup").addEventListener("change", renderKir);
+$("#kirQ").addEventListener("input", renderKir);
+function renderKir(){
+  const need = INV_OK === false;
+  $("#kirNeed").hidden = !need; if (need) $("#kirNeed").innerHTML = INV_NEED;
+  $("#kirNewBox").hidden = need || VIEWING(); $("#supPanel").hidden = need;
+  if (need) { $("#kirBody").innerHTML = ""; return; }
+  kirFillForm();
+  $$("#kirChips [data-kp]").forEach(c => c.classList.toggle("on", c.dataset.kp === kirPreset));
+  if (kirPreset) { const [a, b] = presetRange(kirPreset); $("#kirFFrom").value = a; $("#kirFTo").value = b; }
+  { const v = $("#kirFSup").value; $("#kirFSup").innerHTML = `<option value="">Hammasi</option>` + suppliersAll().map(s => `<option>${esc(s)}</option>`).join(""); if ([...$("#kirFSup").options].some(o => o.value === v)) $("#kirFSup").value = v; }
+  const f = $("#kirFFrom").value, t = $("#kirFTo").value, sp = $("#kirFSup").value, q = $("#kirQ").value.trim().toLowerCase(), money = PRIV() && M();
+  const g = new Map(); purch.forEach(p => { if (f && (!p.date || p.date < f)) return; if (t && (!p.date || p.date > t)) return; if (sp && !same(p.supplier, sp)) return;
+    const x = g.get(p.batch) || { batch: p.batch, items: [] }; x.items.push(p); g.set(p.batch, x); });
+  let list = [...g.values()].map(x => { x.items.sort((a, b) => (a.created || "").localeCompare(b.created || "")); x.head = x.items[0]; x.total = x.items.reduce((s, i) => s + (i.total || 0), 0); return x; });
+  if (q) list = list.filter(x => [x.head.supplier, x.head.waybill, x.head.car, x.head.driver, x.head.note, placeName(x.head.to), ...x.items.map(i => i.product)].join(" ").toLowerCase().includes(q));
+  list.sort((a, b) => ((b.head.date || "") + (b.head.time || "") + b.head.created).localeCompare((a.head.date || "") + (a.head.time || "") + a.head.created));
+  const tot = list.reduce((s, x) => s + x.total, 0), unp = list.reduce((s, x) => s + x.items.filter(i => i.price == null).length, 0);
+  const card = x => { const h = x.head, can = PRIV() && !VIEWING();
+    return `<div class="kar-item inv-item kir-item"><div class="ki-main"><div class="ki-top"><b>${esc(h.supplier || "—")}</b> → ${esc(placeName(h.to))}</div>
+      <div class="ki-who">${x.items.map(i => `${esc(i.product)} — <b class="num">${fmt(i.qty)}</b> ${esc(i.unit || "")} <span class="pill ${i.kind === "raw" ? "zero" : "kind-karyer"}">${KIND_NM[i.kind]}</span>${money ? (i.price != null ? ` <span class="dim">× ${fmt(i.price)}</span>` : ` <span class="warn-t">narxsiz</span>`) : ""}`).join("<br>")}</div>
+      <div class="ki-meta dim">${fmtDate(h.date)} ${esc(h.time || "")}${h.waybill ? ` · № ${esc(h.waybill)}` : ""}${h.car ? ` · <span class="plate">${esc(h.car)}</span>` : ""}${h.driver ? ` · ${esc(h.driver)}` : ""}${h.createdBy ? ` · ✍ ${esc(qWho(h.createdBy))}` : ""}${h.note ? ` · ${esc(h.note)}` : ""}</div></div>
+      <div class="ki-sum">${money ? `<b class="num">${fmt(x.total)}</b>` : PRIV() ? "<b>•••</b>" : ""}</div>
+      <div class="ki-act">${can ? `<button type="button" class="sm" data-kedit="${esc(x.batch)}">Tahrirlash</button><button type="button" class="sm ghost danger" data-kdel="${esc(x.batch)}">O'chirish</button>` : ""}</div></div>`; };
+  $("#kirBody").innerHTML = (PRIV() && !M() ? `<p class="hint">🔒 Summalar yopiq — «Hisob-kitob yopiq» tugmasi bilan oching.</p>` : "")
+    + `<p class="kar-sum">Topildi: <b>${list.length}</b> ta kirim${money ? ` · <b class="num">${fmt(tot)}</b> so'm` : ""}${PRIV() && unp ? ` · <span class="warn-t">narxsiz: ${unp} ta qator</span>` : ""}</p>`
+    + (list.length ? list.map(card).join("") : `<p class="empty">Tanlangan davrda kirim yo'q.</p>`);
+  if (PRIV()) renderSup();
+}
+$("#kirBody").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.kedit) kirStartEdit(b.dataset.kedit);
+  else if (b.dataset.kdel) {
+    const its = purch.filter(p => p.batch === b.dataset.kdel); if (!its.length) return;
+    if (!confirm(`${its[0].supplier} dan ${fmtDate(its[0].date)} dagi kirim o'chirilsinmi?\n\n${its.map(i => `${i.product} — ${fmt(i.qty)} ${i.unit}`).join("\n")}`)) return;
+    const { error } = await sb.from("purchases").delete().in("id", its.map(p => p.id)); if (error) { toast(error.message); return; }
+    purch = purch.filter(p => p.batch !== b.dataset.kdel); toast("O'chirildi"); renderKir();
+  }
+});
+/* ---------- yetkazib beruvchilar hisobi ---------- */
+function supAcc(){
+  const m = new Map(), K = s => { const k = fkey(s); if (!m.has(k)) m.set(k, { name: s.trim(), got: 0, paid: 0, paidCash: 0, unp: 0, last: "", lastPay: "" }); return m.get(k); };
+  purch.forEach(p => { if (!p.supplier) return; const x = K(p.supplier); x.got += p.total || 0; if (p.price == null) x.unp++; if ((p.date || "") > x.last) x.last = p.date || ""; });
+  supPays.forEach(p => { const x = K(p.supplier); x.paid += p.amount; if (p.method === "cash") x.paidCash += p.amount; if ((p.date || "") > x.lastPay) x.lastPay = p.date || ""; });
+  return [...m.values()].map(x => ({ ...x, bal: Math.round((x.paid - x.got) * 100) / 100 })).sort((a, b) => a.bal - b.bal || a.name.localeCompare(b.name));
+}
+function renderSup(){
+  const money = M(), A = supAcc();
+  if (!$("#spDate").value) $("#spDate").value = today();
+  if (!$("#sprFrom").value) $("#sprFrom").value = today();
+  $("#supPayForm").hidden = $("#supPriceForm").hidden = VIEWING();
+  const debt = A.filter(x => x.bal < -0.5).reduce((s, x) => s - x.bal, 0);
+  $("#supBody").innerHTML = !money ? `<p class="hint">🔒 Summalar yopiq — «Hisob-kitob yopiq» tugmasi bilan oching.</p>` : !A.length ? `<p class="empty">Hali kirim yozilmagan.</p>`
+    : `<p class="kar-sum">Bizning yetkazib beruvchilarga qarzimiz: <b class="num neg">${fmt(debt)}</b> so'm</p>
+      <div class="tbl kar-tbl"><table><thead><tr><th>Yetkazib beruvchi</th><th class="r">Olindi, so'm</th><th class="r">To'landi, so'm</th><th class="r">Qoldiq</th><th>Oxirgi kirim / to'lov</th><th></th></tr></thead><tbody>
+      ${A.map(x => `<tr><td><b>${esc(x.name)}</b>${x.unp ? `<span class="sub warn-t">⚠ narxsiz kirim: ${x.unp} ta</span>` : ""}</td><td class="r num">${fmt(x.got)}</td><td class="r num">${fmt(x.paid)}${x.paidCash ? `<span class="sub">naqd: ${fmt(x.paidCash)}</span>` : ""}</td>
+        <td class="r num">${Math.abs(x.bal) < 1 ? `<span class="pill zero">0</span>` : x.bal < 0 ? `<b class="neg">Qarzimiz ${fmt(-x.bal)}</b>` : `<b class="ok-t">Avans ${fmt(x.bal)}</b>`}</td>
+        <td>${fmtDate(x.last) || "—"} / ${fmtDate(x.lastPay) || "—"}</td>
+        <td class="r nw">${VIEWING() ? "" : `<button type="button" class="sm" data-sppay="${esc(x.name)}">💰 To'lov</button>`} <button type="button" class="sm ghost" data-sphist="${esc(x.name)}">To'lovlar</button></td></tr>`).join("")}</tbody></table></div><div id="supHist"></div>`;
+  const P = [...supPrices].sort((a, b) => a.supplier.localeCompare(b.supplier) || a.product.localeCompare(b.product) || (b.from || "").localeCompare(a.from || ""));
+  $("#supPriceList").innerHTML = P.length ? `<div class="tbl kar-tbl"><table><thead><tr><th>Yetkazib beruvchi</th><th>Mahsulot</th><th class="r">Narxi</th><th>Sanadan</th><th></th></tr></thead><tbody>
+    ${P.map(p => `<tr><td>${esc(p.supplier)}</td><td>${esc(p.product)}</td><td class="r num">${money ? fmt(p.price) : "•••"}</td><td>${fmtDate(p.from)}</td><td class="r">${VIEWING() ? "" : `<button type="button" class="sm ghost danger" data-sprdel="${p.id}">O'chirish</button>`}</td></tr>`).join("")}</tbody></table></div>` : `<p class="hint">Narxlar ro'yxati bo'sh.</p>`;
+}
+function supHist(name){
+  const L = supPays.filter(p => same(p.supplier, name)).sort((a, b) => (b.date + b.at).localeCompare(a.date + a.at));
+  $("#supHist").innerHTML = `<h3 class="kar-h">${esc(name)} — to'lovlar</h3>` + (L.length ? `<div class="tbl kar-tbl"><table><thead><tr><th>Sana</th><th class="r">Summa</th><th>Qanday</th><th>Izoh</th><th></th></tr></thead><tbody>
+    ${L.map(p => `<tr><td>${fmtDate(p.date)}</td><td class="r num">${fmt(p.amount)}</td><td>${PM[p.method] || ""}</td><td>${esc(p.note)}</td><td class="r">${VIEWING() ? "" : `<button type="button" class="sm ghost danger" data-spdel="${p.id}">O'chirish</button>`}</td></tr>`).join("")}</tbody></table></div>` : `<p class="hint">To'lov yo'q.</p>`);
+  $("#supHist").scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+$("#supBody").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.sppay) { $("#spSup").value = b.dataset.sppay; $("#spAmt").focus(); $("#supPayH").scrollIntoView({ block: "start", behavior: "smooth" }); }
+  else if (b.dataset.sphist) supHist(b.dataset.sphist);
+  else if (b.dataset.spdel) { const p = supPays.find(x => x.id === b.dataset.spdel); if (!p || !confirm(`To'lov o'chirilsinmi?\n\n${p.supplier} · ${fmt(p.amount)} so'm · ${fmtDate(p.date)}`)) return;
+    const { error } = await sb.from("supplier_pays").delete().eq("id", p.id); if (error) { toast(error.message); return; }
+    supPays = supPays.filter(x => x.id !== p.id); renderSup(); supHist(p.supplier); toast("O'chirildi"); }
+});
+$("#supPayForm").addEventListener("submit", async e => {
+  e.preventDefault(); if (VIEWING()) return;
+  const d = { supplier: $("#spSup").value.trim(), amount: parseNum($("#spAmt").value), method: $("#spMethod").value, date: $("#spDate").value || today(), note: $("#spNote").value.trim() };
+  if (!d.supplier) { toast("Yetkazib beruvchini yozing"); $("#spSup").focus(); return; }
+  if (!(d.amount > 0)) { toast("Summani yozing"); $("#spAmt").focus(); return; }
+  const { data, error } = await sb.from("supplier_pays").insert(d).select("*").single();
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return; }
+  supPays.push({ id: data.id, supplier: data.supplier, date: data.date || "", amount: Number(data.amount), method: data.method, note: data.note || "", at: data.created_at, by: data.created_by });
+  toast(`To'lov yozildi: ${d.supplier} · ${fmt(d.amount)} so'm`); $("#spAmt").value = ""; $("#spNote").value = ""; renderSup();
+});
+$("#supPriceForm").addEventListener("submit", async e => {
+  e.preventDefault(); if (VIEWING()) return;
+  const d = { supplier: $("#sprSup").value.trim(), product: $("#sprProd").value.trim(), price: parseNum($("#sprPrice").value), from_date: $("#sprFrom").value || today() };
+  if (!d.supplier) { toast("Yetkazib beruvchini yozing"); $("#sprSup").focus(); return; }
+  if (!d.product) { toast("Mahsulotni yozing"); $("#sprProd").focus(); return; }
+  if (!(d.price > 0)) { toast("Narxni yozing"); $("#sprPrice").focus(); return; }
+  const { data, error } = await sb.from("supplier_prices").insert(d).select("*").single();
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return; }
+  supPrices.push({ id: data.id, supplier: data.supplier, product: data.product, price: Number(data.price), from: data.from_date, at: data.created_at });
+  let n = 0;
+  if ($("#sprApply").checked) {
+    const L = purch.filter(p => same(p.supplier, d.supplier) && same(p.product, d.product) && (p.date || "") >= d.from_date && p.price !== d.price);
+    for (const p of L) { const { error: er } = await sb.from("purchases").update({ price_hint: d.price }).eq("id", p.id); if (!er) n++; }
+  }
+  toast(`Narx qo'shildi${n ? ` · ${n} ta kirimga qo'llandi` : ""}`); $("#sprPrice").value = "";
+  if (n) await invLoad(); else renderSup();
+});
+$("#supPriceList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-sprdel]"); if (!b) return; const p = supPrices.find(x => x.id === b.dataset.sprdel);
+  if (!p || !confirm(`Narx o'chirilsinmi?\n\n${p.supplier} · ${p.product} · ${fmt(p.price)} (${fmtDate(p.from)} dan)\n\nAvval yozilgan kirimlar narxi o'zgarmaydi.`)) return;
+  const { error } = await sb.from("supplier_prices").delete().eq("id", p.id); if (error) { toast(error.message); return; }
+  supPrices = supPrices.filter(x => x.id !== p.id); renderSup(); toast("O'chirildi");
+});
+
+/* ======================= 📦 OMBOR QOLDIG'I ======================= */
+// faqat kirim qilingan mahsulotlar hisoblanadi; harakatlar: kirim (+), ichki kelgan (+), ichki ketgan (−), sotuv yoki xomashyo sarfi (−)
+function stockCompute(until){
+  const track = new Map();
+  purch.forEach(p => { if (until && p.date && p.date > until) return; const k = fkey(p.product); const t = track.get(k) || { name: p.product.trim(), unit: p.unit, kind: p.kind }; if (!t.unit && p.unit) t.unit = p.unit; t.kind = p.kind; track.set(k, t); });
+  const cell = new Map(), C = (place, k) => { const key = place + "|" + k; if (!cell.has(key)) cell.set(key, { place, k, kirim: 0, inn: 0, out: 0, sold: 0 }); return cell.get(key); };
+  purch.forEach(p => { if (until && p.date && p.date > until) return; C(p.to || "", fkey(p.product)).kirim += p.qty; });
+  const nameToItem = new Map((typeof calc !== "undefined" ? calc.items : []).map(i => [i.id, fkey(i.name)]));
+  const outOf = (place, r, internal) => {
+    const k = fkey(r.product), t = track.get(k);
+    if (t && t.kind === "resale") { if (internal) { C(place, k).out += r.qty; if (r.toPlace) C(r.toPlace, k).inn += r.qty; } else C(place, k).sold += r.qty; return; }
+    if (t && t.kind === "raw" && internal) { C(place, k).out += r.qty; if (r.toPlace) C(r.toPlace, k).inn += r.qty; return; }
+    if (typeof CALC_OK === "undefined" || !CALC_OK) return;
+    const out = {}, warn = new Set(); calcExpand(r.product, r.qty, r.date, out, warn, 0);
+    for (const [id, q] of Object.entries(out)) { const ik = nameToItem.get(id); if (ik && track.has(ik)) C(place, ik).sold += q; }
+  };
+  const fromOf = r => r.fromPlace || (r.kind === "karyer" && r.quarry ? "q:" + r.quarry : stockDef || "");
+  rows.forEach(r => { if (until && r.date && r.date > until) return; outOf(fromOf(r), r, false); });
+  irows.forEach(r => { if (until && r.date && r.date > until) return; outOf(r.fromPlace || stockDef || "", r, true); });
+  (typeof qSales !== "undefined" ? qSales : []).forEach(x => { if (until && x.date && x.date > until) return; outOf("q:" + x.quarry, { product: x.product, qty: x.qty, date: x.date }, false); });
+  const res = new Map();
+  for (const c of cell.values()) { if (!track.has(c.k)) continue; const t = track.get(c.k), left = c.kirim + c.inn - c.out - c.sold;
+    if (!res.has(c.place)) res.set(c.place, []); res.get(c.place).push({ ...c, name: t.name, unit: t.unit, kind: t.kind, left }); }
+  res.forEach(l => l.sort((a, b) => a.name.localeCompare(b.name)));
+  return res;
+}
+function renderOmbor(){
+  const need = INV_OK === false;
+  $("#omNeed").hidden = !need; if (need) { $("#omNeed").innerHTML = INV_NEED; $("#omBody").innerHTML = ""; return; }
+  fillPlace("#omPlace", $("#omPlace").value, "Barcha omborlar");
+  fillPlace("#omDef", stockDef, "— tanlanmagan —"); $("#omDef").disabled = VIEWING();
+  if (!$("#omTo").value) $("#omTo").value = today();
+  const R = stockCompute($("#omTo").value), only = $("#omPlace").value;
+  const places = [...R.keys()].filter(p => !only || p === only).sort((a, b) => (a === "" ? 1 : b === "" ? -1 : placeName(a).localeCompare(placeName(b))));
+  const q3 = v => fq(v);
+  $("#omBody").innerHTML = (!stockDef ? `<p class="hint warn-t">⚠ «Tashqi sotuv odatda qaysi ombordan chiqadi» tanlanmagan — ombori ko'rsatilmagan sotuvlar «Ombor ko'rsatilmagan» qatoriga yoziladi.</p>` : "")
+    + (!purch.length ? `<p class="empty">Hali kirim yozilmagan. «📥 Olingan mahsulotlar» bo'limida birinchi kirimni yozing.</p>` : "")
+    + places.map(p => `<h2 class="kar-h">${p ? esc(placeName(p)) : "Ombor ko'rsatilmagan"}</h2><div class="tbl kar-tbl"><table><thead><tr><th>Mahsulot</th><th>Turi</th><th class="r">Kirim</th><th class="r">Ichki kelgan</th><th class="r">Ichki ketgan</th><th class="r">Sotuv / sarf</th><th class="r">Qoldiq</th></tr></thead><tbody>
+      ${R.get(p).map(x => `<tr><td><b>${esc(x.name)}</b></td><td><span class="pill ${x.kind === "raw" ? "zero" : "kind-karyer"}">${KIND_NM[x.kind]}</span></td><td class="r num">${q3(x.kirim)}</td><td class="r num">${q3(x.inn)}</td><td class="r num">${q3(x.out)}</td><td class="r num">${q3(x.sold)}</td>
+        <td class="r num"><b class="${x.left < -0.0005 ? "neg" : ""}">${q3(x.left)}</b> ${esc(x.unit || "")}${x.left < -0.0005 ? ` <span class="warn-t" title="Chiqim kirimdan ko'p — kirim yozilmagan bo'lishi mumkin">⚠</span>` : ""}</td></tr>`).join("")}</tbody></table></div>`).join("");
+}
+$("#omPlace").addEventListener("change", renderOmbor);
+$("#omTo").addEventListener("change", renderOmbor);
+$("#omDef").addEventListener("change", async () => { const v = $("#omDef").value; if (await saveSetting("stock_place", { place: v })) { stockDef = v; toast("Saqlandi"); renderOmbor(); } else $("#omDef").value = stockDef; });
+$("#omXl").addEventListener("click", () => {
+  if (typeof XLSX === "undefined") return;
+  const R = stockCompute($("#omTo").value), aoa = [["Ombor", "Mahsulot", "Turi", "Kirim", "Ichki kelgan", "Ichki ketgan", "Sotuv / sarf", "Qoldiq", "Birlik"]];
+  [...R.keys()].sort().forEach(p => R.get(p).forEach(x => aoa.push([placeName(p), x.name, KIND_NM[x.kind], x.kirim, x.inn, x.out, x.sold, Math.round(x.left * 1000) / 1000, x.unit])));
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Ombor");
+  saveFile(`Ombor qoldig'i ${$("#omTo").value || today()}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+});
+/* ---------- Yangi yuk xati formasi: «Qaysi ombordan» ---------- */
+const fFromKey = () => "savdo-ffrom-" + (me?.id || "");
+function fFromFill(val){
+  const box = $("#fFromBox"); if (!box) return;
+  const on = !!INT_OK && placeList().length > 0 && !!purch.length; box.hidden = !on; if (!on) return;
+  let v = val; if (v === undefined) { v = $("#fFrom").value; if (!v) { try { v = localStorage.getItem(fFromKey()) || ""; } catch(e) {} } }
+  fillPlace("#fFrom", v, stockDef ? `Odatiy: ${placeName(stockDef)}` : "— ko'rsatilmagan —");
+}
 
 /* ---------- Ishga tushirish ---------- */
 connect();
