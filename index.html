@@ -322,6 +322,7 @@ button.sm.danger:hover{background:color-mix(in srgb,var(--danger) 10%,transparen
 .kar-selrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 8px}
 .ki-sel{display:flex;align-items:center;padding:0 4px 0 0;cursor:pointer}.ki-sel input{width:18px;height:18px;accent-color:var(--accent)}
 .kar-item.sel{outline:2px solid var(--accent);outline-offset:-2px}
+.qw-top{align-items:end;margin-bottom:12px}.kar-filters.qw-top .f{flex:0 1 240px}.kar-filters.qw-top .f:last-child{flex:0 0 auto}.qw-top .qw-arc{flex:0 0 auto;width:auto;align-self:center;white-space:nowrap;padding-top:18px}.qw-days{width:72px;text-align:right;padding:5px 8px}.qw-type{align-self:end}.qw-type button{min-height:40px;font-size:14px}.qwk-tbl td{vertical-align:middle}
 /* ---- 🔁 Ichki hisob, 📥 kirim, 📦 ombor ---- */
 .inv-panel h2{margin-bottom:10px}
 .inv-new{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px;background:var(--surface-2)}
@@ -984,6 +985,7 @@ body.side-single .side-h::after{display:none}
       <div class="side-h"><span aria-hidden="true">⛏</span> Karyerlar</div>
       <button type="button" data-page="q-new"><i aria-hidden="true">＋</i>Yangi yuklash</button>
       <button type="button" data-page="q-cash"><i aria-hidden="true">💵</i>Kassa</button>
+      <button type="button" data-page="q-workers"><i aria-hidden="true">👷</i>Ishchilar va maosh</button>
       <button type="button" data-page="q-list"><i aria-hidden="true">🗂</i>Yuklashlar ro'yxati</button>
       <button type="button" data-page="q-rep"><i aria-hidden="true">📊</i>Karyer hisoboti</button>
       <button type="button" data-page="q-setup"><i aria-hidden="true">⛏</i>Karyerlar</button>
@@ -1356,6 +1358,43 @@ body.side-single .side-h::after{display:none}
   </section>
 
   <!-- ⛏ KARYER: ro'yxat -->
+
+  <!-- ⛏ KARYER: ishchilar va maoshlar -->
+  <section class="panel kar-panel" id="qWorkPanel" data-page="q-workers">
+    <h2>👷 Karyer ishchilari va maoshlari</h2>
+      <div class="kar-filters qw-top">
+        <div class="f" id="qwQBox"><label for="qwQ">Karyer</label><select id="qwQ"></select></div>
+        <div class="f"><label for="qwMonth">Oy</label><input type="month" id="qwMonth"></div>
+        <label class="chk qw-arc"><input type="checkbox" id="qwArc"> Arxivdagilar ham</label>
+        <div class="f"><label>&nbsp;</label><button type="button" id="qwXl">Excel</button></div>
+      </div>
+    <div class="inv-need" id="qwNeed" hidden></div>
+    <details class="inv-new" id="qwNewBox">
+      <summary><b id="qwFormT">＋ Yangi ishchi qo'shish</b> <span class="hint">oylik yoki kunlik maosh bilan</span></summary>
+      <form class="entry" id="qwForm" autocomplete="off" novalidate>
+        <div class="f c4"><label for="qwName">Ishchi (F.I.Sh) *</label><input id="qwName" placeholder="Familiya Ism"></div>
+        <div class="f c3"><label for="qwPos">Lavozimi</label><input id="qwPos" list="qwPosList" placeholder="masalan: ekskavatorchi, qorovul"></div>
+        <div class="f c3"><label for="qwPhone">Telefon</label><input id="qwPhone" inputmode="tel" placeholder="+998 90 123 45 67"></div>
+        <div class="f c2"><label for="qwStart">Ishga kirgan sana</label><input type="date" id="qwStart"></div>
+        <div class="c5 kar-seg qw-type" id="qwType" role="group" aria-label="Maosh turi"><button type="button" data-pt="month" class="on">📅 Oylik maosh</button><button type="button" data-pt="day">🗓 Kunlik maosh</button></div>
+        <div class="f c3"><label for="qwRate" id="qwRateLbl">Oylik maosh, so'm *</label><input id="qwRate" class="num" inputmode="decimal" placeholder="0"></div>
+        <div class="f c4"><label for="qwNote">Izoh</label><input id="qwNote" placeholder="ixtiyoriy"></div>
+        <div class="c12 kar-act"><span class="hint" id="qwHint"></span><span class="btns"><button type="button" id="qwCancel" hidden>Bekor qilish</button><button type="submit" class="primary" id="qwSave">Ishchini qo'shish</button></span></div>
+      </form>
+    </details>
+    <datalist id="qwPosList"></datalist>
+    <div id="qwBody"></div>
+    <h2 class="kar-h" id="qwPayH">💰 Maosh yoki avans berish</h2>
+    <form class="entry" id="qwPayForm" autocomplete="off" novalidate>
+      <div class="f c4"><label for="qwPW">Ishchi *</label><select id="qwPW"></select></div>
+      <div class="f c3"><label for="qwPAmt">Summa, so'm *</label><input id="qwPAmt" class="num" inputmode="decimal" placeholder="0"><span class="hint" id="qwPInfo"></span></div>
+      <div class="f c2"><label for="qwPDate">Sana</label><input type="date" id="qwPDate"></div>
+      <div class="f c3"><label for="qwPNote">Izoh</label><input id="qwPNote" placeholder="masalan: avans, noyabr oyligi"></div>
+      <div class="c12 kar-act"><span class="hint">Berilgan pul shu karyer kassasiga «Ishchiga maosh» bo'lib ham yoziladi va karyer hisobotiga tushadi.</span><span class="btns"><button type="submit" class="primary" id="qwPSave">Berildi — yozish</button></span></div>
+    </form>
+    <h2 class="kar-h" id="qwPaysH">Shu oyda berilganlar</h2>
+    <div id="qwPays"></div>
+  </section>
   <section class="panel kar-panel" id="qListPanel" data-page="q-list">
     <div class="kar-filters">
       <div class="f" id="qlQBox"><label for="qlQ">Karyer</label><select id="qlQ"></select></div>
@@ -3265,6 +3304,7 @@ const $$ = s => [...document.querySelectorAll(s)];
 let irows = [], INT_OK = null, ownFirms = [], stockDef = "", purch = [], supPrices = [], supPays = [], INV_OK = null;
 let intType = "place", intEdit = null, intPreset = "month", kirEdit = null, kirPreset = "month";
 const arcSel = new Set();
+let qWorkers = [], qWDays = [], WK_OK = null, qwEdit = null, qwPT = "month";
 const MONTHS = ["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
 const NO_FIRM = "__nofirm__";
 let rows = [], pays = [], ref = {firms:[], sellers:[], products:[], prices:[], lastGiver:"", lastSeller:""}, editId = null;
@@ -6297,6 +6337,7 @@ const PAGES = {
   tgbot: ["gen", "Telegram bot", "Rahbariyat guruhiga kunlik hisobot"],
   "q-new":   ["kar", "Yangi yuklash", "Karyerdan chiqqan yuk: firmaga yoki jismoniy shaxsga"],
   "q-cash":  ["kar", "Karyer kassasi", "Qarz qaytdi, xarajat, maosh, kitobga, firmadan naqd pul"],
+  "q-workers": ["kar", "Karyer ishchilari", "Ishchilar ro'yxati, oylik yoki kunlik maosh, berilgan pul va qoldiq"],
   "q-list":  ["kar", "Yuklashlar ro'yxati", "Karyerdan chiqqan barcha yuklar va kassa yozuvlari"],
   "q-rep":   ["kar", "Karyer hisoboti", "Oylik sotuv, kassa, xarajat, foyda va qarzdorlar"],
   "q-setup": ["kar", "Karyerlar", "Karyerlar, qaysi firmaga qarashli, ish yurituvchilar"],
@@ -6314,6 +6355,7 @@ const PAGES = {
 let curPage = null;
 const pageOk = id => { const P = PAGES[id]; if (!P) return false;
   if (P[0] === "wb") return CAN_WB() && (["new", "beton", "archive"].includes(id) ? !(typeof Q_STAFF === "function" && Q_STAFF()) : PRIV());
+  if (id === "q-workers") return CAN_WB() && Q_OK !== null;
   if (P[0] === "kar") return CAN_WB() && Q_OK !== null && (PRIV() || (!["q-setup", "q-cam"].includes(id) && qMine().length > 0));
   if (P[0] === "reys") return CAN_WB() && PRIV();
   if (P[0] === "inv") return CAN_WB() && (id === "ombor" ? PRIV() : true);
@@ -7252,13 +7294,17 @@ async function qLoad(){
     Q_OK = true;
   } catch(e) { quarries = []; Q_OK = false; return; }
   try { const { data: st } = await sb.from("settings").select("value").eq("key", "q_cats").maybeSingle(); qCats = st && st.value && Array.isArray(st.value.list) ? st.value.list : null; } catch(e) {}
-  if (!PRIV() && !qMine().length) { qSales = []; qCash = []; return; }
+  await qwLoad();
+  if (!PRIV() && !qMine().length) { qSales = [];
+    try { qCash = (await fetchAll("quarry_cash", "*", q => q.eq("kind", "salary").order("date").order("created_at"))).map(x => ({ id: x.id, quarry: x.quarry_id, date: x.date || "", kind: x.kind, amount: Number(x.amount) || 0, car: "", category: "",
+      person: x.person || "", firm: "", note: x.note || "", workerId: x.worker_id || "", created: x.created_at, createdBy: x.created_by })); } catch(e) { qCash = []; }
+    return; }
   try {
     const [a, b] = await Promise.all([fetchAll("quarry_sales", "*", q => q.order("date").order("created_at")), fetchAll("quarry_cash", "*", q => q.order("date").order("created_at"))]);
     qSales = a.map(x => ({ id: x.id, quarry: x.quarry_id, date: x.date || "", time: x.time || "", product: x.product, kovsh: x.kovsh == null ? null : Number(x.kovsh), qty: Number(x.qty),
       unit: x.unit || "m³", price: Number(x.price) || 0, total: Number(x.total) || 0, pay: x.pay, car: x.car || "", driver: x.driver || "", waybill: x.waybill || "", note: x.note || "", created: x.created_at, createdBy: x.created_by }));
     qCash = b.map(x => ({ id: x.id, quarry: x.quarry_id, date: x.date || "", kind: x.kind, amount: Number(x.amount) || 0, car: x.car || "", category: x.category || "",
-      person: x.person || "", firm: x.firm || "", note: x.note || "", created: x.created_at, createdBy: x.created_by }));
+      person: x.person || "", firm: x.firm || "", note: x.note || "", workerId: x.worker_id || "", created: x.created_at, createdBy: x.created_by }));
   } catch(e) { toast("Karyer ma'lumotini yuklab bo'lmadi: " + (e.message || "")); }
 }
 function qRenderAll(){
@@ -7269,6 +7315,7 @@ function qRenderAll(){
   else if (curPage === "q-rep") renderQRep();
   else if (curPage === "q-setup") renderQSetup();
   else if (curPage === "q-cam") renderQCam();
+  else if (curPage === "q-workers") renderQWorkers();
 }
 async function qOpen(id){
   if (Q_OK === null) await qLoad();
@@ -7544,7 +7591,7 @@ function renderQCash(){
   $("#qcCancel").hidden = !qcEdit; $("#qcSave").textContent = qcEdit ? "O'zgarishni saqlash" : "Saqlash";
   const debts = qDebts(qid).filter(d => d.left > 0.5);
   $("#qDebtList").innerHTML = debts.map(d => `<option value="${esc(d.car)}">qarz ${fmt(d.left)} so'm</option>`).join("");
-  $("#qPersonList").innerHTML = [...new Set(qCash.filter(x => x.kind === "salary" && x.person).map(x => x.person))].map(p => `<option value="${esc(p)}">`).join("");
+  $("#qPersonList").innerHTML = [...new Set([...(typeof qWorkers !== "undefined" ? qWorkers.filter(w => w.quarry === qid && w.active).map(w => w.name) : []), ...qCash.filter(x => x.kind === "salary" && x.person).map(x => x.person)])].map(p => `<option value="${esc(p)}">`).join("");
   qcDebtInfo();
   const mon = qMonthOf(today()), list = qCash.filter(x => x.quarry === qid && qMonthOf(x.date) === mon).sort((a, b) => (b.date + b.created).localeCompare(a.date + a.created));
   $("#qcListH").textContent = `Shu oydagi kassa yozuvlari — ${MONTHS[+mon.slice(5) - 1]} ${mon.slice(0, 4)}`;
@@ -7622,11 +7669,12 @@ $("#qcForm").addEventListener("submit", async e => {
   if (qcKind === "salary" && !d.person) return bad("Ishchining ismini yozing", "#qcPerson");
   if (qcKind === "firm_cash" && !d.firm) return bad("Firma nomini yozing", "#qcFirm");
   if (!(amt > 0)) return bad("Summani yozing", "#qcAmt");
+  if (qcKind === "salary" && WK_OK) { const w = qWorkers.find(x => x.quarry === qid && same(x.name, d.person)); if (w) d.worker_id = w.id; }
   $("#qcSave").disabled = true;
   try {
     const res = qcEdit ? await sb.from("quarry_cash").update(d).eq("id", qcEdit).select("*").single() : await sb.from("quarry_cash").insert(d).select("*").single();
     if (res.error) throw res.error;
-    const x = res.data, it = { id: x.id, quarry: x.quarry_id, date: x.date, kind: x.kind, amount: Number(x.amount), car: x.car, category: x.category, person: x.person, firm: x.firm, note: x.note, created: x.created_at, createdBy: x.created_by };
+    const x = res.data, it = { id: x.id, quarry: x.quarry_id, date: x.date, kind: x.kind, amount: Number(x.amount), car: x.car, category: x.category, person: x.person, firm: x.firm, note: x.note, workerId: x.worker_id || "", created: x.created_at, createdBy: x.created_by };
     const i = qCash.findIndex(c => c.id === it.id); if (i > -1) qCash[i] = it; else qCash.push(it);
     if (qcKind === "firm_cash") { if (rememberFirm(d.firm)) saveRef(); if (PRIV()) reloadSoon(); }
     toast(qcEdit ? "Tuzatildi" : `Saqlandi: ${QC_KINDS[qcKind]} ${fmt(amt)} so'm`);
@@ -7914,7 +7962,7 @@ function renderQCam(){
 /* ---------- Menyu ---------- */
 function setupKarMenu(){
   const show = id => { const b = $(`#side [data-page="${id}"]`); if (b) b.hidden = !pageOk(id); return !!b && !b.hidden; };
-  const any = ["q-new", "q-cash", "q-list", "q-rep", "q-setup", "q-cam"].map(show).some(Boolean);
+  const any = ["q-new", "q-cash", "q-workers", "q-list", "q-rep", "q-setup", "q-cam"].map(show).some(Boolean);
   $("#sgKar").hidden = !any;
   $("#sgReys").hidden = !show("reys");
   if (Q_STAFF()) $("#sgWb").hidden = true;
@@ -7978,6 +8026,165 @@ $("#qsCatForm").addEventListener("submit", async e => {
   const v = $("#qsCatIn").value.trim(); if (!v) { $("#qsCatIn").focus(); return; }
   if (qCatBase().some(c => same(c, v))) { toast("Bu tur ro'yxatda bor"); return; }
   if (await qCatsSave([...qCatBase(), v])) { $("#qsCatIn").value = ""; toast(`«${v}» qo'shildi`); renderQSetup(); }
+});
+
+/* ---------- 👷 Karyer ishchilari va maoshlari ----------
+   quarry_workers — ro'yxat (oylik yoki kunlik), quarry_work_days — kunlikning ishlagan kunlari, berilgan pul — quarry_cash (kind = salary, worker_id).
+   Hisob: ishga kirgan oydan (arxivga olingan oygacha) har oy hisoblangan maosh − berilganlar = qoldiq (bizning qarzimiz). */
+async function qwLoad(){
+  try {
+    const [a, b] = await Promise.all([fetchAll("quarry_workers", "*", q => q.order("created_at")), fetchAll("quarry_work_days", "*", q => q.order("month"))]);
+    qWorkers = a.map(x => ({ id: x.id, quarry: x.quarry_id, name: x.name, position: x.position || "", phone: x.phone || "", payType: x.pay_type === "day" ? "day" : "month", rate: Number(x.rate) || 0,
+      start: x.start_date || "", end: x.end_date || "", note: x.note || "", active: x.active !== false, created: x.created_at, createdBy: x.created_by }));
+    qWDays = b.map(x => ({ id: x.id, worker: x.worker_id, month: x.month, days: Number(x.days) || 0 }));
+    WK_OK = true;
+  } catch(e) { WK_OK = false; qWorkers = []; qWDays = []; }
+}
+const qwQuarries = () => quarries.filter(q => q.active || PRIV()).sort((a, b) => (b.active - a.active) || a.name.localeCompare(b.name));
+const qwById = id => qWorkers.find(w => w.id === id);
+const qwDays = (w, m) => { const d = qWDays.find(x => x.worker === w.id && x.month === m); return d ? d.days : 0; };
+const qwPaysOf = w => qCash.filter(x => x.kind === "salary" && (x.workerId === w.id || (!x.workerId && x.quarry === w.quarry && same(x.person, w.name))));
+const qwMonths = (a, b) => { const out = []; if (!a || !b || a > b) return out; let [y, m] = a.split("-").map(Number); for (let i = 0; i < 240; i++) { const k = y + "-" + String(m).padStart(2, "0"); if (k > b) break; out.push(k); if (++m > 12) { m = 1; y++; } } return out; };
+const qwAccr = (w, m) => { const s = (w.start || "").slice(0, 7), e = (w.end || "").slice(0, 7); if (s && m < s) return 0; if (e && m > e) return 0; return w.payType === "day" ? w.rate * qwDays(w, m) : w.rate; };
+function qwCalc(w, mon){
+  const accr = qwAccr(w, mon), [a, b] = qMonthRange(mon), P = qwPaysOf(w);
+  const paid = P.filter(x => x.date >= a && x.date <= b).reduce((s, x) => s + x.amount, 0);
+  const from = (w.start || "").slice(0, 7) || mon, tot = qwMonths(from < mon ? from : mon, mon).reduce((s, m) => s + qwAccr(w, m), 0);
+  const paidAll = P.filter(x => x.date <= b).reduce((s, x) => s + x.amount, 0);
+  return { accr, paid, left: Math.round((tot - paidAll) * 100) / 100, prev: Math.round((tot - accr - (paidAll - paid)) * 100) / 100 };
+}
+function qwFillQ(){
+  const el = $("#qwQ"), list = qwQuarries(); let v = el.value; if (!v) { try { v = localStorage.getItem(qSelKey()) || ""; } catch(e) {} }
+  el.innerHTML = list.map(q => `<option value="${q.id}">${esc(q.name)}${q.active ? "" : " (arxivda)"}</option>`).join("");
+  el.value = list.some(q => q.id === v) ? v : (list[0] ? list[0].id : ""); $("#qwQBox").hidden = list.length < 2; return el.value;
+}
+function qwTypeUi(){
+  $$("#qwType [data-pt]").forEach(b => b.classList.toggle("on", b.dataset.pt === qwPT));
+  $("#qwRateLbl").textContent = qwPT === "day" ? "Kunlik stavka (1 kun), so'm *" : "Oylik maosh, so'm *";
+  $("#qwHint").textContent = qwPT === "day" ? "Har oy ishlagan kunlari jadvalda yoziladi: maosh = kunlar × stavka." : "Har oy shu summa hisoblanadi (ishga kirgan oydan boshlab).";
+}
+function renderQWorkers(){
+  if (WK_OK === false) { $("#qwNeed").hidden = false; $("#qwNeed").innerHTML = INV_NEED.replace("yangilash.sql", "karyer-ishchilari.sql"); $("#qwBody").innerHTML = ""; $("#qwPays").innerHTML = ""; $("#qwNewBox").hidden = $("#qwPayForm").hidden = true; return; }
+  $("#qwNeed").hidden = true;
+  const qid = qwFillQ(), q = qById(qid);
+  if (!$("#qwMonth").value) $("#qwMonth").value = today().slice(0, 7);
+  if (!q) { $("#qwBody").innerHTML = qNoQuarry(); $("#qwNewBox").hidden = $("#qwPayForm").hidden = true; $("#qwPays").innerHTML = ""; return; }
+  $("#qwNewBox").hidden = $("#qwPayForm").hidden = VIEWING();
+  if (!$("#qwStart").value) $("#qwStart").value = today();
+  if (!$("#qwPDate").value) $("#qwPDate").value = today();
+  qwTypeUi();
+  $("#qwSave").textContent = qwEdit ? "O'zgarishni saqlash" : "Ishchini qo'shish"; $("#qwCancel").hidden = !qwEdit;
+  $("#qwFormT").textContent = qwEdit ? "✏️ Ishchini tahrirlash" : "＋ Yangi ishchi qo'shish";
+  $("#qwPosList").innerHTML = [...new Set(qWorkers.map(w => w.position).filter(Boolean))].map(p => `<option value="${esc(p)}">`).join("");
+  const mon = $("#qwMonth").value, money = qMoney(), arc = $("#qwArc").checked;
+  const L = qWorkers.filter(w => w.quarry === qid && (arc || w.active)).sort((a, b) => (b.active - a.active) || a.name.localeCompare(b.name));
+  const act = qWorkers.filter(w => w.quarry === qid && w.active).sort((a, b) => a.name.localeCompare(b.name));
+  { const v = $("#qwPW").value; $("#qwPW").innerHTML = `<option value="">— ishchini tanlang —</option>` + act.map(w => `<option value="${w.id}">${esc(w.name)}${w.position ? " · " + esc(w.position) : ""}</option>`).join(""); if (act.some(w => w.id === v)) $("#qwPW").value = v; qwPInfo(); }
+  const can = !VIEWING();
+  const R = L.map(w => ({ w, c: qwCalc(w, mon) }));
+  const T = R.reduce((t, x) => ({ accr: t.accr + x.c.accr, paid: t.paid + x.c.paid, left: t.left + x.c.left }), { accr: 0, paid: 0, left: 0 });
+  const m$ = v => money ? fmt(v) : "•••";
+  $("#qwBody").innerHTML = (PRIV() && !money ? `<p class="hint">🔒 Summalar yopiq. <button type="button" class="sm primary" data-qunlock>Parol bilan ochish</button></p>` : "")
+    + (!L.length ? `<p class="empty">Bu karyerda hali ishchi yo'q. Yuqoridagi «＋ Yangi ishchi qo'shish» orqali qo'shing.</p>`
+    : `<p class="kar-sum">${MONTHS[+mon.slice(5) - 1]} ${mon.slice(0, 4)}: <b>${act.length}</b> ta ishchi · hisoblandi <b class="num">${m$(T.accr)}</b> · berildi <b class="num">${m$(T.paid)}</b> · qoldiq (berilishi kerak) <b class="num${T.left > 0.5 ? " neg" : ""}">${m$(T.left)}</b> so'm</p>
+      <div class="tbl kar-tbl"><table class="qwk-tbl"><thead><tr><th>Ishchi</th><th>Maosh turi</th><th class="r">Stavka</th><th class="r">Ishlagan kun</th><th class="r">Hisoblandi</th><th class="r">Berildi</th><th class="r">Qoldiq</th><th></th></tr></thead><tbody>
+      ${R.map(({ w, c }) => `<tr class="${w.active ? "" : "site-off"}"><td><b>${esc(w.name)}</b>${w.active ? "" : ` <span class="pill closed">arxivda</span>`}${w.position ? `<span class="sub">${esc(w.position)}</span>` : ""}${w.phone ? `<span class="sub num">${esc(w.phone)}</span>` : ""}</td>
+        <td>${w.payType === "day" ? "Kunlik" : "Oylik"}</td><td class="r num">${m$(w.rate)}${w.payType === "day" ? "<span class='sub'>1 kun</span>" : ""}</td>
+        <td class="r">${w.payType === "day" ? `<input class="num qw-days" data-qwdays="${w.id}" inputmode="decimal" value="${qwDays(w, mon) ? String(qwDays(w, mon)).replace(".", ",") : ""}" placeholder="0" aria-label="${esc(w.name)} — ishlagan kunlari"${can ? "" : " disabled"}>` : `<span class="dim">—</span>`}</td>
+        <td class="r num">${m$(c.accr)}</td><td class="r num">${m$(c.paid)}</td>
+        <td class="r num"><b class="${c.left > 0.5 ? "neg" : ""}">${money ? (c.left < -0.5 ? `ortiqcha ${fmt(-c.left)}` : fmt(c.left)) : "•••"}</b>${money && Math.abs(c.prev) > 0.5 ? `<span class="sub">o'tgan oylardan: ${fmt(c.prev)}</span>` : ""}</td>
+        <td class="r nw">${can ? `${w.active ? `<button type="button" class="sm" data-qwpay="${w.id}">💰 Berish</button> ` : ""}<button type="button" class="sm ghost" data-qwed="${w.id}">Tahrirlash</button> <button type="button" class="sm ghost" data-qwarc="${w.id}">${w.active ? "📦 Arxivga" : "Qaytarish"}</button>${PRIV() && !w.active ? ` <button type="button" class="sm ghost danger" data-qwdel="${w.id}">O'chirish</button>` : ""}` : ""}</td></tr>`).join("")}
+      </tbody><tfoot><tr><td colspan="4">Jami</td><td class="r num">${m$(T.accr)}</td><td class="r num">${m$(T.paid)}</td><td class="r num">${m$(T.left)}</td><td></td></tr></tfoot></table></div>`);
+  const [a, b] = qMonthRange(mon), ids = new Set(qWorkers.filter(w => w.quarry === qid).map(w => w.id));
+  const P = qCash.filter(x => x.kind === "salary" && x.quarry === qid && x.date >= a && x.date <= b).sort((x, y) => (y.date + y.created).localeCompare(x.date + x.created));
+  $("#qwPaysH").textContent = `Shu oyda berilganlar — ${MONTHS[+mon.slice(5) - 1]} ${mon.slice(0, 4)}`;
+  $("#qwPays").innerHTML = P.length ? P.map(x => { const w = x.workerId && ids.has(x.workerId) ? qwById(x.workerId) : null, mine = !VIEWING() && (PRIV() || x.createdBy === me.id);
+    return `<div class="kar-item kc-salary"><div class="ki-main"><div class="ki-top"><b>${esc(w ? w.name : x.person)}</b>${w && w.position ? ` <span class="dim">· ${esc(w.position)}</span>` : ""}</div>
+      <div class="ki-meta dim">${fmtDate(x.date)}${x.note ? ` · ${esc(x.note)}` : ""}${x.createdBy ? ` · ✍ ${esc(qWho(x.createdBy))}` : ""}</div></div>
+      <div class="ki-sum"><b class="num">−${money ? fmt(x.amount) : "•••"}</b></div><div class="ki-act">${mine ? `<button type="button" class="sm ghost danger" data-qwpdel="${x.id}">O'chirish</button>` : ""}</div></div>`; }).join("")
+    : `<p class="hint">Bu oyda hali maosh berilmagan.</p>`;
+}
+function qwPInfo(){
+  const w = qwById($("#qwPW").value); if (!w) { $("#qwPInfo").textContent = ""; return; }
+  const c = qwCalc(w, $("#qwMonth").value || today().slice(0, 7));
+  $("#qwPInfo").textContent = qMoney() ? (c.left > 0.5 ? `Berilishi kerak: ${fmt(c.left)} so'm` : c.left < -0.5 ? `Ortiqcha berilgan: ${fmt(-c.left)} so'm` : "Qarz yo'q") : "";
+}
+function qwReset(){ qwEdit = null; $("#qwForm").reset(); qwPT = "month"; $("#qwStart").value = today(); renderQWorkers(); }
+$("#qwType").addEventListener("click", e => { const b = e.target.closest("[data-pt]"); if (!b) return; qwPT = b.dataset.pt; qwTypeUi(); });
+$("#qwQ").addEventListener("change", () => { qRemember($("#qwQ").value); qwReset(); });
+["#qwMonth", "#qwArc"].forEach(s => $(s).addEventListener("change", renderQWorkers));
+$("#qwPW").addEventListener("change", qwPInfo);
+$("#qwCancel").addEventListener("click", qwReset);
+$("#qwForm").addEventListener("submit", async e => {
+  e.preventDefault(); if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
+  const qid = $("#qwQ").value, d = { quarry_id: qid, name: $("#qwName").value.trim().replace(/\s+/g, " "), position: $("#qwPos").value.trim(), phone: $("#qwPhone").value.trim(),
+    pay_type: qwPT, rate: parseNum($("#qwRate").value), start_date: $("#qwStart").value || today(), note: $("#qwNote").value.trim() };
+  if (!qid) { toast("Karyerni tanlang"); return; }
+  if (!d.name) { toast("Ishchining ismini yozing"); $("#qwName").focus(); return; }
+  if (!(d.rate > 0)) { toast(qwPT === "day" ? "Kunlik stavkani yozing" : "Oylik maoshni yozing"); $("#qwRate").focus(); return; }
+  if (!qwEdit && qWorkers.some(w => w.quarry === qid && w.active && same(w.name, d.name))) { toast("Bu karyerda shu ismli ishchi bor"); $("#qwName").focus(); return; }
+  $("#qwSave").disabled = true;
+  const { error } = qwEdit ? await sb.from("quarry_workers").update(d).eq("id", qwEdit) : await sb.from("quarry_workers").insert(d);
+  $("#qwSave").disabled = false;
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return; }
+  toast(qwEdit ? "Ishchi ma'lumoti o'zgartirildi" : `«${d.name}» ro'yxatga qo'shildi`);
+  await qwLoad(); qwReset();
+});
+$("#qwBody").addEventListener("change", async e => {
+  const inp = e.target.closest("[data-qwdays]"); if (!inp) return;
+  if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
+  const w = qwById(inp.dataset.qwdays), mon = $("#qwMonth").value, days = parseNum(inp.value);
+  if (!w || !mon) return;
+  if (days < 0 || days > 31) { toast("Kunlar soni 0 dan 31 gacha bo'lsin"); inp.value = qwDays(w, mon) || ""; return; }
+  const { data, error } = await sb.from("quarry_work_days").upsert({ worker_id: w.id, month: mon, days }, { onConflict: "worker_id,month" }).select("*").single();
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return; }
+  const i = qWDays.findIndex(x => x.worker === w.id && x.month === mon), it = { id: data ? data.id : "", worker: w.id, month: mon, days };
+  if (i > -1) qWDays[i] = it; else qWDays.push(it);
+  toast(`${w.name}: ${fmt(days)} kun saqlandi`); renderQWorkers();
+});
+$("#qwBody").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.qwpay) { $("#qwPW").value = b.dataset.qwpay; qwPInfo(); $("#qwPayH").scrollIntoView({ block: "start", behavior: "smooth" }); setTimeout(() => $("#qwPAmt").focus(), 300); }
+  else if (b.dataset.qwed) { const w = qwById(b.dataset.qwed); if (!w) return; qwEdit = w.id; qwPT = w.payType;
+    $("#qwName").value = w.name; $("#qwPos").value = w.position; $("#qwPhone").value = w.phone; $("#qwRate").value = String(w.rate); $("#qwStart").value = w.start || today(); $("#qwNote").value = w.note;
+    $("#qwNewBox").open = true; renderQWorkers(); $("#qwNewBox").scrollIntoView({ block: "start", behavior: "smooth" }); }
+  else if (b.dataset.qwarc) { const w = qwById(b.dataset.qwarc); if (!w) return;
+    if (w.active && !confirm(`«${w.name}» arxivga olinsinmi?\n\nRo'yxatdan chiqadi, shu oydan keyin maosh hisoblanmaydi. Eski maosh yozuvlari saqlanadi — kerak bo'lsa, «Arxivdagilar ham» belgisi bilan topib qaytarsa bo'ladi.`)) return;
+    const { error } = await sb.from("quarry_workers").update(w.active ? { active: false, end_date: today() } : { active: true, end_date: null }).eq("id", w.id);
+    if (error) { toast(error.message); return; } await qwLoad(); renderQWorkers(); toast(w.active ? "Arxivga olindi" : "Ro'yxatga qaytarildi"); }
+  else if (b.dataset.qwdel) { const w = qwById(b.dataset.qwdel); if (!w) return;
+    if (!confirm(`«${w.name}» butunlay o'chirilsinmi?\n\nIshlagan kunlari o'chadi. Kassadagi maosh yozuvlari qoladi (ism bilan).`)) return;
+    const { error } = await sb.from("quarry_workers").delete().eq("id", w.id); if (error) { toast(error.message); return; } await qwLoad(); renderQWorkers(); toast("O'chirildi"); }
+});
+$("#qwPayForm").addEventListener("submit", async e => {
+  e.preventDefault(); if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
+  const w = qwById($("#qwPW").value), amt = parseNum($("#qwPAmt").value);
+  if (!w) { toast("Ishchini tanlang"); $("#qwPW").focus(); return; }
+  if (!(amt > 0)) { toast("Summani yozing"); $("#qwPAmt").focus(); return; }
+  const d = { quarry_id: w.quarry, kind: "salary", date: $("#qwPDate").value || today(), amount: amt, person: w.name, worker_id: w.id, note: $("#qwPNote").value.trim(), car: "", category: "", firm: "" };
+  $("#qwPSave").disabled = true;
+  const { data, error } = await sb.from("quarry_cash").insert(d).select("*").single();
+  $("#qwPSave").disabled = false;
+  if (error) { toast("Saqlab bo'lmadi: " + error.message); return; }
+  const x = data || { ...d, id: newId(), created_at: new Date().toISOString(), created_by: me.id };
+  qCash.push({ id: x.id, quarry: x.quarry_id, date: x.date, kind: "salary", amount: Number(x.amount), car: "", category: "", person: x.person, firm: "", note: x.note || "", workerId: x.worker_id || w.id, created: x.created_at, createdBy: x.created_by });
+  toast(`Yozildi: ${w.name} — ${fmt(amt)} so'm`); $("#qwPAmt").value = ""; $("#qwPNote").value = ""; renderQWorkers();
+});
+$("#qwPays").addEventListener("click", async e => {
+  const b = e.target.closest("[data-qwpdel]"); if (!b) return; const x = qCash.find(c => c.id === b.dataset.qwpdel); if (!x) return;
+  if (!confirm(`O'chirilsinmi?\n\n${x.person} · ${fmt(x.amount)} so'm · ${fmtDate(x.date)}`)) return;
+  const { error } = await sb.from("quarry_cash").delete().eq("id", x.id); if (error) { toast(error.message); return; }
+  qCash = qCash.filter(c => c.id !== x.id); toast("O'chirildi"); renderQWorkers();
+});
+$("#qwXl").addEventListener("click", () => {
+  if (typeof XLSX === "undefined") return;
+  const qid = $("#qwQ").value, q = qById(qid), mon = $("#qwMonth").value; if (!q || !mon) return;
+  const aoa = [[`${q.name} karyeri — ishchilar maoshi, ${MONTHS[+mon.slice(5) - 1]} ${mon.slice(0, 4)}`], [], ["Ishchi", "Lavozimi", "Telefon", "Maosh turi", "Stavka", "Ishlagan kun", "Hisoblandi", "Berildi", "Qoldiq (oy oxiriga)"]];
+  qWorkers.filter(w => w.quarry === qid && (w.active || $("#qwArc").checked)).sort((a, b) => a.name.localeCompare(b.name)).forEach(w => { const c = qwCalc(w, mon);
+    aoa.push([w.name, w.position, w.phone, w.payType === "day" ? "Kunlik" : "Oylik", w.rate, w.payType === "day" ? qwDays(w, mon) : "", c.accr, c.paid, c.left]); });
+  const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(aoa); ws["!cols"] = [{ wch: 26 }, { wch: 16 }, { wch: 16 }, { wch: 10 }, { wch: 12 }, { wch: 10 }, { wch: 14 }, { wch: 14 }, { wch: 16 }];
+  XLSX.utils.book_append_sheet(wb, ws, "Maosh");
+  saveFile(`${q.name} — ishchilar maoshi ${mon}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 });
 
 /* ---------- 🔁 ICHKI HISOB, 📥 KIRIM (olingan mahsulotlar), 📦 OMBOR ----------
