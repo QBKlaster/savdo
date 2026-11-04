@@ -1315,10 +1315,11 @@ body.side-single .side-h::after{display:none}
           <span class="hint" id="qnDebtHint">Qarzga berilsa, mashina raqami bo'yicha qarzdorlar ro'yxatiga yoziladi.</span></div>
       </div>
 
-      <div class="f c3"><label for="qnPrice">Narxi (1 m³), so'm *</label><input id="qnPrice" class="num" inputmode="decimal" placeholder="0"></div>
+      <div class="f c3"><label for="qnKPrice">Narxi (1 kovsh), so'm *</label><input id="qnKPrice" class="num" inputmode="decimal" placeholder="masalan, 350 000"><span class="hint" id="qnKPHint"></span></div>
+      <div class="f c3"><label for="qnPrice">Narxi (1 m³), so'm <span class="dim">— avtomatik</span></label><input id="qnPrice" class="num" inputmode="decimal" placeholder="0"></div>
       <div class="f c3"><label for="qnSum">Summa, so'm</label><input id="qnSum" class="num" inputmode="decimal" placeholder="0"></div>
       <div class="f c3"><label for="qnDate">Sana</label><input type="date" id="qnDate"></div>
-      <div class="f c3"><label for="qnNote">Izoh</label><input id="qnNote" placeholder="ixtiyoriy"></div>
+      <div class="f c12"><label for="qnNote">Izoh</label><input id="qnNote" placeholder="ixtiyoriy"></div>
       <div class="c12 kar-act">
         <span class="kar-total" id="qnTotal"></span>
         <span class="btns"><button type="button" id="qnCancel" hidden>Bekor qilish</button><button type="submit" id="qnSave">Saqlash</button><button type="button" class="primary" id="qnSavePrint">Saqlash va yuk xatini chiqarish</button></span>
@@ -7320,14 +7321,21 @@ function qnWhoUi(){
   $("#qnTitle").textContent = qnEdit ? "Yuklashni tahrirlash" : "Yangi yuklash";
   $("#qnCancel").hidden = !qnEdit;
 }
+// aniq 1 m³ narxi: kovsh narxi yozilgan bo'lsa — undan (yaxlitlanmagan), aks holda m³ maydonidan
+function qnExactPrice(){ const q = qnQuarry(), kp = parseNum($("#qnKPrice").value); return q && kp > 0 && q.kovsh > 0 ? kp / q.kovsh : parseNum($("#qnPrice").value); }
 function qnCalc(from){
   const q = qnQuarry(); if (!q) return;
-  const k = parseNum($("#qnKovsh").value), qty = parseNum($("#qnQty").value), pr = parseNum($("#qnPrice").value), sum = parseNum($("#qnSum").value);
-  if (from === "kovsh" && k > 0) $("#qnQty").value = qFmtQ(k * q.kovsh).replace(/\s/g, "");
+  const K = q.kovsh > 0 ? q.kovsh : 0, k = parseNum($("#qnKovsh").value), r2 = v => Math.round(v * 100) / 100;
+  if (from === "kovsh" && k > 0) $("#qnQty").value = qFmtQ(k * K).replace(/\s/g, "");
   const Q = parseNum($("#qnQty").value);
-  if (from === "sum" && Q > 0) $("#qnPrice").value = sum > 0 ? String(Math.round(sum / Q * 100) / 100) : "";
-  else if (from !== "sum") $("#qnSum").value = Q > 0 && parseNum($("#qnPrice").value) > 0 ? fmt(Q * parseNum($("#qnPrice").value)) : "";
-  const P = parseNum($("#qnPrice").value);
+  // narx kovshda belgilanadi: 1 m³ narxi = kovsh narxi ÷ 1 kovsh hajmi (va aksincha)
+  if (from === "kprice") { const kp = parseNum($("#qnKPrice").value); $("#qnPrice").value = kp > 0 && K ? String(r2(kp / K)) : ""; }
+  else if (from === "price") { const P0 = parseNum($("#qnPrice").value); $("#qnKPrice").value = P0 > 0 && K ? fmt(r2(P0 * K)) : ""; }
+  else if (from === "sum") { const sm = parseNum($("#qnSum").value), P0 = Q > 0 && sm > 0 ? sm / Q : 0; $("#qnPrice").value = P0 ? String(r2(P0)) : ""; $("#qnKPrice").value = P0 && K ? fmt(r2(P0 * K)) : ""; }
+  else if (!parseNum($("#qnKPrice").value) && parseNum($("#qnPrice").value) > 0 && K) $("#qnKPrice").value = fmt(r2(parseNum($("#qnPrice").value) * K));
+  const P = qnExactPrice();
+  if (from !== "sum") $("#qnSum").value = Q > 0 && P > 0 ? fmt(Q * P) : "";
+  $("#qnKPHint").textContent = P > 0 ? `1 m³ = ${fmt(P)} so'm · 1 kovsh = ${qFmtQ(K)} m³` : `1 kovsh = ${qFmtQ(K)} m³`;
   $("#qnTotal").innerHTML = Q > 0 ? `<b>${esc(qnProd)}</b> · ${qFmtQ(Q)} m³${k > 0 ? ` (${qFmtQ(k)} kovsh)` : ""}${P > 0 ? ` · <b class="num">${fmt(Q * P)}</b> so'm` : ""}` : "";
 }
 $("#qnProd").addEventListener("click", e => { const b = e.target.closest("[data-prod]"); if (!b) return; qnProd = b.dataset.prod; $$("#qnProd [data-prod]").forEach(x => x.classList.toggle("on", x === b)); qnPriceGuess(); qnCalc(); });
@@ -7336,6 +7344,7 @@ $("#qnPay").addEventListener("click", e => { const b = e.target.closest("[data-p
 $("#qnKovsh").addEventListener("input", () => qnCalc("kovsh"));
 $("#qnQty").addEventListener("input", () => qnCalc("qty"));
 $("#qnPrice").addEventListener("input", () => qnCalc("price"));
+$("#qnKPrice").addEventListener("input", () => qnCalc("kprice"));
 $("#qnSum").addEventListener("input", () => qnCalc("sum"));
 $("#qnQ").addEventListener("change", () => { qRemember($("#qnQ").value); qnProd = ""; renderQNew(); });
 $("#qnPm").addEventListener("change", () => { pmMark($("#qnPm")); try { localStorage.setItem("savdo-qpm-" + me.id, $("#qnPm").value); } catch(e) {} });
@@ -7353,7 +7362,7 @@ $("#qnFirm").addEventListener("change", async () => {
   qnPriceGuess();
 });
 function qnPriceGuess(){
-  if (qnEdit || $("#qnPrice").value) return;
+  if (qnEdit || $("#qnPrice").value || $("#qnKPrice").value) return;
   const q = qnQuarry(); if (!q) return;
   let last = null;
   if (qnWho === "firm") { const f = $("#qnFirm").value.trim(); if (!f) return;
@@ -7373,13 +7382,13 @@ $("#qnSavePrint").addEventListener("click", () => qnSave(true));
 async function qnSave(print){
   if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
   const q = qnQuarry(); if (!q) { toast("Karyerni tanlang"); return; }
-  const qty = parseNum($("#qnQty").value), price = parseNum($("#qnPrice").value), car = $("#qnCar").value.trim().toUpperCase().replace(/\s+/g, " ");
+  const qty = parseNum($("#qnQty").value), price = qnExactPrice(), car = $("#qnCar").value.trim().toUpperCase().replace(/\s+/g, " ");
   const kovsh = parseNum($("#qnKovsh").value) || null, date = $("#qnDate").value || today();
   const bad = (m, sel) => { toast(m); if (sel) $(sel).focus(); };
   if (!qnProd) return bad("Mahsulotni tanlang");
   if (!(qty > 0)) return bad("Hajmini (m³) yoki kovsh sonini yozing", "#qnKovsh");
   if (!car) return bad("Mashina raqamini yozing", "#qnCar");
-  if (!(price > 0)) return bad("Narxini yozing — qanchaga sotildi", "#qnPrice");
+  if (!(price > 0)) return bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
   const btns = [$("#qnSave"), $("#qnSavePrint")]; btns.forEach(b => b.disabled = true);
   try {
     if (qnWho === "firm") {
@@ -7466,7 +7475,7 @@ function qItemCard(it, opts = {}){
     ${opts.sel ? `<label class="ki-sel" title="Birga chop etish uchun belgilash"><input type="checkbox" data-qlsel="${sk}"${qlSel.has(sk) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}<div class="ki-main"><div class="ki-top"><b>${esc(it.product)}</b> · <b class="num">${qFmtQ(it.qty)} m³</b>${it.kovsh ? ` <span class="dim">(${qFmtQ(it.kovsh)} kovsh)</span>` : ""} · <span class="plate">${esc(it.car)}</span></div>
       <div class="ki-who">${who}</div>
       <div class="ki-meta dim">${opts.date ? `${fmtDate(it.date)} ` : ""}${esc(it.time || "")}${opts.quarry ? ` · ⛏ ${esc(qName(it.quarry))}` : ""}${it.driver ? ` · ${esc(it.driver)}` : ""}${it.createdBy ? ` · ✍ ${esc(qWho(it.createdBy))}` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</div></div>
-    <div class="ki-sum">${money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? fmt(it.price) + " × m³" : ""}</small>` : "<b>•••</b>"}</div>
+    <div class="ki-sum">${money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? (() => { const qq = qById(it.quarry); return qq && qq.kovsh > 0 ? `1 kovsh: ${fmt(it.price * qq.kovsh)}` : fmt(it.price) + " × m³"; })() : ""}</small>` : "<b>•••</b>"}</div>
     <div class="ki-act">${it.t === "firm" ? `<button type="button" class="sm" data-qprint="${esc(it.key)}">Yuk xati</button>` : `<button type="button" class="sm" data-qpprint="${it.id}">Yuk xati</button>`}${qCanEdit(it) ? `<button type="button" class="sm" data-qedit="${it.t}:${it.id}">Tahrirlash</button>${it.t !== "firm" || PRIV() ? `<button type="button" class="sm ghost danger" data-qdel="${it.t}:${it.id}">O'chirish</button>` : ""}` : ""}</div>
   </div>`;
 }
