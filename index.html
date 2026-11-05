@@ -1249,8 +1249,8 @@ body.side-single .side-h::after{display:none}
     <summary><span>Foydalanuvchilar (login va parollar)</span> <span class="hint">kim qanday huquq bilan kiradi</span></summary>
     <form class="mini-form u-form" id="uForm" autocomplete="off">
       <div class="f"><label for="uName">F.I.Sh</label><input id="uName" required placeholder="Karimov Ali"></div>
-      <div class="f"><label for="uLogin">Login</label><input id="uLogin" required placeholder="ali" pattern="[A-Za-z0-9._-]{3,32}" title="3–32 ta lotin harfi, raqam, nuqta yoki chiziqcha"></div>
-      <div class="f"><label for="uPass">Parol</label><input id="uPass" type="text" required minlength="6" placeholder="kamida 6 ta belgi"></div>
+      <div class="f"><label for="uLogin">Login</label><input id="uLogin" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" required placeholder="ali" pattern="[A-Za-z0-9._-]{3,32}" title="3–32 ta lotin harfi, raqam, nuqta yoki chiziqcha"></div>
+      <div class="f"><label for="uPass">Parol</label><input id="uPass" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore required minlength="6" placeholder="kamida 6 ta belgi"></div>
       <div class="f"><label for="uRole">Rol</label><select id="uRole"></select></div>
       <div class="f u-secs-f"><label>Qaysi bo'limni ko'radi</label><div class="u-secs-in"><label class="chk"><input type="checkbox" id="uWb" checked> Yuk xatlari</label><label class="chk admin-only"><input type="checkbox" id="uPay"> Oylik maoshlar</label></div></div>
       <label class="chk" id="uCanBox" hidden><input type="checkbox" id="uCan"> boshqalarga login-parol bera oladi</label>
@@ -1264,8 +1264,8 @@ body.side-single .side-h::after{display:none}
       <form class="mini-form u-form" id="orgForm" autocomplete="off">
         <div class="f"><label for="oOrgName">Korxona nomi</label><input id="oOrgName" required placeholder='"NAMUNA SAVDO" MCHJ'></div>
         <div class="f"><label for="oFull">Rahbari F.I.Sh</label><input id="oFull" required placeholder="Familiya Ism"></div>
-        <div class="f"><label for="oLogin">Login</label><input id="oLogin" required pattern="[A-Za-z0-9._-]{3,32}" title="3–32 ta lotin harfi, raqam, nuqta yoki chiziqcha" placeholder="namuna"></div>
-        <div class="f"><label for="oPass">Parol</label><input id="oPass" type="text" required minlength="6" placeholder="kamida 6 ta belgi"></div>
+        <div class="f"><label for="oLogin">Login</label><input id="oLogin" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" required pattern="[A-Za-z0-9._-]{3,32}" title="3–32 ta lotin harfi, raqam, nuqta yoki chiziqcha" placeholder="namuna"></div>
+        <div class="f"><label for="oPass">Parol</label><input id="oPass" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore required minlength="6" placeholder="kamida 6 ta belgi"></div>
         <button type="submit" class="primary" id="oAdd">Korxona ochish</button>
       </form>
       <div id="orgList"></div>
@@ -6628,7 +6628,7 @@ function renderUsers(){
       <td>${u.active ? '<span class="pill ok">Faol</span>' : '<span class="pill bad">O\'chirilgan</span>'}</td>
       <td>${["director","accountant"].includes(u.role) ? (admin ? `<label class="chk"><input type="checkbox" data-ucan="${u.id}"${u.can_manage_users ? " checked" : ""}> xodim qo'sha oladi</label>` : (u.can_manage_users ? "xodim qo'sha oladi" : "—")) : (u.role === "admin" ? "hammasi" : "—")}</td>
       <td class="u-act">${canEdit(u) && u.id !== me.id ? (ed
-        ? `<span class="u-pw"><input type="password" id="uNewPw" placeholder="Yangi parol" aria-label="Yangi parol"><button type="button" class="primary sm" data-upwsave="${u.id}">Saqlash</button><button type="button" class="sm" data-upwno>Bekor</button></span>`
+        ? `<span class="u-pw"><input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore name="u-reset-${Date.now()}" id="uNewPw" placeholder="Yangi parol (kamida 6 belgi)" aria-label="Yangi parol"><button type="button" class="primary sm" data-upwsave="${u.id}">Saqlash</button><button type="button" class="sm" data-upwno>Bekor</button></span>`
         : `<button type="button" class="sm" data-upw="${u.id}">Parolni tiklash</button><button type="button" class="sm ${u.active ? "danger" : ""}" data-uact="${u.id}">${u.active ? "O'chirish" : "Faollashtirish"}</button>`) : ""}</td>
     </tr>`; }).join("")}</tbody></table></div>`;
 }
@@ -6659,6 +6659,7 @@ $("#uList").addEventListener("click", async e => {
   try {
     if (b.dataset.upw) { userEdit = b.dataset.upw; renderUsers(); $("#uNewPw").focus(); return; }
     if (b.hasAttribute("data-upwno")) { userEdit = null; renderUsers(); return; }
+    if (b.dataset.upwsave && $("#uNewPw").value.trim().length < 6) { toast("Yangi parol kamida 6 ta belgidan iborat bo'lsin"); $("#uNewPw").focus(); return; }
     if (b.dataset.upwsave) { await callUsers({ action: "update", id: b.dataset.upwsave, password: $("#uNewPw").value }); userEdit = null; toast("Yangi parol o'rnatildi"); }
     if (b.dataset.uact) { const u = users.find(x => x.id === b.dataset.uact); await callUsers({ action: "update", id: u.id, active: !u.active }); toast(u.active ? "Foydalanuvchi o'chirildi — endi kira olmaydi" : "Foydalanuvchi faollashtirildi"); }
   } catch(err) { toast(err.message); }
@@ -6710,7 +6711,7 @@ function renderOrgs(){
     return `<tr class="${o.active ? "" : "u-off"}"><td><b>${esc(o.name)}</b><div class="hint">${fmtDate(String(o.created_at || "").slice(0, 10))}dan</div></td>
       <td>${a ? `${esc(a.full_name || "")} <span class="num dim">(${esc(a.login)})</span>` : "—"}</td><td class="num">${o.users || 0}</td>
       <td>${o.active ? '<span class="pill ok">Faol</span>' : '<span class="pill bad">To\'xtatilgan</span>'}</td>
-      <td class="u-act">${ed ? `<span class="u-pw"><input type="password" id="oNewPw" placeholder="Yangi parol" aria-label="Yangi parol"><button type="button" class="primary sm" data-opwsave="${o.id}">Saqlash</button><button type="button" class="sm" data-opwno>Bekor</button></span>`
+      <td class="u-act">${ed ? `<span class="u-pw"><input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore name="o-reset-${Date.now()}" id="oNewPw" placeholder="Yangi parol (kamida 6 belgi)" aria-label="Yangi parol"><button type="button" class="primary sm" data-opwsave="${o.id}">Saqlash</button><button type="button" class="sm" data-opwno>Bekor</button></span>`
         : `<button type="button" class="sm primary" data-oview="${o.id}" title="Shu korxonaning yuk xatlari, mahsulotlari va savdosini faqat o'qish uchun ochish">👁 Ko'rish</button><button type="button" class="sm" data-opw="${o.id}">Parolni tiklash</button><button type="button" class="sm ${o.active ? "danger" : ""}" data-oact="${o.id}">${o.active ? "To'xtatish" : "Faollashtirish"}</button>`}</td></tr>`; }).join("")}</tbody></table></div>`
     : `<p class="hint">Hali tashqi korxona ochilmagan.</p>`;
 }
@@ -6729,6 +6730,7 @@ $("#orgList").addEventListener("click", async e => {
     if (b.dataset.oview) { await setView(b.dataset.oview); return; }
     if (b.dataset.opw) { orgEdit = b.dataset.opw; renderOrgs(); $("#oNewPw").focus(); return; }
     if (b.hasAttribute("data-opwno")) { orgEdit = null; renderOrgs(); return; }
+    if (b.dataset.opwsave && $("#oNewPw").value.trim().length < 6) { toast("Yangi parol kamida 6 ta belgidan iborat bo'lsin"); $("#oNewPw").focus(); return; }
     if (b.dataset.opwsave) { await callUsers({ action: "orgupdate", org_id: b.dataset.opwsave, password: $("#oNewPw").value }); orgEdit = null; toast("Korxona bosh adminiga yangi parol o'rnatildi"); }
     if (b.dataset.oact) { const o = orgsList.find(x => x.id === b.dataset.oact);
       if (o.active && !confirm(`«${o.name}» to'xtatilsinmi? Uning hech bir foydalanuvchisi kira olmaydi. Ma'lumotlari o'chmaydi — keyin qayta faollashtirish mumkin.`)) return;
