@@ -1401,11 +1401,12 @@ body.side-single .side-h::after{display:none}
       <div class="f kar-qsel" id="qcQBox"><label for="qcQ">Karyer</label><select id="qcQ"></select></div>
     </div>
     <div class="kar-seg kar-kinds" id="qcKind" role="group" aria-label="Yozuv turi">
-      <button type="button" data-kind="debt_back">↩ Qarz qaytdi</button><button type="button" data-kind="expense">🧾 Xarajat</button><button type="button" data-kind="salary">👷 Ishchiga maosh</button><button type="button" data-kind="kitob">📤 Kitobga yuborildi</button><button type="button" data-kind="firm_cash">🏢 Firmadan naqd pul</button>
+      <button type="button" data-kind="debt_back">↩ Qarz qaytdi</button><button type="button" data-kind="expense">🧾 Xarajat</button><button type="button" data-kind="salary">👷 Ishchiga maosh</button><button type="button" data-kind="kitob">📤 Pul yuborildi</button><button type="button" data-kind="firm_cash">🏢 Firmadan naqd pul</button>
     </div>
     <form class="entry kar-form" id="qcForm" autocomplete="off" novalidate>
       <p class="hint c12" id="qcHint"></p>
       <div class="f c4" id="qcCarBox"><label for="qcCar">Mashina raqami (qarzdor) *</label><input id="qcCar" list="qDebtList" placeholder="70 A 123 BC" autocapitalize="characters"><span class="hint" id="qcDebtInfo"></span></div>
+      <div class="f c4" id="qcDestBox" hidden><label for="qcDest">Qayerga yuborildi *</label><input id="qcDest" list="qcDestList" placeholder="masalan: Qarshi"><datalist id="qcDestList"></datalist></div>
       <div class="f c4" id="qcCatBox"><label for="qcCat">Xarajat turi *</label><div class="qc-catrow"><select id="qcCat"></select><button type="button" class="sm" id="qcCatAdd" title="Ro'yxatda yo'q turni qo'shish">＋ Yangi tur</button></div></div>
       <div class="f c4" id="qcPersonBox"><label for="qcPerson">Ishchi (F.I.Sh) *</label><input id="qcPerson" list="qPersonList" placeholder="Familiya Ism"></div>
       <div class="f c4" id="qcFirmBox"><label for="qcFirm">Firma nomi *</label><input id="qcFirm" list="firmList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
@@ -1489,7 +1490,9 @@ body.side-single .side-h::after{display:none}
       <div class="f c5"><label for="qsOwner">Qaysi firmaga qarashli *</label><input id="qsOwner" list="sellerList" placeholder="&quot;QARSHI BETON KLASTER&quot; MCHJ"></div>
       <div class="f c3"><label for="qsKovsh">1 kovsh, m³</label><input id="qsKovsh" class="num" inputmode="decimal" value="3"></div>
       <div class="f c6"><label for="qsProds">Mahsulotlar (vergul bilan)</label><input id="qsProds" value="Qum, Sheben, Sechka"></div>
-      <div class="f c6"><label class="chk kar-blank"><input type="checkbox" id="qsOwnBlank" checked> Yuk xatida bizning blank (logotip, telefon) chiqsin</label><span class="hint">Boshqa firmaga qarashli karyer uchun belgini olib tashlang — yuk xati tepasida o'sha firma nomi chiqadi.</span></div>
+      <div class="f c6"><label class="chk kar-blank"><input type="checkbox" id="qsOwnBlank" checked> Yuk xatida bizning blank (logotip, telefon) chiqsin</label><span class="hint">Boshqa firmaga qarashli karyer uchun belgini olib tashlang — yuk xati tepasida o'sha firma nomi chiqadi.</span>
+        <label class="chk kar-blank" style="margin-top:8px"><input type="checkbox" id="qsKitob"> Kassada «📤 Pul yuborildi» bo'limi bo'lsin</label>
+        <div class="f" id="qsSendBox"><label for="qsSend">Qayerga yuboriladi (vergul bilan)</label><input id="qsSend" placeholder="masalan: Kitob, Qarshi"></div><span class="hint">Faqat pulini boshqa joyga yuboradigan karyer uchun belgilang. Kassada yozayotganda shu ro'yxatdan tanlanadi.</span></div>
       <div class="f c6"><label for="qsFmt">Yuk xati blanki (odatiy)</label><select id="qsFmt"><option value="a5_eq">A5 — teng ikkiga (bizda / xaridorga)</option><option value="a5_stub">A5 — koreshokli</option><option value="a4x4_eq">A4 ga 4 ta — teng ikkiga</option><option value="a4x4_stub">A4 ga 4 ta — koreshokli</option><option value="receipt">Chek printeri — 80 mm lenta</option><option value="a4_old">Hozirgi A4 (butun varaq)</option></select><span class="hint">Chop etish oynasida har safar boshqasini tanlasa ham bo'ladi.</span></div>
       <div class="f c12"><label>Ish yurituvchi(lar)</label><div class="kar-staff" id="qsStaff"></div></div>
       <div class="c12 kar-act"><span class="btns"><button type="button" id="qsCancel" hidden>Bekor qilish</button><button type="submit" class="primary" id="qsSave">Karyerni qo'shish</button></span></div>
@@ -6471,7 +6474,7 @@ const PAGES = {
   brand: ["gen", "Yuk xati blanki", "Chop etiladigan blank ko'rinishi"],
   tgbot: ["gen", "Telegram bot", "Rahbariyat guruhiga kunlik hisobot"],
   "q-new":   ["kar", "Yangi yuklash", "Karyerdan chiqqan yuk: firmaga yoki jismoniy shaxsga"],
-  "q-cash":  ["kar", "Karyer kassasi", "Qarz qaytdi, xarajat, maosh, kitobga, firmadan naqd pul"],
+  "q-cash":  ["kar", "Karyer kassasi", "Qarz qaytdi, xarajat, maosh, yuborilgan pul, firmadan naqd pul"],
   "q-stats":   ["kar", "Karyerlar statistikasi", "Barcha karyerlar: sotuv, kassa, xarajat, maosh va foyda; solishtirish"],
   "q-workers": ["kar", "Karyer ishchilari", "Ishchilar ro'yxati, oylik yoki kunlik maosh, berilgan pul va qoldiq"],
   "q-list":  ["kar", "Yuklashlar ro'yxati", "Karyerdan chiqqan barcha yuklar va kassa yozuvlari"],
@@ -7410,6 +7413,7 @@ $("#tgPanel").addEventListener("click", async e => {
    Firmaga sotuv — oddiy yuk xati (sales, kind = "karyer"): raqami firmaning boshqa yuk xatlari bilan davom etadi, firma hisob-kitobiga qo'shiladi.
    Jismoniy shaxsga sotuv — quarry_sales (naqd yoki qarzga, qarz mashina raqami bo'yicha). Kassa — quarry_cash. */
 let quarries = [], qSales = [], qCash = [], Q_OK = null, qCats = null, Q_FMT_OK = null;
+var Q_KITOB_OK = null;
 let qnOther = false, qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
 const KX_ITEMS = {};                         // jismoniy shaxs yuk xatini chop etish uchun vaqtinchalik qatorlar
 const Q_CATS = ["Oziq-ovqat", "Xo'jalik mollari", "Yoqilg'i", "Ta'mirlash va ehtiyot qismlar", "Kommunal to'lovlar", "Transport", "Boshqa"];
@@ -7447,7 +7451,7 @@ async function qLoad(){
     if (error) throw error;
     Q_FMT_OK = !(data || []).length || "wb_format" in data[0];
     quarries = (data || []).map(q => ({ id: q.id, name: q.name, owner: q.owner || "", staff: q.staff || [], kovsh: Number(q.kovsh) || 3,
-      products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false, wbFormat: q.wb_format || "" }));
+      products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false, wbFormat: q.wb_format || "", cashKitob: q.cash_kitob === true, cashSend: Array.isArray(q.cash_send) ? q.cash_send.filter(Boolean) : [] }));
     Q_OK = true;
   } catch(e) { quarries = []; Q_OK = false; return; }
   try { const { data: st } = await sb.from("settings").select("value").eq("key", "q_cats").maybeSingle(); qCats = st && st.value && Array.isArray(st.value.list) ? st.value.list : null; } catch(e) {}
@@ -7743,10 +7747,10 @@ document.addEventListener("click", e => {
 });
 
 /* ---------- Kassa: qarz qaytdi, xarajat, maosh, kitobga, firmadan naqd ---------- */
-const QC_KINDS = { debt_back: "Qarz qaytdi", expense: "Xarajat", salary: "Ishchiga maosh", kitob: "Kitobga yuborildi", firm_cash: "Firmadan naqd pul" };
+const QC_KINDS = { debt_back: "Qarz qaytdi", expense: "Xarajat", salary: "Ishchiga maosh", kitob: "Pul yuborildi", firm_cash: "Firmadan naqd pul" };
 const QC_HINT = { debt_back: "Jismoniy shaxs qarzga olgan yuk uchun pul olib keldi — mashina raqami bo'yicha qarzdan ayiriladi.",
   expense: "Karyer uchun qilingan xarajat. «Nima uchun» qismiga yozsangiz, turi o'zi tanlanadi (masalan, «non, suv» → Oziq-ovqat).",
-  salary: "Ishchiga berilgan maosh yoki avans.", kitob: "Karyer kassasidan markazga (kitobga) yuborilgan pul. Bu xarajat emas — foydadan beriladi.",
+  salary: "Ishchiga berilgan maosh yoki avans.", kitob: "Karyer kassasidan boshqa joyga (masalan, Kitob yoki Qarshiga) yuborilgan pul. Bu xarajat emas — foydadan beriladi.",
   firm_cash: "Firma karyerda naqd pul berdi. Bu pul firmaning hisob-kitobiga ham to'lov bo'lib yoziladi." };
 function qDebts(qid, until){
   const m = new Map();
@@ -7758,6 +7762,14 @@ function renderQCash(){
   const qid = qFillSel("#qcQ", "#qcQBox"), q = qById(qid);
   $("#qcForm").hidden = $("#qcKind").hidden = !q; $$(".kar-empty-cash").forEach(x => x.remove());
   if (!q) { $("#qcKind").insertAdjacentHTML("beforebegin", `<div class="kar-empty-cash">${qNoQuarry()}</div>`); $("#qcList").innerHTML = ""; return; }
+  // «Kitobga» — faqat shu bo'lim yoqilgan karyerda (yoki eski yozuvni tahrirlayotganda)
+  { const kOk = q.cashKitob || (qcEdit && qcKind === "kitob"); if (!kOk && qcKind === "kitob") qcKind = "expense";
+    const kb = $('#qcKind [data-kind="kitob"]'); if (kb) kb.hidden = !kOk;
+    $("#qcDestBox").hidden = qcKind !== "kitob";
+    const prev = [...new Set(qCash.filter(c => c.quarry === q.id && c.kind === "kitob" && c.category).map(c => c.category))];
+    const opts = [...new Set([...(q.cashSend || []), ...prev])];
+    $("#qcDestList").innerHTML = opts.map(o => `<option value="${esc(o)}">`).join("");
+    if (qcKind === "kitob" && !$("#qcDest").value && opts.length === 1) $("#qcDest").value = opts[0]; }
   $$("#qcKind [data-kind]").forEach(b => b.classList.toggle("on", b.dataset.kind === qcKind));
   $("#qcHint").textContent = QC_HINT[qcKind];
   $("#qcCarBox").hidden = qcKind !== "debt_back"; $("#qcCatBox").hidden = qcKind !== "expense"; $("#qcPersonBox").hidden = qcKind !== "salary"; $("#qcFirmBox").hidden = qcKind !== "firm_cash";
@@ -7779,7 +7791,7 @@ function renderQCash(){
     + (list.length ? list.map(qcCard).join("") : `<p class="hint">Bu oy hali kassa yozuvi yo'q.</p>`);
 }
 function qcCard(x){
-  const det = x.kind === "debt_back" ? `<span class="plate">${esc(x.car)}</span>` : x.kind === "expense" ? esc(x.category) : x.kind === "salary" ? esc(x.person) : x.kind === "firm_cash" ? esc(x.firm) : "";
+  const det = x.kind === "debt_back" ? `<span class="plate">${esc(x.car)}</span>` : x.kind === "expense" || x.kind === "kitob" ? esc(x.category) : x.kind === "salary" ? esc(x.person) : x.kind === "firm_cash" ? esc(x.firm) : "";
   const can = !VIEWING() && (PRIV() || x.createdBy === me.id);
   return `<div class="kar-item kc-${x.kind}"><div class="ki-main"><div class="ki-top"><b>${QC_KINDS[x.kind]}</b>${det ? ` · ${det}` : ""}</div>
     <div class="ki-meta dim">${fmtDate(x.date)}${x.note ? ` · ${esc(x.note)}` : ""}${x.createdBy ? ` · ✍ ${esc(qWho(x.createdBy))}` : ""}</div></div>
@@ -7828,7 +7840,7 @@ function qcStartEdit(id){
   const x = qCash.find(c => c.id === id); if (!x) return;
   if (curPage !== "q-cash") showPage("q-cash");
   qcEdit = id; qcKind = x.kind; $("#qcQ").value = x.quarry; renderQCash();
-  $("#qcCar").value = x.car; $("#qcCat").value = x.category; $("#qcCat").dataset.manual = "1"; $("#qcPerson").value = x.person; $("#qcFirm").value = x.firm;
+  $("#qcCar").value = x.car; $("#qcCat").value = x.category; $("#qcCat").dataset.manual = "1"; $("#qcPerson").value = x.person; $("#qcFirm").value = x.firm; $("#qcDest").value = x.kind === "kitob" ? x.category || "" : "";
   $("#qcAmt").value = fmt(x.amount); $("#qcDate").value = x.date; $("#qcNote").value = x.note;
   renderQCash(); $("#qcForm").scrollIntoView({ block: "start", behavior: "smooth" });
 }
@@ -7837,13 +7849,14 @@ $("#qcForm").addEventListener("submit", async e => {
   if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
   const qid = $("#qcQ").value, amt = parseNum($("#qcAmt").value);
   const d = { quarry_id: qid, kind: qcKind, date: $("#qcDate").value || today(), amount: amt, note: $("#qcNote").value.trim(),
-    car: qcKind === "debt_back" ? $("#qcCar").value.trim() : "", category: qcKind === "expense" ? $("#qcCat").value : "",
+    car: qcKind === "debt_back" ? $("#qcCar").value.trim() : "", category: qcKind === "expense" ? $("#qcCat").value : qcKind === "kitob" ? $("#qcDest").value.trim().replace(/\s+/g, " ") : "",
     person: qcKind === "salary" ? $("#qcPerson").value.trim() : "", firm: qcKind === "firm_cash" ? $("#qcFirm").value.trim() : "" };
   const bad = (m, s) => { toast(m); if (s) $(s).focus(); };
   if (!qid) return bad("Karyerni tanlang");
   if (qcKind === "debt_back" && !d.car) return bad("Qaysi mashina qarzini qaytardi — raqamini yozing", "#qcCar");
   if (qcKind === "expense" && !d.note) return bad("Nima uchun xarajat qilinganini yozing", "#qcNote");
   if (qcKind === "expense" && (!d.category || d.category === "__new")) return bad("Xarajat turini tanlang", "#qcCat");
+  if (qcKind === "kitob" && !d.category) return bad("Pul qayerga yuborilganini yozing (masalan: Qarshi)", "#qcDest");
   if (qcKind === "salary" && !d.person) return bad("Ishchining ismini yozing", "#qcPerson");
   if (qcKind === "firm_cash" && !d.firm) return bad("Firma nomini yozing", "#qcFirm");
   if (!(amt > 0)) return bad("Summani yozing", "#qcAmt");
@@ -8050,12 +8063,12 @@ $("#qrXl").addEventListener("click", () => {
     { h: "Umumiy", head: ["Ko'rsatkich", "Summa, so'm"], rows: [["Sotildi, m³", qXlN(R.m3)], ["Firmalarga sotuv", qXlN(R.firmSum)], ["Jismoniy shaxslarga — naqd", qXlN(R.perCash)], ["Jismoniy shaxslarga — qarzga", qXlN(R.perDebt)],
       ["Jami sotuv", qXlN(R.sales)], ["Xarajatlar", qXlN(R.expense)], ["Ishchilarga maosh", qXlN(R.salary)], ["Foyda (sotuv − xarajat − maosh)", qXlN(R.profit)], ["Kitobga yuborildi", qXlN(R.kitob)]] },
     { h: "Kassa (naqd pul)", head: ["", "Summa, so'm"], rows: [["Oy boshidagi qoldiq", qXlN(R.open)], ["+ Jismoniy shaxslardan naqd", qXlN(R.perCash)], ["+ Qaytgan qarzlar", qXlN(R.debtBack)], ["+ Firmalardan naqd", qXlN(R.firmCash)],
-      ["− Xarajatlar", qXlN(R.expense)], ["− Ishchilarga maosh", qXlN(R.salary)], ["− Kitobga yuborildi", qXlN(R.kitob)]], tot: ["Oy oxiridagi qoldiq", qXlN(R.close)] },
+      ["− Xarajatlar", qXlN(R.expense)], ["− Ishchilarga maosh", qXlN(R.salary)], ["− Yuborilgan pul (Kitob, Qarshi …)", qXlN(R.kitob)]], tot: ["Oy oxiridagi qoldiq", qXlN(R.close)] },
     { h: "Mahsulotlar", head: ["Mahsulot", "Kovsh", "Jami, m³", "Firmalarga, m³", "Jismoniy, m³", "Summa, so'm"], rows: R.prods.map(p => [p.name, qXlN(p.kovsh), qXlN(p.m3), qXlN(p.firm), qXlN(p.per), qXlN(p.sum)]) },
     { h: "Firmalar", head: ["Firma", "Yuklash", "m³", "Summa, so'm"], rows: R.firms.map(f => [f.name, f.n, qXlN(f.m3), qXlN(f.sum)]) },
     { h: "Xarajatlar turi bo'yicha", head: ["Turi", "Summa, so'm"], rows: R.cats.map(([c, v]) => [c, qXlN(v)]), tot: ["Jami", qXlN(R.expense)] },
     ...(R.sal.length ? [{ h: "Maoshlar", head: ["Ishchi", "Summa, so'm"], rows: R.sal.map(([p, v]) => [p, qXlN(v)]), tot: ["Jami", qXlN(R.salary)] }] : []),
-    { h: "Oxirgi 6 oy", head: ["Oy", "Sotildi, m³", "Sotuv", "Xarajat va maosh", "Foyda", "Kitobga"], rows: R.hist.map(h => [qMonLbl(h.m), qXlN(h.m3), qXlN(h.sales), qXlN(h.exp), qXlN(h.profit), qXlN(h.kitob)]) }
+    { h: "Oxirgi 6 oy", head: ["Oy", "Sotildi, m³", "Sotuv", "Xarajat va maosh", "Foyda", "Yuborilgan pul"], rows: R.hist.map(h => [qMonLbl(h.m), qXlN(h.m3), qXlN(h.sales), qXlN(h.exp), qXlN(h.profit), qXlN(h.kitob)]) }
   ]), "Hisobot");
   const its = qItems(R.qid, R.from, R.to).filter(it => R.qid || qVisible(true).some(q => q.id === it.quarry)).reverse();
   XLSX.utils.book_append_sheet(wb, qXlSheet(`Yuklashlar — ${qMonLbl(R.mon)}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "m³", "Kimga", "Narx (1 m³)", "Summa, so'm", "To'lov", "Yuk xati №", "Yozdi", "Izoh"],
@@ -8111,9 +8124,12 @@ $("#qsForm").addEventListener("submit", async e => {
   if (!owner) { toast("Qaysi firmaga qarashli ekanini yozing"); $("#qsOwner").focus(); return; }
   if (quarries.some(q => q.id !== qsEdit && same(q.name, name))) { toast("Bu nomdagi karyer bor"); return; }
   const d = { name, owner, kovsh, products: products.length ? products : ["Qum", "Sheben", "Sechka"], staff, own_blank: $("#qsOwnBlank").checked };
+  if (Q_KITOB_OK !== false) { d.cash_kitob = $("#qsKitob").checked; d.cash_send = $("#qsSend").value.split(/[,;]/).map(x => x.trim()).filter(Boolean); }
   if (Q_FMT_OK !== false) d.wb_format = $("#qsFmt").value || "a5_eq";
   $("#qsSave").disabled = true;
   let { error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d);
+  if (error && "cash_kitob" in d && /cash_kitob|cash_send/.test(error.message || "")) { Q_KITOB_OK = false; delete d.cash_kitob; delete d.cash_send; toast("«Kitobga» sozlamasi uchun bazani yangilang (yangilash-3.sql)");
+    ({ error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d)); }
   if (error && d.wb_format && /wb_format/.test(error.message || "")) { Q_FMT_OK = false; delete d.wb_format; toast("Blank turini saqlash uchun bazani yangilang (yangilash.sql)");
     ({ error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d)); }
   $("#qsSave").disabled = false;
@@ -8127,7 +8143,7 @@ $("#qsCancel").addEventListener("click", () => { qsEdit = null; $("#qsForm").res
 $("#qsList").addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.qsed) { const q = qById(b.dataset.qsed); if (!q) return; qsEdit = q.id;
-    $("#qsName").value = q.name; $("#qsOwner").value = q.owner; $("#qsKovsh").value = String(q.kovsh); $("#qsProds").value = q.products.join(", "); $("#qsOwnBlank").checked = q.ownBlank; $("#qsFmt").value = qwbFmt(q.wbFormat) ? q.wbFormat : "a5_eq";
+    $("#qsName").value = q.name; $("#qsOwner").value = q.owner; $("#qsKovsh").value = String(q.kovsh); $("#qsProds").value = q.products.join(", "); $("#qsOwnBlank").checked = q.ownBlank; $("#qsKitob").checked = !!q.cashKitob; $("#qsSend").value = (q.cashSend || []).join(", "); $("#qsFmt").value = qwbFmt(q.wbFormat) ? q.wbFormat : "a5_eq";
     renderQSetup(); $("#qsForm").scrollIntoView({ block: "start", behavior: "smooth" }); }
   if (b.dataset.qsarc) { const q = qById(b.dataset.qsarc); if (!q) return;
     if (q.active && !confirm(`«${q.name}» karyeri arxivga olinsinmi?\n\nIsh yurituvchilar unga yoza olmaydi, ro'yxatlarda chiqmaydi. Yozuvlari va hisoboti saqlanib qoladi — kerak bo'lsa, arxivdan qaytarish mumkin.`)) return;
@@ -8223,7 +8239,7 @@ async function qwLoad(){
     WK_OK = true;
   } catch(e) { WK_OK = false; qWorkers = []; qWDays = []; }
 }
-const qwQuarries = () => quarries.filter(q => q.active || PRIV()).sort((a, b) => (b.active - a.active) || a.name.localeCompare(b.name));
+const qwQuarries = () => (!PRIV() && qMine().length ? qMine() : quarries).filter(q => q.active || PRIV()).sort((a, b) => (b.active - a.active) || a.name.localeCompare(b.name));
 const qwById = id => qWorkers.find(w => w.id === id);
 const qwDays = (w, m) => { const d = qWDays.find(x => x.worker === w.id && x.month === m); return d ? d.days : 0; };
 const qwPaysOf = w => qCash.filter(x => x.kind === "salary" && (x.workerId === w.id || (!x.workerId && x.quarry === w.quarry && same(x.person, w.name))));
@@ -8546,7 +8562,7 @@ const AU_F = { amount: "summa", qty: "miqdor", price: "narx", total: "summa", ko
   active: "faol", end_date: "arxiv sanasi", position: "lavozim", quarry_id: "karyer", from_date: "sanadan", to_place: "qayerga", unit: "o'lchov", time: "vaqt", pay_type: "maosh turi",
   phone: "telefon", start_date: "ish boshlagan", batch: "hujjat" };
 const AU_SKIP = new Set(["id", "created_at", "created_by", "org_id", "pay_id", "worker_id", "updated_at", "price_hint", "batch"]);
-const AU_KIND = { debt_back: "qarz qaytdi", expense: "xarajat", kitob: "kitobga", salary: "maosh", firm_cash: "firmadan naqd", cash: "naqd", debt: "qarzga", bank: "hisob raqam",
+const AU_KIND = { debt_back: "qarz qaytdi", expense: "xarajat", kitob: "pul yuborildi", salary: "maosh", firm_cash: "firmadan naqd", cash: "naqd", debt: "qarzga", bank: "hisob raqam",
   raw: "xomashyo", resale: "qayta sotish", month: "oylik", day: "kunlik" };
 const auNum = new Set(["amount", "qty", "price", "total", "kovsh", "rate"]);
 function auVal(k, v){
