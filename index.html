@@ -351,6 +351,7 @@ body.role-director .dir-ro{display:flex;align-items:center;gap:8px;padding:8px 1
 .dash-bar{align-items:flex-end;margin-bottom:12px}.dash-bar .chips{margin:0;align-self:flex-end}.kar-filters.dash-bar .f{flex:0 1 200px}
 .oq-pill{position:fixed;left:14px;bottom:14px;z-index:70;background:#8a5a00;color:#fff;border:0;border-radius:99px;padding:9px 14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .oq-pill.err{background:#b4412f}.side-app{margin-top:10px}
+.qn-prod-in{width:auto;min-width:200px;flex:1 1 200px;margin-left:6px}
 .au-bar .f.grow{flex:1 1 200px}.kar-filters.au-bar .f:last-child{flex:0 0 auto;width:auto}.au-del .au-ch b{color:inherit}.au-list{display:flex;flex-direction:column;gap:6px;margin-top:6px}.au-day{font-weight:700;font-size:13px;color:var(--muted);margin:10px 0 2px}
 .au-it{display:grid;grid-template-columns:48px 110px 1fr auto;gap:10px;align-items:start;padding:8px 10px;border:1px solid var(--line,#e3e7eb);border-left:3px solid #d99a00;border-radius:8px;background:#fff;font-size:13.5px}
 .au-it.au-del{border-left-color:#c8372d}.au-tm{color:var(--muted)}.au-op{font-weight:600;font-size:12.5px}.au-ch{margin-top:2px;line-height:1.55}.au-ch s{color:#a33;text-decoration:line-through}.au-ch b{color:#176b3a}
@@ -7409,7 +7410,7 @@ $("#tgPanel").addEventListener("click", async e => {
    Firmaga sotuv — oddiy yuk xati (sales, kind = "karyer"): raqami firmaning boshqa yuk xatlari bilan davom etadi, firma hisob-kitobiga qo'shiladi.
    Jismoniy shaxsga sotuv — quarry_sales (naqd yoki qarzga, qarz mashina raqami bo'yicha). Kassa — quarry_cash. */
 let quarries = [], qSales = [], qCash = [], Q_OK = null, qCats = null, Q_FMT_OK = null;
-let qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
+let qnOther = false, qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
 const KX_ITEMS = {};                         // jismoniy shaxs yuk xatini chop etish uchun vaqtinchalik qatorlar
 const Q_CATS = ["Oziq-ovqat", "Xo'jalik mollari", "Yoqilg'i", "Ta'mirlash va ehtiyot qismlar", "Kommunal to'lovlar", "Transport", "Boshqa"];
 const Q_CAT_WORDS = [["Oziq-ovqat", /\b(non|suv|produkt|abed|abet|ovqat|go'sht|gosht|choy|qand|shakar|yog'|yog|guruch|un|kartoshka|piyoz|sabzi|meva|tuxum|sut|kolbasa|makaron|tuz)\b/i],
@@ -7500,8 +7501,14 @@ function renderQNew(){
   $("#qnForm").hidden = !q; $("#qnToday").previousElementSibling.hidden = !q;
   $$(".kar-empty-new").forEach(x => x.remove());
   if (!q) { $("#qnForm").insertAdjacentHTML("beforebegin", `<div class="kar-empty-new">${qNoQuarry()}</div>`); $("#qnToday").innerHTML = ""; return; }
-  if (!q.products.some(p => same(p, qnProd))) qnProd = q.products[0] || "";
-  $("#qnProd").innerHTML = q.products.map(p => `<button type="button" data-prod="${esc(p)}" class="${same(p, qnProd) ? "on" : ""}">${esc(p)}</button>`).join("");
+  if (!qnOther && !q.products.some(p => same(p, qnProd))) qnProd = q.products[0] || "";
+  if (qnOther && q.products.some(p => same(p, qnProd))) qnOther = false;
+  $("#qnProd").innerHTML = q.products.map(p => `<button type="button" data-prod="${esc(p)}" class="${!qnOther && same(p, qnProd) ? "on" : ""}">${esc(p)}</button>`).join("")
+    + `<button type="button" data-prod-other class="${qnOther ? "on" : ""}">✏️ Boshqa…</button>`
+    + (qnOther ? `<input id="qnProdIn" class="qn-prod-in" placeholder="Mahsulot nomini yozing" value="${esc(qnProd)}" list="qProdList" autocomplete="off">` : "");
+  { const all = new Set(); [...qSales, ...qFirmRows()].forEach(x => { if (x.product) all.add(x.product); }); q.products.forEach(p => all.delete(p));
+    let dl = $("#qProdList"); if (!dl) { dl = document.createElement("datalist"); dl.id = "qProdList"; document.body.appendChild(dl); }
+    dl.innerHTML = [...all].map(p => `<option value="${esc(p)}">`).join(""); }
   $("#qnKHint").textContent = `(1 kovsh = ${qFmtQ(q.kovsh)} m³)`;
   if (!$("#qnDate").value) $("#qnDate").value = today();
   if (SITES_OK && !$("#qnSite").options.length) { $("#qnSite").innerHTML = siteOptions("", { empty: "— belgilanmagan —", noNew: true }); }
@@ -7542,7 +7549,12 @@ function qnCalc(from){
   $("#qnKPHint").textContent = P > 0 ? `1 m³ = ${fmt(P)} so'm · 1 kovsh = ${qFmtQ(K)} m³` : `1 kovsh = ${qFmtQ(K)} m³`;
   $("#qnTotal").innerHTML = Q > 0 ? `<b>${esc(qnProd)}</b> · ${qFmtQ(Q)} m³${k > 0 ? ` (${qFmtQ(k)} kovsh)` : ""}${P > 0 ? ` · <b class="num">${fmt(Q * P)}</b> so'm` : ""}` : "";
 }
-$("#qnProd").addEventListener("click", e => { const b = e.target.closest("[data-prod]"); if (!b) return; qnProd = b.dataset.prod; $$("#qnProd [data-prod]").forEach(x => x.classList.toggle("on", x === b)); qnPriceGuess(); qnCalc(); });
+$("#qnProd").addEventListener("click", e => {
+  if (e.target.closest("[data-prod-other]")) { if (!qnOther) { qnOther = true; qnProd = ""; renderQNew(); } $("#qnProdIn").focus(); return; }
+  const b = e.target.closest("[data-prod]"); if (!b) return; qnProd = b.dataset.prod;
+  if (qnOther) { qnOther = false; $$("#qnProd [data-prod-other]").forEach(x => x.classList.remove("on")); const i = $("#qnProdIn"); if (i) i.remove(); } $$("#qnProd [data-prod]").forEach(x => x.classList.toggle("on", x === b)); qnPriceGuess(); qnCalc(); });
+$("#qnProd").addEventListener("input", e => { if (e.target.id !== "qnProdIn") return; qnProd = e.target.value.trim(); qnCalc(); });
+$("#qnProd").addEventListener("change", e => { if (e.target.id === "qnProdIn") qnPriceGuess(); });
 $("#qnWho").addEventListener("click", e => { const b = e.target.closest("[data-who]"); if (!b) return; qnWho = b.dataset.who; qnWhoUi(); qnPriceGuess(); if (qnWho === "firm") $("#qnFirm").focus(); });
 $("#qnPay").addEventListener("click", e => { const b = e.target.closest("[data-pay]"); if (!b) return; qnPay = b.dataset.pay; qnWhoUi(); });
 $("#qnKovsh").addEventListener("input", () => qnCalc("kovsh"));
@@ -7589,7 +7601,7 @@ async function qnSave(print){
   const qty = parseNum($("#qnQty").value), price = qnExactPrice(), car = $("#qnCar").value.trim().toUpperCase().replace(/\s+/g, " ");
   const kovsh = parseNum($("#qnKovsh").value) || null, date = $("#qnDate").value || today();
   const bad = (m, sel) => { toast(m); if (sel) $(sel).focus(); };
-  if (!qnProd) return bad("Mahsulotni tanlang");
+  if (!qnProd) return bad(qnOther ? "Mahsulot nomini yozing" : "Mahsulotni tanlang", qnOther ? "#qnProdIn" : null);
   if (!(qty > 0)) return bad("Hajmini (m³) yoki kovsh sonini yozing", "#qnKovsh");
   if (!car) return bad("Mashina raqamini yozing", "#qnCar");
   if (!(price > 0)) return bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
@@ -7703,7 +7715,7 @@ function qStartEdit(t, id){
   const it = t === "firm" ? rows.find(r => r.id === id) : qSales.find(x => x.id === id); if (!it) return;
   if (curPage !== "q-new") showPage("q-new");
   qnEdit = { t, id };
-  $("#qnQ").value = it.quarry; qnProd = it.product; renderQNew();
+  $("#qnQ").value = it.quarry; qnProd = it.product; qnOther = !((qById(it.quarry) || {}).products || []).some(p => same(p, it.product)); renderQNew();
   qnWho = t; if (t === "person") qnPay = it.pay;
   $("#qnKovsh").value = it.kovsh ? String(it.kovsh) : ""; $("#qnQty").value = String(it.qty); $("#qnCar").value = it.car || ""; $("#qnDriver").value = it.driver || "";
   $("#qnPrice").value = it.price ? String(it.price) : ""; $("#qnDate").value = it.date || today(); $("#qnNote").value = it.note || "";
