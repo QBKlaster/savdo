@@ -720,6 +720,13 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .pill.closed{background:#6b7c88;color:#fff}
 .proj-now.st-closed{border-left:5px solid #6b7c88}
 .proj-now .btns{display:flex;gap:8px;flex-wrap:wrap}
+.prod-sum{margin:0 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.prod-sum-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.prod-sum-h h2{margin:0}
+.prod-sum .tbl table{min-width:520px}
+.prod-sum tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:0}
+.prod-sum td small{color:var(--muted)}
+.prod-sum .ps-warn{color:var(--danger);font-size:12px;display:block}
 /* dumaloq (pitsa) diagramma */
 .st-pie{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center}
 .st-pie svg{width:260px;height:260px;flex:none;max-width:100%}
@@ -1197,6 +1204,7 @@ body.side-single .side-h::after{display:none}
       <div class="site-tabs" id="accSiteTabs" hidden></div>
       <div class="site-assign" id="accAssign" hidden></div>
       <div class="proj-box" id="projBox"></div>
+      <div class="prod-sum" id="prodSum"></div>
       <div class="acc-cols">
         <div>
           <h2>To'lovlar (firma bizga o'tkazgan pul)</h2>
@@ -4782,6 +4790,32 @@ $("#fPay").addEventListener("change", updateBalance);
 $("#fFirm").addEventListener("input", updateBalance);
 
 let accFirm = "", pendingPayDel = null;
+// firma ichida: qaysi mahsulotdan jami qancha olingani va summasi
+let prodSumScope = "all";
+function renderProdSum(){
+  const box = $("#prodSum"); if (!box || !accFirm) return;
+  const S = accSite, cut = projNow(accFirm, S).cut, hasProj = projCuts(accFirm, S).length > 0;
+  if (!hasProj) prodSumScope = "all";
+  const R = rows.filter(r => same(r.firm, accFirm) && inSite(r, S) && r.product && (prodSumScope === "all" || rowAt(r) > cut));
+  const m = new Map();
+  R.forEach(r => { const k = fkey(r.product), x = m.get(k) || { name: String(r.product).trim(), unit: r.unit || "", qty: 0, sum: 0, pq: 0, wb: new Set(), np: 0 };
+    const q = Number(r.qty) || 0; x.qty += q; x.sum += r.total || 0; x.wb.add(gk(r)); if (hasPrice(r)) x.pq += q; else x.np++; if (!x.unit && r.unit) x.unit = r.unit; m.set(k, x); });
+  const list = [...m.values()].sort((a, b) => b.sum - a.sum || a.name.localeCompare(b.name));
+  const tot = list.reduce((s, x) => s + x.sum, 0), wbAll = new Set(R.map(gk)).size;
+  const units = new Set(list.map(x => x.unit || "")), oneU = units.size === 1;
+  const seg = hasProj ? `<span class="seg" role="group" aria-label="Davr"><button type="button" data-ps-scope="all" class="${prodSumScope === "all" ? "on" : ""}" aria-pressed="${prodSumScope === "all"}">Hammasi</button><button type="button" data-ps-scope="cur" class="${prodSumScope === "cur" ? "on" : ""}" aria-pressed="${prodSumScope === "cur"}">Joriy loyiha</button></span>` : "";
+  const where = SITES_OK && S !== undefined && S !== null && S !== "" ? ` <span class="hint">· 📍 ${esc(siteLbl(S))}</span>` : "";
+  box.innerHTML = `<div class="prod-sum-h"><h2>📦 Mahsulotlar bo'yicha jami${where}</h2>${seg}</div>` + (list.length
+    ? `<div class="tbl"><table><thead><tr><th>Mahsulot</th><th class="r">Yuk xati</th><th class="r">Jami miqdor</th><th class="r">O'rtacha narx</th><th class="r">Summa, so'm</th></tr></thead><tbody>${list.map(x => `<tr>
+        <td><b>${esc(x.name)}</b>${x.np ? `<span class="ps-warn">⚠ ${x.np} ta yozuvda narx yo'q</span>` : ""}</td>
+        <td class="r num">${x.wb.size}</td>
+        <td class="r num"><b>${fmt(x.qty)}</b>${x.unit ? ` <small>${esc(x.unit)}</small>` : ""}</td>
+        <td class="r num">${x.pq ? fmt(Math.round(x.sum / x.pq)) : "—"}</td>
+        <td class="r num"><b>${fmt(x.sum)}</b></td></tr>`).join("")}</tbody>
+      <tfoot><tr><td>JAMI</td><td class="r num">${wbAll}</td><td class="r num">${oneU ? `${fmt(list.reduce((s, x) => s + x.qty, 0))}${list[0].unit ? ` <small>${esc(list[0].unit)}</small>` : ""}` : ""}</td><td></td><td class="r num">${fmt(tot)}</td></tr></tfoot></table></div>`
+    : `<p class="hint">${prodSumScope === "cur" ? "Joriy loyihada hali yuk xati yo'q." : "Bu firmaga hali mahsulot berilmagan."}</p>`);
+}
+$("#prodSum").addEventListener("click", e => { const b = e.target.closest("[data-ps-scope]"); if (!b) return; prodSumScope = b.dataset.psScope; renderProdSum(); });
 const buyersAll = () => [...new Map([...ref.firms, ...rows.map(r => r.firm), ...pays.map(p => p.firm)].filter(Boolean).map(f => [f.trim().toLowerCase(), f.trim()])).values()].sort((a, b) => a.localeCompare(b));
 // narxi qo'yilmagan (yoki 0) yuk xati qatorlari — firma bo'yicha
 let UP = new Map();
@@ -4983,7 +5017,7 @@ function renderAccounts(){
   const d = $("#accDetail");
   if (!accFirm) { d.hidden = true; return; }
   d.hidden = false;
-  $("#accTitle").textContent = accFirm; renderSiteTabs(); renderProjects();
+  $("#accTitle").textContent = accFirm; renderSiteTabs(); renderProjects(); renderProdSum();
   if (!$("#payDate").value) $("#payDate").value = today();
   if (!$("#prFrom").value) $("#prFrom").value = today();
   const ps = pays.filter(p => same(p.firm, accFirm) && inSite(p, accSite)).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.at || "").localeCompare(a.at || ""));
