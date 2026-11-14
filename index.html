@@ -7898,7 +7898,7 @@ function qItemCard(it, opts = {}){
       <div class="ki-who">${who}</div>
       <div class="ki-meta dim">${opts.date ? `${fmtDate(it.date)} ` : ""}${esc(it.time || "")}${opts.quarry ? ` · ⛏ ${esc(qName(it.quarry))}` : ""}${it.driver ? ` · ${esc(it.driver)}` : ""}${it.createdBy ? ` · ✍ ${esc(qWho(it.createdBy))}` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</div></div>
     <div class="ki-sum">${qIsOwn(it) ? `<b>—</b><small>narxsiz</small>` : money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? (() => { const qq = qById(it.quarry); return qU(it) === "tonna" ? `1 tonna: ${fmt(it.price)}` : qq && qq.kovsh > 0 ? `1 kovsh: ${fmt(it.price * qq.kovsh)}` : fmt(it.price) + " × m³"; })() : ""}</small>` : "<b>•••</b>"}</div>
-    <div class="ki-act">${it.t === "firm" ? `<button type="button" class="sm" data-qprint="${esc(it.key)}">Yuk xati</button>` : `<button type="button" class="sm" data-qpprint="${it.id}">Yuk xati</button>`}${qCanEdit(it) ? `<button type="button" class="sm" data-qedit="${it.t}:${it.id}">Tahrirlash</button>${it.t !== "firm" || PRIV() ? `<button type="button" class="sm ghost danger" data-qdel="${it.t}:${it.id}">O'chirish</button>` : ""}` : ""}</div>
+    <div class="ki-act">${it.t === "firm" ? `<button type="button" class="sm" data-qprint="${esc(it.key)}">Yuk xati</button>` : `<button type="button" class="sm" data-qpprint="${it.id}">Yuk xati</button>`}${qCanEdit(it) ? `<button type="button" class="sm" data-qedit="${it.t}:${it.id}">Tahrirlash</button><button type="button" class="sm ghost danger" data-qdel="${it.t}:${it.id}">O'chirish</button>` : ""}</div>
   </div>`;
 }
 function renderQToday(){
@@ -7923,8 +7923,9 @@ function qStartEdit(t, id){
 async function qDelete(t, id){
   const it = t === "firm" ? rows.find(r => r.id === id) : qSales.find(x => x.id === id); if (!it) return;
   if (!confirm(`O'chirilsinmi?\n\n${it.product} · ${qFmtQ(it.qty)} ${qU(it)} · ${it.car}${t === "firm" ? " · " + it.firm : ""}`)) return;
-  const { error } = await sb.from(t === "firm" ? "sales" : "quarry_sales").delete().eq("id", id);
+  const { data: del, error } = await sb.from(t === "firm" ? "sales" : "quarry_sales").delete().eq("id", id).select("id");
   if (error) { toast(error.message); return; }
+  if (!del || !del.length) { toast(t === "firm" ? "O'chirib bo'lmadi. Bazani yangilang (9-yangilash-6.sql) yoki bu yuk xatini rahbariyat o'chiradi." : "O'chirib bo'lmadi"); return; }
   if (t === "firm") rows = rows.filter(r => r.id !== id); else qSales = qSales.filter(x => x.id !== id);
   toast("O'chirildi"); if (typeof render === "function") render(); qRenderAll();
 }
