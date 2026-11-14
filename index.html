@@ -336,7 +336,7 @@ body.role-director #entry, body.role-director #betonPanel, body.role-director #p
 body.role-director .ref-add, body.role-director [data-del], body.role-director [data-delfirm], body.role-director [data-arcfirm], body.role-director [data-rdel], body.role-director [data-edit],
 body.role-director [data-pdel], body.role-director #fsBar, body.role-director #restoreBtn, body.role-director #importBtn, body.role-director [data-conf],
 body.role-director [data-pay-del], body.role-director [data-pay-yes], body.role-director [data-prdel], body.role-director [data-prdelall], body.role-director [data-up-set], body.role-director #accPayNew, body.role-director #accAssign,
-body.role-director .arc-sel, body.role-director #arcSelBar, body.role-director .arc-head .chk,
+body.role-director .arc-sel, body.role-director #arcSelBar, body.role-director #lpMove, body.role-director [data-lp-new], body.role-director .arc-head .chk,
 body.role-director #intNewBox, body.role-director #ownFirmForm, body.role-director #intFirmForm, body.role-director [data-ofdel], body.role-director [data-iedit], body.role-director [data-iback], body.role-director [data-idel], body.role-director [data-ifback],
 body.role-director #kirNewBox, body.role-director #supPayForm, body.role-director #supPriceForm, body.role-director #supPayH, body.role-director [data-kedit], body.role-director [data-kdel], body.role-director [data-sppay], body.role-director [data-spdel], body.role-director [data-sprdel],
 body.role-director #qcForm, body.role-director #qcKind, body.role-director [data-qcedit], body.role-director [data-qdel], body.role-director [data-qedit], body.role-director [data-qcat-del], body.role-director #qsCatForm,
@@ -726,6 +726,7 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .prod-sum .tbl table{min-width:520px}
 .prod-sum tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:0}
 .prod-sum td small{color:var(--muted)}
+.prod-sum .ps-sub{margin:14px 0 6px;font-size:14px}
 .prod-sum .ps-warn{color:var(--danger);font-size:12px;display:block}
 /* dumaloq (pitsa) diagramma */
 .st-pie{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center}
@@ -829,6 +830,23 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .site-tab.st-zero{border-left-color:#1f9d55}.site-tab.st-zero b{color:#17794a}
 .site-tab.st-closed{border-left-color:#8a98a3}
 .site-tab.on{background:var(--accent-soft);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.site-tabs-h{align-self:center;font-weight:600;font-size:13px;color:var(--muted);margin-right:2px}
+.site-tab.site-add{border-style:dashed;border-left-width:1px;justify-content:center;color:var(--accent);font-weight:600}
+.site-tab.site-all{border-left-color:var(--accent)}
+.lp-move{margin:0 0 14px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:13px}
+.lp-move>summary{cursor:pointer;font-weight:600}
+.lp-move .lp-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 8px}
+.lp-move .lp-bar>*{width:auto}
+.lp-move .lp-bar input[type=search]{flex:1 1 220px;min-width:0}
+.lp-move .lp-bar select{min-width:200px}
+.lp-list{max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.lp-list table{width:100%;min-width:560px;border-collapse:collapse}
+.lp-list td,.lp-list th{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+.lp-list th{position:sticky;top:0;background:var(--surface);z-index:1;font-size:12px;color:var(--muted)}
+.lp-list tr.sel td{background:var(--accent-soft)}
+.lp-list .r{text-align:right}
+.lp-list small{color:var(--muted);display:block}
+.prod-sum-h .ps-segs{display:flex;gap:8px;flex-wrap:wrap}
 .site-assign{padding:10px 14px;border-radius:10px;border:1px dashed color-mix(in srgb,var(--accent) 50%,var(--line));background:color-mix(in srgb,var(--accent-soft) 60%,var(--surface));font-size:13px;display:grid;gap:8px}
 .site-assign-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .site-assign-row label{display:flex;align-items:center;gap:6px}
@@ -1131,7 +1149,7 @@ body.side-single .side-h::after{display:none}
       <div class="f c4"><label for="fSeller">Sotuvchi firma</label><input id="fSeller" list="sellerList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
       <div class="f c4"><label for="fFirm">Xaridor firma (kimga sotildi)</label><input id="fFirm" list="firmList" placeholder="Yozing yoki ro'yxatdan tanlang"></div>
       <div class="f c2"><label for="fTime">Vaqti (24 soat)</label><input type="time" id="fTime" step="60"></div>
-      <div class="f c4 site-f" id="fSiteBox"><label for="fSite">📍 Obyekt (qaysi ish uchun) *</label><select id="fSite"></select></div>
+      <div class="f c4 site-f" id="fSiteBox"><label for="fSite">📍 Loyiha / obyekt (qaysi ish uchun) *</label><select id="fSite"></select></div>
       <div class="f c4" id="fFromBox" hidden><label for="fFrom">📦 Qaysi ombordan chiqdi</label><select id="fFrom"></select></div>
       <div class="f c3"><label for="fLoad">Yuk ortiladigan manzil</label><input id="fLoad" list="loadList" placeholder="Qayerdan ortiladi"></div>
       <div class="f c3"><label for="fUnload">Yuk tushiriladigan manzil</label><input id="fUnload" list="unloadList" placeholder="Qayerga tushiriladi"></div>
@@ -1203,6 +1221,7 @@ body.side-single .side-h::after{display:none}
       </div>
       <div class="site-tabs" id="accSiteTabs" hidden></div>
       <div class="site-assign" id="accAssign" hidden></div>
+      <details class="lp-move" id="lpMove" hidden></details>
       <div class="proj-box" id="projBox"></div>
       <div class="prod-sum" id="prodSum"></div>
       <div class="acc-cols">
@@ -1211,7 +1230,7 @@ body.side-single .side-h::after{display:none}
           <form class="mini-form" id="payForm" autocomplete="off">
             <div class="f"><label for="payDate">Sana</label><input type="date" id="payDate"></div>
             <div class="f"><label for="payMethod">Qanday to'landi</label><select id="payMethod"><option value="bank">Hisob raqamga (bank)</option><option value="cash">Naqd</option></select></div>
-            <div class="f" id="paySiteBox"><label for="paySite">📍 Qaysi obyekt uchun</label><select id="paySite"></select></div>
+            <div class="f" id="paySiteBox"><label for="paySite">📍 Qaysi loyiha (obyekt) uchun</label><select id="paySite"></select></div>
             <div class="f"><label for="payAmt">Summa, so'm</label><input id="payAmt" class="num" inputmode="decimal" placeholder="0"></div>
             <div class="f grow"><label for="payNote">Izoh</label><input id="payNote" placeholder="masalan, bank o'tkazmasi"></div>
             <button type="submit" class="primary">To'lov qo'shish</button>
@@ -1365,8 +1384,10 @@ body.side-single .side-h::after{display:none}
     </div>
     <form class="entry kar-form" id="qnForm" autocomplete="off" novalidate>
       <div class="f c12"><label>Mahsulot *</label><div class="kar-seg" id="qnProd" role="group" aria-label="Mahsulot"></div></div>
-      <div class="f c3"><label for="qnKovsh">Kovsh soni</label><input id="qnKovsh" class="num" inputmode="decimal" placeholder="masalan, 2"></div>
-      <div class="f c3"><label for="qnQty">Hajmi, m³ * <span class="dim" id="qnKHint"></span></label><input id="qnQty" class="num" inputmode="decimal" placeholder="0"></div>
+      <div class="f c12" id="qnUnitBox" hidden><label>O'lchov birligi *</label><div class="kar-seg" id="qnUnit" role="group" aria-label="O'lchov birligi">
+        <button type="button" data-unit="m³">📦 m³ (kub)</button><button type="button" data-unit="tonna">⚖️ tonna</button></div></div>
+      <div class="f c3" id="qnKovshBox"><label for="qnKovsh">Kovsh soni</label><input id="qnKovsh" class="num" inputmode="decimal" placeholder="masalan, 2"></div>
+      <div class="f c3"><label for="qnQty"><span id="qnQtyLbl">Hajmi, m³</span> * <span class="dim" id="qnKHint"></span></label><input id="qnQty" class="num" inputmode="decimal" placeholder="0"></div>
       <div class="f c3"><label for="qnCar">Mashina raqami *</label><input id="qnCar" list="qCarList" placeholder="70 A 123 BC" autocapitalize="characters"></div>
       <div class="f c3"><label for="qnDriver">Haydovchi <span class="dim">— ixtiyoriy</span></label><input id="qnDriver" list="qDrvList" placeholder="Familiya Ism"></div>
 
@@ -1387,8 +1408,8 @@ body.side-single .side-h::after{display:none}
           <span class="hint" id="qnDebtHint">Qarzga berilsa, mashina raqami bo'yicha qarzdorlar ro'yxatiga yoziladi.</span></div>
       </div>
 
-      <div class="f c3"><label for="qnKPrice">Narxi (1 kovsh), so'm *</label><input id="qnKPrice" class="num" inputmode="decimal" placeholder="masalan, 350 000"><span class="hint" id="qnKPHint"></span></div>
-      <div class="f c3"><label for="qnPrice">Narxi (1 m³), so'm <span class="dim">— avtomatik</span></label><input id="qnPrice" class="num" inputmode="decimal" placeholder="0"></div>
+      <div class="f c3" id="qnKPriceBox"><label for="qnKPrice">Narxi (1 kovsh), so'm *</label><input id="qnKPrice" class="num" inputmode="decimal" placeholder="masalan, 350 000"><span class="hint" id="qnKPHint"></span></div>
+      <div class="f c3"><label for="qnPrice">Narxi (1 <span id="qnPUnit">m³</span>), so'm <span class="dim" id="qnPAuto">— avtomatik</span></label><input id="qnPrice" class="num" inputmode="decimal" placeholder="0"></div>
       <div class="f c3"><label for="qnSum">Summa, so'm</label><input id="qnSum" class="num" inputmode="decimal" placeholder="0"></div>
       <div class="f c3"><label for="qnDate">Sana</label><input type="date" id="qnDate"></div>
       <div class="f c12"><label for="qnNote">Izoh</label><input id="qnNote" placeholder="ixtiyoriy"></div>
@@ -1497,7 +1518,8 @@ body.side-single .side-h::after{display:none}
       <div class="f c4"><label for="qsName">Karyer nomi *</label><input id="qsName" placeholder="masalan, Pachkamar"></div>
       <div class="f c5"><label for="qsOwner">Qaysi firmaga qarashli *</label><input id="qsOwner" list="sellerList" placeholder="&quot;QARSHI BETON KLASTER&quot; MCHJ"></div>
       <div class="f c3"><label for="qsKovsh">1 kovsh, m³</label><input id="qsKovsh" class="num" inputmode="decimal" value="3"></div>
-      <div class="f c6"><label for="qsProds">Mahsulotlar (vergul bilan)</label><input id="qsProds" value="Qum, Sheben, Sechka"></div>
+      <div class="f c4"><label for="qsUnits">O'lchov birligi</label><select id="qsUnits"><option value="m³">Faqat m³ (kub)</option><option value="tonna">Faqat tonna</option><option value="m³,tonna">m³ va tonna — har yuklashda tanlanadi</option></select><span class="hint">Tonnada kovsh ishlatilmaydi — og'irlik va 1 tonna narxi yoziladi.</span></div>
+      <div class="f c8"><label for="qsProds">Mahsulotlar (vergul bilan)</label><input id="qsProds" value="Qum, Sheben, Sechka"></div>
       <div class="f c6"><label class="chk kar-blank"><input type="checkbox" id="qsOwnBlank" checked> Yuk xatida bizning blank (logotip, telefon) chiqsin</label><span class="hint">Boshqa firmaga qarashli karyer uchun belgini olib tashlang — yuk xati tepasida o'sha firma nomi chiqadi.</span>
         <label class="chk kar-blank" style="margin-top:8px"><input type="checkbox" id="qsKitob"> Kassada «📤 Pul yuborildi» bo'limi bo'lsin</label>
         <div class="f" id="qsSendBox"><label for="qsSend">Qayerga yuboriladi (vergul bilan)</label><input id="qsSend" placeholder="masalan: Kitob, Qarshi"></div><span class="hint">Faqat pulini boshqa joyga yuboradigan karyer uchun belgilang. Kassada yozayotganda shu ro'yxatdan tanlanadi.</span></div>
@@ -1607,7 +1629,7 @@ body.side-single .side-h::after{display:none}
   <section class="panel" id="archive" data-page="archive">
       <div class="arc-head"><h2>Yuk xatlari arxivi</h2>
         <label class="chk priv-only" hidden><input type="checkbox" id="arcSelAll"> Ko'rinayotganlarning hammasini belgilash</label>
-        <span class="selbar" id="arcSelBar" hidden><b>Belgilangan: <span id="arcSelN">0</span></b><button type="button" class="sm primary" id="arcToInt">🔁 Ichki hisobga o'tkazish</button><button type="button" class="sm ghost" id="arcSelClear">Bekor qilish</button></span></div>
+        <span class="selbar" id="arcSelBar" hidden><b>Belgilangan: <span id="arcSelN">0</span></b><button type="button" class="sm primary" id="arcToSite" hidden>📍 Loyihasini o'zgartirish</button><button type="button" class="sm primary" id="arcToInt">🔁 Ichki hisobga o'tkazish</button><button type="button" class="sm ghost" id="arcSelClear">Bekor qilish</button></span></div>
       <div class="tbl">
         <table>
           <thead><tr><th>Sana</th><th>Yuk xati / firma</th><th>Mahsulotlar</th><th>Yetkazib berish</th><th class="r money">Summa</th><th>Amallar</th></tr></thead>
@@ -1856,9 +1878,9 @@ body.side-single .side-h::after{display:none}
 </form></dialog>
 
 <dialog class="dlg" id="siteDlg" aria-labelledby="sdT"><form id="siteDlgF" autocomplete="off" novalidate>
-  <h3 id="sdT">Yangi obyekt</h3>
-  <p class="hint">Yuk qaysi ish joyi uchun chiqayotganini belgilash uchun.</p>
-  <div class="f"><label for="sdName">Obyekt nomi</label><input id="sdName" placeholder="masalan: Navoiy — 110 kV podstansiya"></div>
+  <h3 id="sdT">Yangi loyiha (obyekt)</h3>
+  <p class="hint">Yuk qaysi ish (loyiha, obyekt) uchun chiqayotganini belgilash uchun. Bitta firma bilan bir vaqtda bir nechta loyiha yuritish mumkin — har birining hisobi alohida.</p>
+  <div class="f"><label for="sdName">Loyiha (obyekt) nomi</label><input id="sdName" placeholder="masalan: Navoiy — 110 kV podstansiya"></div>
   <div class="btns dlg-act"><button type="button" id="sdCancel">Bekor qilish</button><button type="submit" class="primary">Qo'shish</button></div>
 </form></dialog>
 <dialog class="dlg" id="txtDlg" aria-labelledby="tdT"><form id="txtDlgF" autocomplete="off" novalidate>
@@ -1869,10 +1891,17 @@ body.side-single .side-h::after{display:none}
 </form></dialog>
 
 <dialog class="dlg" id="psDlg" aria-labelledby="psT"><form id="psF" novalidate>
-  <h3 id="psT">To'lovning obyektini o'zgartirish</h3>
+  <h3 id="psT">To'lovning loyihasini (obyektini) o'zgartirish</h3>
   <p class="hint" id="psInfo"></p>
-  <div class="f"><label for="psSel">📍 Qaysi obyekt hisobiga</label><select id="psSel"></select></div>
+  <div class="f"><label for="psSel">📍 Qaysi loyiha (obyekt) hisobiga</label><select id="psSel"></select></div>
   <div class="btns dlg-act"><button type="button" id="psCancel">Bekor qilish</button><button type="submit" class="primary">Saqlash</button></div>
+</form></dialog>
+
+<dialog class="dlg" id="lpDlg" aria-labelledby="lpT"><form id="lpF" novalidate>
+  <h3 id="lpT">Yuk xatlarining loyihasini o'zgartirish</h3>
+  <p class="hint" id="lpInfo"></p>
+  <div class="f"><label for="lpSel">📍 Qaysi loyiha (obyekt)ga o'tkazilsin</label><select id="lpSel"></select></div>
+  <div class="btns dlg-act"><button type="button" id="lpCancel">Bekor qilish</button><button type="submit" class="primary">O'tkazish</button></div>
 </form></dialog>
 
 <dialog class="dlg" id="cpDlg" aria-labelledby="cpT"><form id="cpF" autocomplete="off" novalidate>
@@ -3435,12 +3464,29 @@ let accProj = {};
 let sites = [], SITES_OK = false, accSite;
 const REGIONS = ["Qashqadaryo viloyati", "Navoiy viloyati", "Buxoro viloyati", "Samarqand viloyati", "Surxondaryo viloyati", "Jizzax viloyati", "Sirdaryo viloyati", "Toshkent viloyati", "Toshkent shahri", "Andijon viloyati", "Farg'ona viloyati", "Namangan viloyati", "Xorazm viloyati", "Qoraqalpog'iston Respublikasi"];
 const siteById = id => sites.find(x => x.id === id);
-const siteLbl = id => { const x = siteById(id); return x ? x.name : id ? "Noma'lum obyekt" : "Obyekt belgilanmagan"; };
+const siteLbl = id => { const x = siteById(id); return x ? x.name : id ? "Noma'lum obyekt" : "Loyiha belgilanmagan"; };
 const siteShort = id => { const x = siteById(id); return x ? x.name : id ? "Noma'lum obyekt" : "Belgilanmagan"; };
 function siteOptions(sel, o = {}){
   const act = sites.filter(x => (x.active || x.id === sel) && !(o.except && x.id === o.except)).sort((a, b) => a.name.localeCompare(b.name));
-  return `<option value="">${o.empty || "— obyektni tanlang —"}</option>` + act.map(x => `<option value="${x.id}"${x.id === sel ? " selected" : ""}>${esc(x.name)}${x.active ? "" : " (arxivda)"}</option>`).join("") +
-    (PRIV() && !VIEWING() && !o.noNew ? `<option value="__new">＋ Yangi obyekt qo'shish…</option>` : "");
+  const opt = x => `<option value="${x.id}"${x.id === sel ? " selected" : ""}>${esc(x.name)}${x.active ? "" : " (arxivda)"}</option>`;
+  // firma ma'lum bo'lsa — shu firmaning loyihalari tepada alohida guruhda
+  const mine = o.firm ? new Set(firmSiteIds(o.firm)) : null;
+  const body = mine && mine.size && act.some(x => mine.has(x.id))
+    ? `<optgroup label="Shu firma loyihalari">${act.filter(x => mine.has(x.id)).map(opt).join("")}</optgroup>` + (act.some(x => !mine.has(x.id)) ? `<optgroup label="Boshqa loyihalar (obyektlar)">${act.filter(x => !mine.has(x.id)).map(opt).join("")}</optgroup>` : "")
+    : act.map(opt).join("");
+  return `<option value="">${o.empty || "— loyihani (obyektni) tanlang —"}</option>` + body +
+    (PRIV() && !VIEWING() && !o.noNew ? `<option value="__new">＋ Yangi loyiha (obyekt) qo'shish…</option>` : "");
+}
+// firma bilan ochilgan, lekin hali yozuvi yo'q loyihalar (shu kompyuterda eslab qolinadi)
+let lpExtra = {};
+try { lpExtra = JSON.parse(localStorage.getItem("savdo-lp-extra") || "{}") || {}; } catch(e) { lpExtra = {}; }
+function lpExtraAdd(f, id){ const k = String(f || "").trim().toLowerCase(); if (!k || !id) return; const l = lpExtra[k] || []; if (!l.includes(id)) l.push(id); lpExtra[k] = l; try { localStorage.setItem("savdo-lp-extra", JSON.stringify(lpExtra)); } catch(e) {} }
+function firmSiteIds(f){
+  const k = String(f || "").trim().toLowerCase(); if (!k) return [];
+  const set = new Set((lpExtra[k] || []).filter(id => siteById(id)));
+  rows.forEach(r => { if (r.site && String(r.firm || "").trim().toLowerCase() === k) set.add(r.site); });
+  pays.forEach(p => { if (p.site && String(p.firm || "").trim().toLowerCase() === k) set.add(p.site); });
+  return [...set];
 }
 const siteKey = () => "savdo-site-" + (me?.id || "");
 function getLastSite(){ try { const v = localStorage.getItem(siteKey()) || ""; return siteById(v)?.active ? v : ""; } catch(e) { return ""; } }
@@ -3935,7 +3981,9 @@ $("#fPay").addEventListener("change", () => { setPm($("#fPay").value); pmMark($(
 let autoSite = "";
 function fillSite(){
   if (editId || !SITES_OK) return;
-  const cur = $("#fSite").value; if (cur && cur !== autoSite) return;
+  const cur = $("#fSite").value;
+  $("#fSite").innerHTML = siteOptions(cur, { firm: $("#fFirm").value.trim() }); $("#fSite").value = cur;
+  if (cur && cur !== autoSite) return;
   const v = lastSiteFor($("#fFirm").value.trim()) || cur || getLastSite();
   $("#fSite").value = v; if ($("#fSite").value !== v) $("#fSite").value = ""; autoSite = $("#fSite").value; pmMark($("#fSite"));
 }
@@ -4098,7 +4146,7 @@ function render(){
   renderRef();
   $("#fSiteBox").hidden = $("#qSiteBox").hidden = $("#paySiteBox").hidden = $("#apSiteBox").hidden = !SITES_OK;
   if (SITES_OK) {
-    { const v = $("#fSite").value; $("#fSite").innerHTML = siteOptions(v); $("#fSite").value = v; if ($("#fSite").value !== v) $("#fSite").value = ""; pmMark($("#fSite")); }
+    { const v = $("#fSite").value; $("#fSite").innerHTML = siteOptions(v, { firm: $("#fFirm").value.trim() }); $("#fSite").value = v; if ($("#fSite").value !== v) $("#fSite").value = ""; pmMark($("#fSite")); }
     { const v = $("#qSite").value; $("#qSite").innerHTML = `<option value="">Barcha obyektlar</option>` + [...sites].sort((a, b) => siteLbl(a.id).localeCompare(siteLbl(b.id))).map(x => `<option value="${x.id}">${esc(siteLbl(x.id))}</option>`).join("") + (rows.some(r => !r.site) ? `<option value="__none">Obyekt belgilanmagan</option>` : ""); $("#qSite").value = v; if ($("#qSite").value !== v) $("#qSite").value = ""; }
   }
   renderSites();
@@ -4155,7 +4203,7 @@ function render(){
         ? `<div class="acts"><span class="hint">O'chirilsinmi?</span><button class="danger-solid sm" data-del-yes="${esc(g.key)}">Ha, o'chir</button><button class="sm" data-del-no>Yo'q</button></div>`
         : `<div class="acts"><button class="wb sm" data-print="${esc(g.key)}">Yuk xati</button><button class="sm conf${r.hasPhoto ? " has" : ""}" data-conf="${esc(g.key)}" title="Imzolangan/muhrlangan yuk xati rasmini yuklang — u Excel'ga tushadi">${r.hasPhoto ? "✓ Tasdiqlangan" : "📎 Tasdiqlanganini yuklash"}</button><button class="sm" data-edit="${esc(g.key)}">Tahrirlash</button>${PRIV() ? `<button class="sm danger" data-del="${esc(g.key)}">O'chirish</button>` : ""}</div>`;
       html += `<tr>
-        <td class="dcell">${PRIV() && INT_OK && !VIEWING() ? `<label class="arc-sel" title="Belgilash (ichki hisobga o'tkazish uchun)"><input type="checkbox" data-arcsel="${esc(g.key)}"${arcSel.has(g.key) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}${r.date ? `<span class="d1">«${r.date.slice(8)}» ${OYLAR[+r.date.slice(5,7)-1]}</span><span class="d2">${r.date.slice(0,4)}-yil${r.time ? `, ${r.time}` : ""}</span>` : '<span class="dim">—</span>'}</td>
+        <td class="dcell">${PRIV() && (INT_OK || SITES_OK) && !VIEWING() ? `<label class="arc-sel" title="Belgilash (loyihasini o'zgartirish yoki ichki hisobga o'tkazish uchun)"><input type="checkbox" data-arcsel="${esc(g.key)}"${arcSel.has(g.key) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}${r.date ? `<span class="d1">«${r.date.slice(8)}» ${OYLAR[+r.date.slice(5,7)-1]}</span><span class="d2">${r.date.slice(0,4)}-yil${r.time ? `, ${r.time}` : ""}</span>` : '<span class="dim">—</span>'}</td>
         <td>${r.waybill ? `<span class="wbno">№ ${esc(r.waybill)}</span>` : ""}
             ${r.firm ? `<button class="firm-link" data-firm="${esc(r.firm)}">${esc(r.firm)}</button>` : '<span class="dim">Xaridor ko\'rsatilmagan</span>'}
             ${r.unloadAddr ? `<span class="sub">Tushirish: ${esc(r.unloadAddr)}</span>` : ""}
@@ -4169,7 +4217,7 @@ function render(){
     }
     $("#rows").innerHTML = html;
   }
-  if (typeof arcSelBar === "function") { [...arcSel].forEach(k => { if (!keys.includes(k)) arcSel.delete(k); }); arcSelBar(); const sa = $("#arcSelAll"); if (sa) { sa.closest("label").hidden = !(PRIV() && INT_OK && !VIEWING() && keys.length); sa.checked = keys.length > 0 && keys.every(k => arcSel.has(k)); } }
+  if (typeof arcSelBar === "function") { [...arcSel].forEach(k => { if (!keys.includes(k)) arcSel.delete(k); }); arcSelBar(); const sa = $("#arcSelAll"); if (sa) { sa.closest("label").hidden = !(PRIV() && (INT_OK || SITES_OK) && !VIEWING() && keys.length); sa.checked = keys.length > 0 && keys.every(k => arcSel.has(k)); } }
 
   renderAccounts();
   updateBalance();
@@ -4622,14 +4670,14 @@ function setFirmPrice(firm, product, price, from){
 }
 
 /* ---------- To'lovlar va qoldiq ---------- */
-// Loyihalar: hisob yopilganda shu paytgacha bo'lgan yuk xatlari va to'lovlar eski loyihada qoladi, yangisi 0 dan boshlanadi
+// Davrlar: hisob yopilganda shu paytgacha bo'lgan yuk xatlari va to'lovlar eski davrda qoladi, yangisi 0 dan boshlanadi
 const fkey = f => String(f || "").trim().toLowerCase();
 const tsCache = new Map();
 const tsN = v => { if (!v) return ""; let x = tsCache.get(v); if (x === undefined) { const t = Date.parse(String(v).replace(" ", "T")); x = isNaN(t) ? "" : new Date(t).toISOString(); tsCache.set(v, x); } return x; };
 const rowAt = r => tsN(r.created), payAt = p => tsN(p.at);
 const accK = (f, s) => s ? fkey(f) + "|" + s : fkey(f);
 const projName = (f, s, i) => ((accProj.__names || {})[accK(f, s) + "#" + i]) || "";
-const projTitle = (f, s, i) => projName(f, s, i) || `${i}-loyiha`;
+const projTitle = (f, s, i) => projName(f, s, i) || `${i}-davr`;
 const projCuts = (f, s) => (accProj[accK(f, s)] || []).map(p => p.at).filter(Boolean).sort();
 function projNow(f, s){
   const cuts = projCuts(f, s), cut = cuts.length ? cuts[cuts.length - 1] : "";
@@ -4655,18 +4703,18 @@ function projList(f, s){
 function renderProjects(){
   const box = $("#projBox"); if (!box || !accFirm) return;
   const S = accSite, P = projNow(accFirm, S), list = projList(accFirm, S), st = balState(accFirm, P.bal, S), can = PRIV() && !VIEWING();
-  const ren = i => can ? ` <button type="button" class="pr-ren" data-proj-name="${i}" title="Loyihaga nom berish" aria-label="Loyihaga nom berish">✏️</button>` : "";
+  const ren = i => can ? ` <button type="button" class="pr-ren" data-proj-name="${i}" title="Davrga nom berish" aria-label="Davrga nom berish">✏️</button>` : "";
   const curI = P.closed ? list.length : list.length + 1;
   box.innerHTML = P.closed ? `<div class="proj-now st-closed">
       <div><b>🔒 ${esc(projTitle(accFirm, S, curI))} — hisob yopilgan</b>${ren(curI)} <span class="dim">· ${fmtDate(P.cut.slice(0, 10))}</span>
-        <div class="dim">${Math.abs(P.bal) < 1 ? "Hisob-kitob 0 da yopilgan." : P.bal < 0 ? `Yopilganda qarz qolgan: <b class="num">${fmt(-P.bal)}</b> so'm.` : `Yopilganda ortiqcha pul qolgan: <b class="num">${fmt(P.bal)}</b> so'm.`} Shu firmaga yangi yuk xati yoki to'lov yozilsa, yangi loyiha o'zi ochiladi.</div></div>
-      ${can ? `<span class="btns"><button type="button" class="primary" id="projOpen">📁 Yangi loyiha ochish</button><button type="button" class="ghost danger" data-proj-undo>Yopishni bekor qilish</button></span>` : ""}
+        <div class="dim">${Math.abs(P.bal) < 1 ? "Hisob-kitob 0 da yopilgan." : P.bal < 0 ? `Yopilganda qarz qolgan: <b class="num">${fmt(-P.bal)}</b> so'm.` : `Yopilganda ortiqcha pul qolgan: <b class="num">${fmt(P.bal)}</b> so'm.`} Shu firmaga yangi yuk xati yoki to'lov yozilsa, yangi davr o'zi ochiladi.</div></div>
+      ${can ? `<span class="btns"><button type="button" class="primary" id="projOpen">📁 Yangi davr ochish</button><button type="button" class="ghost danger" data-proj-undo>Yopishni bekor qilish</button></span>` : ""}
     </div>` : `<div class="proj-now st-${st}">
-      <div><b>${projName(accFirm, S, curI) ? esc(projName(accFirm, S, curI)) : list.length ? `${curI}-loyiha` : "Hozirgi hisob"}</b>${ren(curI)}${P.cut ? ` <span class="dim">· ${fmtDate(P.cut.slice(0, 10))} dan boshlangan</span>` : ""}
+      <div><b>${projName(accFirm, S, curI) ? esc(projName(accFirm, S, curI)) : list.length ? `${curI}-davr` : "Hozirgi hisob"}</b>${ren(curI)}${P.cut ? ` <span class="dim">· ${fmtDate(P.cut.slice(0, 10))} dan boshlangan</span>` : ""}
         <div class="dim">${st === "zero" ? "Hisob-kitob 0 — yopish mumkin." : P.bal < 0 ? `Qarzi bor: <b class="num">${fmt(-P.bal)}</b> so'm` : `Ortiqcha pul (qoldiq): <b class="num">${fmt(P.bal)}</b> so'm`}</div></div>
-      ${can ? `<span class="btns"><button type="button" class="${st === "zero" ? "primary" : ""}" id="projLock">🔒 Hisobni yopish</button><button type="button" id="projClose">📁 Yopib, yangi loyiha ochish</button></span>` : ""}
+      ${can ? `<span class="btns"><button type="button" class="${st === "zero" ? "primary" : ""}" id="projLock">🔒 Hisobni yopish</button><button type="button" id="projClose">📁 Yopib, yangi davr ochish</button></span>` : ""}
     </div>
-    ${list.length ? `<details class="proj-old"><summary>Oldingi loyihalar (${list.length})</summary><div class="tbl"><table><thead><tr><th>Loyiha</th><th>Davr</th><th class="r">Yuk xati</th><th class="r">Yuk berildi</th><th class="r">To'landi</th><th></th></tr></thead><tbody>
+    ${list.length ? `<details class="proj-old"><summary>Oldingi davrlar (${list.length})</summary><div class="tbl"><table><thead><tr><th>Nomi</th><th>Davr</th><th class="r">Yuk xati</th><th class="r">Yuk berildi</th><th class="r">To'landi</th><th></th></tr></thead><tbody>
       ${list.map((x, j) => `<tr><td>${esc(projTitle(accFirm, S, x.i))}${ren(x.i)}</td><td class="num">${x.d1 ? fmtDate(x.d1) : "—"} – ${x.d2 ? fmtDate(x.d2) : "—"}<div class="dim">yopildi: ${fmtDate(x.cut.slice(0, 10))}</div></td><td class="r num">${x.n}</td><td class="r num">${fmt(x.del)}</td><td class="r num">${fmt(x.paid)}</td>
         <td class="r"><button type="button" class="sm" data-proj-show="${x.i}">Yuk xatlari</button>${can && j === list.length - 1 ? ` <button type="button" class="sm ghost danger" data-proj-undo>Yopishni bekor qilish</button>` : ""}</td></tr>`).join("")}
       </tbody></table></div></details>` : ""}`;
@@ -4690,35 +4738,35 @@ document.addEventListener("click", async e => {
   if (t.id === "projClose" || t.id === "projLock") {
     const lockOnly = t.id === "projLock";
     const S = accSite, P = projNow(accFirm, S), k = accK(accFirm, S), where = SITES_OK && S !== undefined ? ` (📍 ${siteLbl(S)})` : "";
-    const msg = lockOnly ? `«${accFirm}»${where} bilan hisob-kitob yopiladi. Yangi loyiha hozircha ochilmaydi — kerak bo'lganda «Yangi loyiha ochish»ni bosasiz (yoki shu firmaga yangi yuk xati yozilsa, o'zi ochiladi).` +
-      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm.` : "") + "\n\nDavom etilsinmi?" : `«${accFirm}»${where} bilan hozirgi hisob-kitob yopiladi va yangi loyiha 0 dan boshlanadi.\
+    const msg = lockOnly ? `«${accFirm}»${where} bilan hisob-kitob yopiladi. Yangi davr hozircha ochilmaydi — kerak bo'lganda «Yangi davr ochish»ni bosasiz (yoki shu firmaga yangi yuk xati yozilsa, o'zi ochiladi).` +
+      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm.` : "") + "\n\nDavom etilsinmi?" : `«${accFirm}»${where} bilan hozirgi hisob-kitob yopiladi va yangi davr 0 dan boshlanadi.\
 \
-Eski yuk xatlari va to'lovlar o'chmaydi — «Oldingi loyihalar» ro'yxatida turadi.` +
-      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm yangi loyihaga o'tadi.` : "") + "\n\nDavom etilsinmi?";
+Eski yuk xatlari va to'lovlar o'chmaydi — «Oldingi davrlar» ro'yxatida turadi.` +
+      (Math.abs(P.bal) >= 1 ? `\n\nDiqqat: hisob hali 0 emas — ${P.bal < 0 ? "qarz" : "ortiqcha pul"} ${fmt(Math.abs(P.bal))} so'm yangi davrga o'tadi.` : "") + "\n\nDavom etilsinmi?";
     if (!confirm(msg)) return;
-    // chegara: shu firmaning oxirgi yozuvidan keyin (kompyuter soati noto'g'ri bo'lsa ham eski yozuvlar eski loyihada qoladi)
+    // chegara: shu firmaning oxirgi yozuvidan keyin (kompyuter soati noto'g'ri bo'lsa ham eski yozuvlar eski davrda qoladi)
     const last = [...rows.filter(r => same(r.firm, accFirm) && inSite(r, S)).map(rowAt), ...pays.filter(p => same(p.firm, accFirm) && inSite(p, S)).map(payAt)].filter(Boolean).sort().pop() || "";
     let nm = "";
-    if (!lockOnly) { nm = await askText({ title: "Yangi loyiha nomi", hint: "Masalan: «Navoiy — 2-bosqich» yoki «2027 yil shartnomasi». Bo'sh qoldirsangiz, raqam bilan nomlanadi.", label: "Loyiha nomi (ixtiyoriy)", ok: "Ochish" }); if (nm === null) return; }
+    if (!lockOnly) { nm = await askText({ title: "Yangi davr nomi", hint: "Masalan: «2027 yil shartnomasi». Parallel loyihalar uchun esa tepadagi «＋ Yangi loyiha» tugmasidan foydalaning. Bo'sh qoldirsangiz, raqam bilan nomlanadi.", label: "Davr nomi (ixtiyoriy)", ok: "Ochish" }); if (nm === null) return; }
     let at = new Date().toISOString(); if (last && last >= at) at = new Date(new Date(last).getTime() + 1).toISOString();
     accProj = { ...accProj, [k]: [...(accProj[k] || []), { at, by: me.full_name || me.login, ...(lockOnly ? { closed: true } : {}) }] };
     if (nm) accProj.__names = { ...(accProj.__names || {}), [k + "#" + (accProj[k].length + 1)]: nm };
-    if (await saveProj()) { render(); toast(lockOnly ? "Hisob yopildi" : "Hisob yopildi — yangi loyiha 0 dan boshlandi"); }
+    if (await saveProj()) { render(); toast(lockOnly ? "Hisob yopildi" : "Hisob yopildi — yangi davr 0 dan boshlandi"); }
   } else if (t.id === "projOpen") {
     const k = accK(accFirm, accSite), list = (accProj[k] || []).map(p => ({ ...p })); const l = list[list.length - 1]; if (!l) return;
-    const nm = await askText({ title: "Yangi loyiha nomi", hint: "Bo'sh qoldirsangiz, raqam bilan nomlanadi.", label: "Loyiha nomi (ixtiyoriy)", ok: "Ochish" }); if (nm === null) return;
+    const nm = await askText({ title: "Yangi davr nomi", hint: "Bo'sh qoldirsangiz, raqam bilan nomlanadi.", label: "Davr nomi (ixtiyoriy)", ok: "Ochish" }); if (nm === null) return;
     delete l.closed; accProj = { ...accProj, [k]: list };
     if (nm) accProj.__names = { ...(accProj.__names || {}), [k + "#" + (list.length + 1)]: nm };
-    if (await saveProj()) { render(); toast("Yangi loyiha ochildi — hisob 0 dan boshlandi"); }
+    if (await saveProj()) { render(); toast("Yangi davr ochildi — hisob 0 dan boshlandi"); }
   } else if (t.hasAttribute("data-proj-undo")) {
-    if (!confirm("Oxirgi yopish bekor qilinsinmi? Ikki loyiha yana bitta hisobga qo'shiladi.")) return;
+    if (!confirm("Oxirgi yopish bekor qilinsinmi? Ikki davr yana bitta hisobga qo'shiladi.")) return;
     const k = accK(accFirm, accSite); accProj = { ...accProj, [k]: (accProj[k] || []).slice(0, -1) }; if (!accProj[k].length) delete accProj[k];
     if (await saveProj()) { render(); toast("Yopish bekor qilindi"); }
   } else if (t.dataset.projName) {
     const i = +t.dataset.projName, k = accK(accFirm, accSite);
-    const v = await askText({ title: "Loyiha nomi", hint: accFirm + (SITES_OK && accSite !== undefined ? " · 📍 " + siteLbl(accSite) : ""), label: "Nomi", value: projName(accFirm, accSite, i), ph: `${i}-loyiha` }); if (v === null) return;
+    const v = await askText({ title: "Davr nomi", hint: accFirm + (SITES_OK && accSite !== undefined ? " · 📍 " + siteLbl(accSite) : ""), label: "Nomi", value: projName(accFirm, accSite, i), ph: `${i}-davr` }); if (v === null) return;
     const names = { ...(accProj.__names || {}) }; if (v) names[k + "#" + i] = v; else delete names[k + "#" + i];
-    accProj = { ...accProj, __names: names }; if (await saveProj()) { render(); toast("Loyiha nomi saqlandi"); }
+    accProj = { ...accProj, __names: names }; if (await saveProj()) { render(); toast("Davr nomi saqlandi"); }
   } else if (t.dataset.projShow) {
     const x = projList(accFirm, accSite)[+t.dataset.projShow - 1]; if (!x) return;
     if (SITES_OK && accSite !== undefined) $("#qSite").value = accSite || "__none";
@@ -4791,10 +4839,12 @@ $("#fFirm").addEventListener("input", updateBalance);
 
 let accFirm = "", pendingPayDel = null;
 // firma ichida: qaysi mahsulotdan jami qancha olingani va summasi
-let prodSumScope = "all";
+let prodSumScope = "all", prodSumSite = "cur";
 function renderProdSum(){
   const box = $("#prodSum"); if (!box || !accFirm) return;
-  const S = accSite, cut = projNow(accFirm, S).cut, hasProj = projCuts(accFirm, S).length > 0;
+  const multi = SITES_OK && accSite !== undefined && firmSites(accFirm).length > 1;
+  if (!multi) prodSumSite = "cur";
+  const S = prodSumSite === "all" ? undefined : accSite, cut = projNow(accFirm, S).cut, hasProj = S !== undefined && projCuts(accFirm, S).length > 0;
   if (!hasProj) prodSumScope = "all";
   const R = rows.filter(r => same(r.firm, accFirm) && inSite(r, S) && r.product && (prodSumScope === "all" || rowAt(r) > cut));
   const m = new Map();
@@ -4803,9 +4853,13 @@ function renderProdSum(){
   const list = [...m.values()].sort((a, b) => b.sum - a.sum || a.name.localeCompare(b.name));
   const tot = list.reduce((s, x) => s + x.sum, 0), wbAll = new Set(R.map(gk)).size;
   const units = new Set(list.map(x => x.unit || "")), oneU = units.size === 1;
-  const seg = hasProj ? `<span class="seg" role="group" aria-label="Davr"><button type="button" data-ps-scope="all" class="${prodSumScope === "all" ? "on" : ""}" aria-pressed="${prodSumScope === "all"}">Hammasi</button><button type="button" data-ps-scope="cur" class="${prodSumScope === "cur" ? "on" : ""}" aria-pressed="${prodSumScope === "cur"}">Joriy loyiha</button></span>` : "";
-  const where = SITES_OK && S !== undefined && S !== null && S !== "" ? ` <span class="hint">· 📍 ${esc(siteLbl(S))}</span>` : "";
-  box.innerHTML = `<div class="prod-sum-h"><h2>📦 Mahsulotlar bo'yicha jami${where}</h2>${seg}</div>` + (list.length
+  const seg = hasProj ? `<span class="seg" role="group" aria-label="Davr"><button type="button" data-ps-scope="all" class="${prodSumScope === "all" ? "on" : ""}" aria-pressed="${prodSumScope === "all"}">Hammasi</button><button type="button" data-ps-scope="cur" class="${prodSumScope === "cur" ? "on" : ""}" aria-pressed="${prodSumScope === "cur"}">Joriy davr</button></span>` : "";
+  const where = SITES_OK && S !== undefined && S !== null && (S !== "" || multi) ? ` <span class="hint">· 📍 ${esc(siteLbl(S))}</span>` : multi ? ` <span class="hint">· barcha loyihalar</span>` : "";
+  const seg2 = multi ? `<span class="seg" role="group" aria-label="Loyiha"><button type="button" data-ps-site="cur" class="${prodSumSite === "cur" ? "on" : ""}" aria-pressed="${prodSumSite === "cur"}">Shu loyiha</button><button type="button" data-ps-site="all" class="${prodSumSite === "all" ? "on" : ""}" aria-pressed="${prodSumSite === "all"}">Barcha loyihalar</button></span>` : "";
+  const bySite = multi && prodSumSite === "all" ? (() => { const sm = new Map(); R.forEach(r => { const k = r.site || ""; const x = sm.get(k) || { s: k, wb: new Set(), sum: 0 }; x.wb.add(gk(r)); x.sum += r.total || 0; sm.set(k, x); });
+    const L = [...sm.values()].sort((a, b) => b.sum - a.sum); if (L.length < 2) return "";
+    return `<h3 class="ps-sub">Loyihalar bo'yicha</h3><div class="tbl"><table><thead><tr><th>Loyiha (obyekt)</th><th class="r">Yuk xati</th><th class="r">Summa, so'm</th></tr></thead><tbody>${L.map(x => `<tr><td><button type="button" class="firm-link" data-ps-goto="${esc(x.s)}">📍 ${esc(siteLbl(x.s))}</button></td><td class="r num">${x.wb.size}</td><td class="r num"><b>${fmt(x.sum)}</b></td></tr>`).join("")}</tbody></table></div>`; })() : "";
+  box.innerHTML = `<div class="prod-sum-h"><h2>📦 Mahsulotlar bo'yicha jami${where}</h2><span class="ps-segs">${seg2}${seg}</span></div>` + (list.length
     ? `<div class="tbl"><table><thead><tr><th>Mahsulot</th><th class="r">Yuk xati</th><th class="r">Jami miqdor</th><th class="r">O'rtacha narx</th><th class="r">Summa, so'm</th></tr></thead><tbody>${list.map(x => `<tr>
         <td><b>${esc(x.name)}</b>${x.np ? `<span class="ps-warn">⚠ ${x.np} ta yozuvda narx yo'q</span>` : ""}</td>
         <td class="r num">${x.wb.size}</td>
@@ -4813,9 +4867,12 @@ function renderProdSum(){
         <td class="r num">${x.pq ? fmt(Math.round(x.sum / x.pq)) : "—"}</td>
         <td class="r num"><b>${fmt(x.sum)}</b></td></tr>`).join("")}</tbody>
       <tfoot><tr><td>JAMI</td><td class="r num">${wbAll}</td><td class="r num">${oneU ? `${fmt(list.reduce((s, x) => s + x.qty, 0))}${list[0].unit ? ` <small>${esc(list[0].unit)}</small>` : ""}` : ""}</td><td></td><td class="r num">${fmt(tot)}</td></tr></tfoot></table></div>`
-    : `<p class="hint">${prodSumScope === "cur" ? "Joriy loyihada hali yuk xati yo'q." : "Bu firmaga hali mahsulot berilmagan."}</p>`);
+    : `<p class="hint">${prodSumScope === "cur" ? "Joriy davrda hali yuk xati yo'q." : S !== undefined && multi ? "Bu loyihada hali yuk xati yo'q." : "Bu firmaga hali mahsulot berilmagan."}</p>`) + bySite;
 }
-$("#prodSum").addEventListener("click", e => { const b = e.target.closest("[data-ps-scope]"); if (!b) return; prodSumScope = b.dataset.psScope; renderProdSum(); });
+$("#prodSum").addEventListener("click", e => {
+  const g = e.target.closest("[data-ps-goto]"); if (g) { accSite = g.dataset.psGoto; prodSumSite = "cur"; pendingPayDel = null; renderAccounts(); return; }
+  const s = e.target.closest("[data-ps-site]"); if (s) { prodSumSite = s.dataset.psSite; renderProdSum(); return; }
+  const b = e.target.closest("[data-ps-scope]"); if (!b) return; prodSumScope = b.dataset.psScope; renderProdSum(); });
 const buyersAll = () => [...new Map([...ref.firms, ...rows.map(r => r.firm), ...pays.map(p => p.firm)].filter(Boolean).map(f => [f.trim().toLowerCase(), f.trim()])).values()].sort((a, b) => a.localeCompare(b));
 // narxi qo'yilmagan (yoki 0) yuk xati qatorlari — firma bo'yicha
 let UP = new Map();
@@ -4853,6 +4910,7 @@ const ST_TXT = { zero: "✓ Hisob 0", over: "Avans mavjud", debt: "Bizga qarzdor
 function firmSites(f){
   if (!SITES_OK) return [undefined];
   const set = new Set([...rows.filter(r => same(r.firm, f)).map(r => r.site || ""), ...pays.filter(p => same(p.firm, f)).map(p => p.site || "")]);
+  (lpExtra[fkey(f)] || []).forEach(id => { if (siteById(id)) set.add(id); });
   if (!set.size) set.add("");
   return [...set].sort((a, b) => a === "" ? 1 : b === "" ? -1 : siteLbl(a).localeCompare(siteLbl(b)));
 }
@@ -4887,7 +4945,7 @@ function accProjLine(f, y){
 }
 function renderAccList(firms){
   const all = firms.map(accInfo), subsAll = all.flatMap(x => x.subs);
-  $("#accTop").innerHTML = `<div class="acc-kpi"><span>Yuk berildi</span><b class="num">${fmt(subsAll.reduce((t, y) => t + y.P.del, 0))}</b><small>so'm · joriy loyihalar</small></div>
+  $("#accTop").innerHTML = `<div class="acc-kpi"><span>Yuk berildi</span><b class="num">${fmt(subsAll.reduce((t, y) => t + y.P.del, 0))}</b><small>so'm · joriy hisoblar</small></div>
     <div class="acc-kpi"><span>Tushum</span><b class="num">${fmt(subsAll.reduce((t, y) => t + y.P.paid, 0))}</b><small>so'm · bank va naqd</small></div>
     <div class="acc-kpi k-debt"><span>Bizga qarzdorlik</span><b class="num">${fmt(all.reduce((t, x) => t + x.debt, 0))}</b><small>so'm · ${all.filter(x => x.debt > 0).length} ta firma</small></div>
     <div class="acc-kpi k-over"><span>Firmalar avansi</span><b class="num">${fmt(all.reduce((t, x) => t + x.adv, 0))}</b><small>so'm · ${all.filter(x => x.adv > 0).length} ta firma</small></div>`;
@@ -4914,7 +4972,7 @@ function renderAccList(firms){
     return `<button type="button" class="acc-card st-${x.st}${same(x.f, accFirm) ? " on" : ""}" data-acc="${esc(x.f)}">
       <span class="acc-top"><span class="acc-ava">${esc(accIni(x.f))}</span><span class="acc-name">${esc(x.f)}</span></span>
       ${y ? `${showSite ? `<span class="acc-site1">📍 ${esc(siteLbl(y.s))}</span>` : ""}${accProjLine(x.f, y)}
-      ${y.P.carry && !y.P.closed ? `<span class="acc-row acc-sub"><span>Oldingi loyihadan ${y.P.carry < 0 ? "qarz" : "qoldiq"}</span><b class="num">${fmt(Math.abs(y.P.carry))}</b></span>` : ""}
+      ${y.P.carry && !y.P.closed ? `<span class="acc-row acc-sub"><span>Oldingi davrdan ${y.P.carry < 0 ? "qarz" : "qoldiq"}</span><b class="num">${fmt(Math.abs(y.P.carry))}</b></span>` : ""}
       <span class="acc-row"><span>Yuk berildi</span><b class="num">${fmt(y.del)}</b></span>
       <span class="acc-row"><span>To'landi</span><b class="num">${fmt(y.paid)}</b></span>
       <span class="acc-row acc-bal"><span>${balLbl(y)}</span><b class="num acc-v">${fmt(Math.abs(y.bal))}</b></span>
@@ -4931,9 +4989,12 @@ function renderSiteTabs(){
   const tabs = $("#accSiteTabs"), as = $("#accAssign");
   if (!SITES_OK) { tabs.hidden = true; as.hidden = true; return; }
   const subs = firmSites(accFirm); if (!subs.includes(accSite)) accSite = pickSite(accFirm);
-  tabs.hidden = !(subs.length > 1 || (subs[0] && subs[0] !== "") || sites.length);
-  tabs.innerHTML = subs.map(s => { const y = accOne(accFirm, s);
-    return `<button type="button" class="site-tab st-${y.st}${s === accSite ? " on" : ""}" data-acc-site="${esc(s)}"><span>📍 ${esc(siteLbl(s))}</span><b class="num">${y.st === "closed" ? "🔒 " : ""}${sgn(y)}${fmt(Math.abs(y.bal))}</b></button>`; }).join("");
+  const canLp = PRIV() && !VIEWING() && me?.role !== "director";
+  tabs.hidden = !(subs.length > 1 || (subs[0] && subs[0] !== "") || sites.length || canLp);
+  tabs.innerHTML = `<span class="site-tabs-h">📍 Loyihalar${subs.length > 1 ? ` (${subs.length})` : ""}:</span>` + subs.map(s => { const y = accOne(accFirm, s);
+    return `<button type="button" class="site-tab st-${y.st}${s === accSite ? " on" : ""}" data-acc-site="${esc(s)}"><span>📍 ${esc(siteLbl(s))}</span><b class="num">${y.st === "closed" ? "🔒 " : ""}${sgn(y)}${fmt(Math.abs(y.bal))}</b></button>`; }).join("")
+    + (canLp ? `<button type="button" class="site-tab site-add" data-lp-new title="Shu firma bilan yangi parallel loyiha (obyekt) ochish — hisobi alohida yuritiladi">＋ Yangi loyiha</button>` : "");
+  renderLpMove(canLp, subs);
   const unR = rows.filter(r => same(r.firm, accFirm) && !r.site), unP = pays.filter(p => same(p.firm, accFirm) && !p.site), can = PRIV() && !VIEWING();
   const hasHere = rows.some(r => same(r.firm, accFirm) && (r.site || "") === accSite) || pays.some(p => same(p.firm, accFirm) && (p.site || "") === accSite);
   const isNone = accSite === "";
@@ -4941,12 +5002,12 @@ function renderSiteTabs(){
   const mode = isNone ? "none" : "move:" + accSite;
   if (!as.hidden && as.dataset.on !== mode) {
     as.dataset.on = mode;
-    const row = `<div class="site-assign-row"><select id="asSite"></select><label>Sanadan <input type="date" id="asFrom"></label><label>Sanagacha <input type="date" id="asTo"></label><button type="button" class="primary" id="asGo">${isNone ? "Obyektga biriktirish" : "O'tkazish"}</button></div>`;
+    const row = `<div class="site-assign-row"><select id="asSite"></select><label>Sanadan <input type="date" id="asFrom"></label><label>Sanagacha <input type="date" id="asTo"></label><button type="button" class="primary" id="asGo">${isNone ? "Loyihaga biriktirish" : "O'tkazish"}</button></div>`;
     as.className = "site-assign" + (isNone ? "" : " site-move");
-    as.innerHTML = isNone ? `<b>📍 Bu yozuvlar hali obyektga biriktirilmagan.</b> <span class="dim">Sana oralig'ini tanlab, ularni obyektga o'tkazing — keyin hisob o'sha obyekt bo'yicha yuritiladi.</span>${row}`
-      : `<details><summary>↪ Boshqa obyektga o'tkazish <span class="dim">— adashib shu obyektga yozilgan yuk xatlari va to'lovlarni to'g'rilash</span></summary><p class="dim">Sana oralig'ini tanlang (bo'sh qoldirsangiz — shu firmaning shu obyektdagi hammasi). Tanlangan oraliqdagi yuk xatlari va to'lovlar boshqa obyektga o'tadi.</p>${row}</details>`;
+    as.innerHTML = isNone ? `<b>📍 Bu yozuvlar hali loyihaga (obyektga) biriktirilmagan.</b> <span class="dim">Sana oralig'ini tanlab, ularni loyihaga o'tkazing (yoki pastdagi ro'yxatdan bittalab tanlang) — keyin hisob o'sha loyiha bo'yicha yuritiladi.</span>${row}`
+      : `<details><summary>↪ Sana oralig'i bo'yicha boshqa loyihaga o'tkazish <span class="dim">— shu loyihadagi yuk xatlari va to'lovlarni birdaniga</span></summary><p class="dim">Sana oralig'ini tanlang (bo'sh qoldirsangiz — shu firmaning shu loyihadagi hammasi). Tanlangan oraliqdagi yuk xatlari va to'lovlar boshqa loyihaga o'tadi.</p>${row}</details>`;
   }
-  if (!as.hidden) { const v = $("#asSite").value; $("#asSite").innerHTML = siteOptions(v, { noNew: true, except: isNone ? undefined : accSite, empty: isNone ? "— obyektni tanlang —" : "— qaysi obyektga —" }) + (isNone ? "" : `<option value="__none">Obyekt belgilanmagan</option>`); $("#asSite").value = v; }
+  if (!as.hidden) { const v = $("#asSite").value; $("#asSite").innerHTML = siteOptions(v, { noNew: true, except: isNone ? undefined : accSite, empty: isNone ? "— obyektni tanlang —" : "— qaysi obyektga —" }) + (isNone ? "" : `<option value="__none">Loyiha belgilanmagan</option>`); $("#asSite").value = v; }
   else delete as.dataset.on;
   const pv = $("#paySite").value; $("#paySite").innerHTML = siteOptions(pv); $("#paySite").value = accSite || "";
   if ($("#paySite").value !== (accSite || "")) $("#paySite").value = ""; pmMark($("#paySite"));
@@ -4954,7 +5015,7 @@ function renderSiteTabs(){
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-pay-site]"); if (!b) return;
   const p = pays.find(x => x.id === b.dataset.paySite); if (!p) return;
-  const d = $("#psDlg"); $("#psSel").innerHTML = siteOptions(p.site || "", { noNew: true, empty: "Obyekt belgilanmagan" }); $("#psSel").value = p.site || "";
+  const d = $("#psDlg"); $("#psSel").innerHTML = siteOptions(p.site || "", { noNew: true, firm: p.firm, empty: "Loyiha belgilanmagan" }); $("#psSel").value = p.site || "";
   $("#psInfo").textContent = `${fmtDate(p.date)} · ${fmt(p.amount)} so'm · ${PM[p.method === "cash" ? "cash" : "bank"]}`;
   let done = false; const fin = () => { if (!done) { done = true; d.close(); } };
   $("#psCancel").onclick = fin; d.oncancel = e2 => { e2.preventDefault(); fin(); };
@@ -4962,8 +5023,72 @@ document.addEventListener("click", e => {
     if (v === (p.site || "")) { fin(); return; }
     const { error } = await sb.from("payments").update({ site_id: v || null }).eq("id", p.id);
     if (error) { toast("O'zgartirib bo'lmadi: " + error.message); return; }
-    p.site = v; fin(); render(); toast(`To'lov «${siteLbl(v)}» hisobiga o'tkazildi`); };
+    p.site = v; if (v) lpExtraAdd(p.firm, v); fin(); render(); toast(`To'lov «${siteLbl(v)}» hisobiga o'tkazildi`); };
   d.showModal();
+});
+// ---------- Loyihalar: yangi loyiha ochish va yuk xatlarini tanlab boshqa loyihaga o'tkazish ----------
+const lpSel = new Set(); let lpQ = "", lpFor = "";
+const lpCanon = id => id ? id : "";
+async function moveGroupsToSite(keys, sid){
+  const ids = [...new Set(keys.flatMap(k => groupItems(k).map(r => r.id)).filter(Boolean))];
+  if (!ids.length) return 0;
+  for (let i = 0; i < ids.length; i += 200) { const { error } = await sb.from("sales").update({ site_id: sid || null }).in("id", ids.slice(i, i + 200)); if (error) throw error; }
+  return ids.length;
+}
+function renderLpMove(can, subs){
+  const box = $("#lpMove"); if (!box) return;
+  const here = lpCanon(accSite), k = fkey(accFirm) + "|" + here;
+  if (lpFor !== k) { lpSel.clear(); lpQ = ""; lpFor = k; }
+  const G = new Map();
+  rows.filter(r => same(r.firm, accFirm) && (r.site || "") === here).forEach(r => { const g = gk(r); const x = G.get(g) || { key: g, r, items: [], sum: 0 }; x.items.push(r); x.sum += r.total || 0; G.set(g, x); });
+  const others = sites.some(x => x.active && x.id !== here);
+  box.hidden = !(can && SITES_OK && G.size && (others || here === ""));
+  if (box.hidden) { box.innerHTML = ""; return; }
+  [...lpSel].forEach(g => { if (!G.has(g)) lpSel.delete(g); });
+  const q = lpQ.trim().toLowerCase();
+  const txt = x => [x.r.waybill, x.r.date, fmtDate(x.r.date), x.r.unloadAddr, x.r.car, x.r.driver, x.r.note, ...x.items.map(i => i.product)].join(" ").toLowerCase();
+  const list = [...G.values()].sort((a, b) => sortKey(b.r).localeCompare(sortKey(a.r))).filter(x => !q || txt(x).includes(q));
+  const open = box.open || here === "";
+  const prevT = $("#lpTo") ? $("#lpTo").value : "";
+  box.innerHTML = `<summary>↪ Yuk xatlarini boshqa loyihaga o'tkazish <span class="dim">— tanlab (${G.size} ta yuk xati shu ${here ? "loyihada" : "yerda, loyihasi belgilanmagan"})</span></summary>
+    <p class="dim">Kerakli yuk xatlarini belgilang, qaysi loyihaga o'tishini tanlang va «O'tkazish»ni bosing. Hisob-kitob, mahsulotlar jami va akt sverka o'sha loyiha bo'yicha o'zi qayta hisoblanadi. To'lovlarni to'lovlar ro'yxatidagi «📍 Loyihasini o'zgartirish» tugmasi bilan o'tkazasiz.</p>
+    <div class="lp-bar"><input type="search" id="lpQ" placeholder="Qidirish: yuk xati №, sana, manzil, mashina, mahsulot…" value="${esc(lpQ)}" aria-label="Yuk xatlarini qidirish">
+      <select id="lpTo" aria-label="Qaysi loyihaga">${siteOptions(prevT, { firm: accFirm, except: here || undefined, empty: "— qaysi loyihaga —" })}${here ? `<option value="__none">Loyiha belgilanmagan</option>` : ""}</select>
+      <button type="button" class="primary" id="lpGo"${lpSel.size ? "" : " disabled"}>O'tkazish${lpSel.size ? ` (${lpSel.size})` : ""}</button></div>
+    <div class="lp-list"><table><thead><tr><th><input type="checkbox" id="lpAll" aria-label="Ko'rinayotganlarning hammasini belgilash"${list.length && list.every(x => lpSel.has(x.key)) ? " checked" : ""}></th><th>Sana</th><th>Yuk xati</th><th>Mahsulot</th><th>Tushirish manzili / mashina</th><th class="r">Summa</th></tr></thead><tbody>
+    ${list.length ? list.map(x => `<tr class="${lpSel.has(x.key) ? "sel" : ""}"><td><input type="checkbox" data-lpsel="${esc(x.key)}"${lpSel.has(x.key) ? " checked" : ""} aria-label="Belgilash"></td>
+      <td class="num nw">${x.r.date ? fmtDate(x.r.date) : "—"}</td><td class="num">${x.r.waybill ? "№ " + esc(x.r.waybill) : "—"}</td>
+      <td>${x.items.map(i => `${esc(i.product)} <span class="num">${fmt(i.qty)}${i.unit ? " " + esc(i.unit) : ""}</span>`).join("<br>")}</td>
+      <td>${esc(x.r.unloadAddr || "")}${x.r.car ? `<small class="num">${esc(x.r.car)}${x.r.driver ? " · " + esc(x.r.driver) : ""}</small>` : ""}</td>
+      <td class="r num nw">${M() ? fmt(x.sum) : ""}</td></tr>`).join("") : `<tr><td colspan="6" class="dim">Hech narsa topilmadi.</td></tr>`}
+    </tbody></table></div>`;
+  box.open = open;
+  const t = $("#lpTo"); if (prevT && t.value !== prevT) t.value = "";
+}
+document.addEventListener("input", e => { if (e.target.id !== "lpQ") return; lpQ = e.target.value; const pos = e.target.selectionStart; renderLpMove(true); const el = $("#lpQ"); if (el) { el.focus(); try { el.setSelectionRange(pos, pos); } catch(e2) {} } });
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-lpsel]");
+  if (c) { if (c.checked) lpSel.add(c.dataset.lpsel); else lpSel.delete(c.dataset.lpsel); renderLpMove(true); return; }
+  if (e.target.id === "lpAll") { $$("#lpMove [data-lpsel]").forEach(x => { if (e.target.checked) lpSel.add(x.dataset.lpsel); else lpSel.delete(x.dataset.lpsel); }); renderLpMove(true); return; }
+  if (e.target.id === "lpTo") siteSelNew(e.target, "", id => { if (id) lpExtraAdd(accFirm, id); });
+});
+document.addEventListener("click", async e => {
+  if (e.target.closest("[data-lp-new]")) {
+    const f = accFirm;
+    openSiteDlg(id => { if (!id) return; lpExtraAdd(f, id); accSite = id; pendingPayDel = null; renderAccounts();
+      toast(`«${siteLbl(id)}» loyihasi ochildi. Yangi yuk xati yozishda «📍 Loyiha / obyekt» maydonidan shuni tanlang.`); });
+    return;
+  }
+  if (!e.target.closest("#lpGo")) return;
+  const raw = $("#lpTo").value, sid = raw === "__none" ? "" : raw;
+  if (raw !== "__none" && !siteById(sid)) { toast("Qaysi loyihaga o'tkazishni tanlang"); $("#lpTo").focus(); return; }
+  const keys = [...lpSel]; if (!keys.length) { toast("Avval yuk xatlarini belgilang"); return; }
+  if (!confirm(`${accFirm}\n\n«${siteLbl(lpCanon(accSite))}» → «${siteLbl(sid)}»\n${keys.length} ta yuk xati o'tkazilsinmi?`)) return;
+  const b = $("#lpGo"); b.disabled = true;
+  try { await moveGroupsToSite(keys, sid); }
+  catch(err) { toast("O'tkazib bo'lmadi: " + err.message); b.disabled = false; return; }
+  if (sid) lpExtraAdd(accFirm, sid);
+  lpSel.clear(); await reloadAll(true); toast(`${keys.length} ta yuk xati «${siteLbl(sid)}»ga o'tkazildi`);
 });
 $("#accSiteTabs").addEventListener("click", e => { const b = e.target.closest("[data-acc-site]"); if (!b) return; accSite = b.dataset.accSite; pendingPayDel = null; renderAccounts(); });
 $("#paySite").addEventListener("change", e => { siteSelNew(e.target, accSite || ""); pmMark(e.target); });
@@ -5026,7 +5151,7 @@ function renderAccounts(){
       <span class="num pay-amt">${fmt(p.amount)} so'm</span><span class="pill pm-${p.method === "cash" ? "cash" : "bank"}">${PM[p.method === "cash" ? "cash" : "bank"]}</span>
       <span class="dim pay-note">${esc(p.note || "")}</span>
       ${pendingPayDel === p.id ? `<span class="confirm">O'chirilsinmi? <button type="button" class="ghost danger" data-pay-yes="${p.id}">Ha</button><button type="button" class="ghost" data-pay-no>Yo'q</button></span>`
-        : `${SITES_OK && !VIEWING() ? `<button type="button" class="ghost" data-pay-site="${p.id}">📍 Obyektni o'zgartirish</button>` : ""}<button type="button" class="ghost danger" data-pay-del="${p.id}">O'chirish</button>`}
+        : `${SITES_OK && !VIEWING() ? `<button type="button" class="ghost" data-pay-site="${p.id}">📍 Loyihasini o'zgartirish</button>` : ""}<button type="button" class="ghost danger" data-pay-del="${p.id}">O'chirish</button>`}
     </li>`).join("") : `<li class="hint">Hali to'lov kiritilmagan.</li>`;
 
   const prods = [...new Map([...ref.prices.filter(p => same(p.firm, accFirm)).map(p => p.product), ...rows.filter(r => same(r.firm, accFirm)).map(r => r.product)]
@@ -7448,7 +7573,8 @@ $("#tgPanel").addEventListener("click", async e => {
    Jismoniy shaxsga sotuv — quarry_sales (naqd yoki qarzga, qarz mashina raqami bo'yicha). Kassa — quarry_cash. */
 let quarries = [], qSales = [], qCash = [], Q_OK = null, qCats = null, Q_FMT_OK = null;
 var Q_KITOB_OK = null;
-let qnOther = false, qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
+var Q_UNITS_OK = null;   // quarries.units ustuni bormi (7-yangilash-4.sql)
+let qnUnit = "m³", qnOther = false, qnWho = "person", qnPay = "cash", qnProd = "", qnEdit = null, qcKind = "expense", qcEdit = null, qlPreset = "month";
 const KX_ITEMS = {};                         // jismoniy shaxs yuk xatini chop etish uchun vaqtinchalik qatorlar
 const Q_CATS = ["Oziq-ovqat", "Xo'jalik mollari", "Yoqilg'i", "Ta'mirlash va ehtiyot qismlar", "Kommunal to'lovlar", "Transport", "Boshqa"];
 const Q_CAT_WORDS = [["Oziq-ovqat", /\b(non|suv|produkt|abed|abet|ovqat|go'sht|gosht|choy|qand|shakar|yog'|yog|guruch|un|kartoshka|piyoz|sabzi|meva|tuxum|sut|kolbasa|makaron|tuz)\b/i],
@@ -7474,6 +7600,12 @@ const qName = id => (qById(id) || {}).name || "—";
 const qMonthOf = d => String(d || "").slice(0, 7);
 const qCarN = c => String(c || "").toUpperCase().replace(/[^A-Z0-9А-ЯЁ]/g, "");
 const qFmtQ = v => (Math.round((Number(v) || 0) * 100) / 100).toLocaleString("ru-RU").replace(/\s/g, " ");
+// o'lchov birligi: karyerda m³ (kub) yoki tonna. Eski yozuvlar — m³
+const qU = x => /^(t|т)/i.test(String((x && x.unit) || "").trim()) ? "tonna" : "m³";
+const qUnits = q => (q && Array.isArray(q.units) && q.units.length ? q.units : ["m³"]);
+// miqdorlarni birlik bo'yicha alohida qo'shish: { m3, t }
+const qQty = list => list.reduce((o, x) => { o[qU(x) === "tonna" ? "t" : "m3"] += Number(x.qty) || 0; return o; }, { m3: 0, t: 0 });
+const qQtyTxt = o => [o.m3 || !o.t ? qFmtQ(o.m3) + " m³" : "", o.t ? qFmtQ(o.t) + " tonna" : ""].filter(Boolean).join(" · ");
 const qWho = id => { const p = profilesById[id] || (typeof users !== "undefined" ? users.find(u => u.id === id) : null); return p ? (p.full_name || p.login) : (me && id === me.id ? (me.full_name || me.login) : ""); };
 const qFirmRows = () => rows.filter(r => r.kind === "karyer" && r.quarry);
 const qSelKey = () => "savdo-q-" + (me?.id || "");
@@ -7484,8 +7616,10 @@ async function qLoad(){
     const { data, error } = await sb.from("quarries").select("*").order("created_at");
     if (error) throw error;
     Q_FMT_OK = !(data || []).length || "wb_format" in data[0];
+    Q_UNITS_OK = !(data || []).length || "units" in data[0];
     quarries = (data || []).map(q => ({ id: q.id, name: q.name, owner: q.owner || "", staff: q.staff || [], kovsh: Number(q.kovsh) || 3,
-      products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false, wbFormat: q.wb_format || "", cashKitob: q.cash_kitob === true, cashSend: Array.isArray(q.cash_send) ? q.cash_send.filter(Boolean) : [] }));
+      products: (q.products && q.products.length ? q.products : ["Qum", "Sheben", "Sechka"]), active: q.active !== false, ownBlank: q.own_blank !== false, wbFormat: q.wb_format || "", cashKitob: q.cash_kitob === true, cashSend: Array.isArray(q.cash_send) ? q.cash_send.filter(Boolean) : [],
+      units: Array.isArray(q.units) && q.units.filter(u => u === "m³" || u === "tonna").length ? q.units.filter(u => u === "m³" || u === "tonna") : ["m³"] }));
     Q_OK = true;
   } catch(e) { quarries = []; Q_OK = false; return; }
   try { const { data: st } = await sb.from("settings").select("value").eq("key", "q_cats").maybeSingle(); qCats = st && st.value && Array.isArray(st.value.list) ? st.value.list : null; } catch(e) {}
@@ -7548,6 +7682,8 @@ function renderQNew(){
     let dl = $("#qProdList"); if (!dl) { dl = document.createElement("datalist"); dl.id = "qProdList"; document.body.appendChild(dl); }
     dl.innerHTML = [...all].map(p => `<option value="${esc(p)}">`).join(""); }
   $("#qnKHint").textContent = `(1 kovsh = ${qFmtQ(q.kovsh)} m³)`;
+  { const us = qUnits(q); if (!us.includes(qnUnit) && !qnEdit) qnUnit = us[0]; $("#qnUnitBox").hidden = us.length < 2 && us.includes(qnUnit); }
+  qnUnitUi();
   if (!$("#qnDate").value) $("#qnDate").value = today();
   if (SITES_OK && !$("#qnSite").options.length) { $("#qnSite").innerHTML = siteOptions("", { empty: "— belgilanmagan —", noNew: true }); }
   $("#qnSiteBox").hidden = !SITES_OK || !sites.some(x => x.active);
@@ -7570,11 +7706,24 @@ function qnWhoUi(){
   $("#qnTitle").textContent = qnEdit ? "Yuklashni tahrirlash" : "Yangi yuklash";
   $("#qnCancel").hidden = !qnEdit;
 }
-// aniq 1 m³ narxi: kovsh narxi yozilgan bo'lsa — undan (yaxlitlanmagan), aks holda m³ maydonidan
-function qnExactPrice(){ const q = qnQuarry(), kp = parseNum($("#qnKPrice").value); return q && kp > 0 && q.kovsh > 0 ? kp / q.kovsh : parseNum($("#qnPrice").value); }
+// o'lchov birligi: tonnada kovsh ishlatilmaydi — og'irlik va 1 tonna narxi to'g'ridan-to'g'ri yoziladi
+function qnUnitUi(){
+  const t = qnUnit === "tonna";
+  $$("#qnUnit [data-unit]").forEach(b => b.classList.toggle("on", b.dataset.unit === qnUnit));
+  $("#qnKovshBox").hidden = t; $("#qnKPriceBox").hidden = t; $("#qnKHint").hidden = t;
+  $("#qnQtyLbl").textContent = t ? "Og'irligi, tonna" : "Hajmi, m³";
+  $("#qnPUnit").textContent = t ? "tonna" : "m³"; $("#qnPAuto").textContent = t ? "*" : "— avtomatik";
+}
+$("#qnUnit").addEventListener("click", e => {
+  const b = e.target.closest("[data-unit]"); if (!b || b.dataset.unit === qnUnit) return;
+  qnUnit = b.dataset.unit; $("#qnKovsh").value = ""; $("#qnKPrice").value = ""; $("#qnPrice").value = ""; $("#qnSum").value = "";
+  qnUnitUi(); qnPriceGuess(); qnCalc(); $("#qnQty").focus();
+});
+// aniq 1 m³ narxi: kovsh narxi yozilgan bo'lsa — undan (yaxlitlanmagan), aks holda m³ maydonidan (tonnada — faqat narx maydonidan)
+function qnExactPrice(){ if (qnUnit === "tonna") return parseNum($("#qnPrice").value); const q = qnQuarry(), kp = parseNum($("#qnKPrice").value); return q && kp > 0 && q.kovsh > 0 ? kp / q.kovsh : parseNum($("#qnPrice").value); }
 function qnCalc(from){
   const q = qnQuarry(); if (!q) return;
-  const K = q.kovsh > 0 ? q.kovsh : 0, k = parseNum($("#qnKovsh").value), r2 = v => Math.round(v * 100) / 100;
+  const T = qnUnit === "tonna", U = T ? "tonna" : "m³", K = !T && q.kovsh > 0 ? q.kovsh : 0, k = T ? 0 : parseNum($("#qnKovsh").value), r2 = v => Math.round(v * 100) / 100;
   if (from === "kovsh" && k > 0) $("#qnQty").value = qFmtQ(k * K).replace(/\s/g, "");
   const Q = parseNum($("#qnQty").value);
   // narx kovshda belgilanadi: 1 m³ narxi = kovsh narxi ÷ 1 kovsh hajmi (va aksincha)
@@ -7585,7 +7734,7 @@ function qnCalc(from){
   const P = qnExactPrice();
   if (from !== "sum") $("#qnSum").value = Q > 0 && P > 0 ? fmt(Q * P) : "";
   $("#qnKPHint").textContent = P > 0 ? `1 m³ = ${fmt(P)} so'm · 1 kovsh = ${qFmtQ(K)} m³` : `1 kovsh = ${qFmtQ(K)} m³`;
-  $("#qnTotal").innerHTML = Q > 0 ? `<b>${esc(qnProd)}</b> · ${qFmtQ(Q)} m³${k > 0 ? ` (${qFmtQ(k)} kovsh)` : ""}${P > 0 ? ` · <b class="num">${fmt(Q * P)}</b> so'm` : ""}` : "";
+  $("#qnTotal").innerHTML = Q > 0 ? `<b>${esc(qnProd)}</b> · ${qFmtQ(Q)} ${U}${k > 0 ? ` (${qFmtQ(k)} kovsh)` : ""}${P > 0 ? ` · <b class="num">${fmt(Q * P)}</b> so'm` : ""}` : "";
 }
 $("#qnProd").addEventListener("click", e => {
   if (e.target.closest("[data-prod-other]")) { if (!qnOther) { qnOther = true; qnProd = ""; renderQNew(); } $("#qnProdIn").focus(); return; }
@@ -7620,9 +7769,9 @@ function qnPriceGuess(){
   const q = qnQuarry(); if (!q) return;
   let last = null;
   if (qnWho === "firm") { const f = $("#qnFirm").value.trim(); if (!f) return;
-    last = qFirmRows().filter(r => r.quarry === q.id && same(r.firm, f) && same(r.product, qnProd) && r.price > 0).sort((a, b) => String(b.created).localeCompare(String(a.created)))[0];
-    if (!last && PRIV()) { const p = (ref.prices || []).filter(x => same(x.firm, f) && same(x.product, qnProd)).sort((a, b) => String(b.from).localeCompare(String(a.from)))[0]; if (p) last = { price: p.price }; }
-  } else last = qSales.filter(x => x.quarry === q.id && same(x.product, qnProd) && x.price > 0).sort((a, b) => String(b.created).localeCompare(String(a.created)))[0];
+    last = qFirmRows().filter(r => r.quarry === q.id && same(r.firm, f) && same(r.product, qnProd) && qU(r) === qnUnit && r.price > 0).sort((a, b) => String(b.created).localeCompare(String(a.created)))[0];
+    if (!last && PRIV() && qnUnit === "m³") { const p = (ref.prices || []).filter(x => same(x.firm, f) && same(x.product, qnProd)).sort((a, b) => String(b.from).localeCompare(String(a.from)))[0]; if (p) last = { price: p.price }; }
+  } else last = qSales.filter(x => x.quarry === q.id && same(x.product, qnProd) && qU(x) === qnUnit && x.price > 0).sort((a, b) => String(b.created).localeCompare(String(a.created)))[0];
   if (last) { $("#qnPrice").value = String(last.price); qnCalc("price"); }
 }
 function qnReset(){
@@ -7637,12 +7786,13 @@ async function qnSave(print){
   if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
   const q = qnQuarry(); if (!q) { toast("Karyerni tanlang"); return; }
   const qty = parseNum($("#qnQty").value), price = qnExactPrice(), car = $("#qnCar").value.trim().toUpperCase().replace(/\s+/g, " ");
-  const kovsh = parseNum($("#qnKovsh").value) || null, date = $("#qnDate").value || today();
+  const kovsh = qnUnit === "tonna" ? null : (parseNum($("#qnKovsh").value) || null), date = $("#qnDate").value || today();
   const bad = (m, sel) => { toast(m); if (sel) $(sel).focus(); };
   if (!qnProd) return bad(qnOther ? "Mahsulot nomini yozing" : "Mahsulotni tanlang", qnOther ? "#qnProdIn" : null);
-  if (!(qty > 0)) return bad("Hajmini (m³) yoki kovsh sonini yozing", "#qnKovsh");
+  if (!(qty > 0)) return qnUnit === "tonna" ? bad("Og'irligini (tonna) yozing", "#qnQty") : bad("Hajmini (m³) yoki kovsh sonini yozing", "#qnKovsh");
   if (!car) return bad("Mashina raqamini yozing", "#qnCar");
-  if (!(price > 0)) return bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
+  if (!(price > 0)) return qnUnit === "tonna" ? bad("Narxini yozing — 1 tonna qanchaga sotildi", "#qnPrice") : bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
+  if (qnUnit === "tonna" && Q_UNITS_OK === false) return bad("Tonnada yozish uchun bazani yangilang (7-yangilash-4.sql)");
   const btns = [$("#qnSave"), $("#qnSavePrint")]; btns.forEach(b => b.disabled = true);
   let pend = null;   // internet uzilsa — shu yozuv navbatga qo'yiladi
   try {
@@ -7653,10 +7803,10 @@ async function qnSave(print){
       const old = qnEdit && qnEdit.t === "firm" ? rows.find(r => r.id === qnEdit.id) : null;
       const r = { batch: old ? old.batch : newId(), kind: "karyer", date, time: old ? old.time : nowTime(), seller: q.owner, firm, waybill: wb,
         giver: old ? old.giver : (me.full_name || me.login), driver: $("#qnDriver").value.trim(), car, note: $("#qnNote").value.trim(),
-        loadAddr: q.name + " karyeri", unloadAddr: old ? old.unloadAddr : "", product: qnProd, qty, unit: "m³", payMethod: pm, hasPhoto: old ? old.hasPhoto : false };
+        loadAddr: q.name + " karyeri", unloadAddr: old ? old.unloadAddr : "", product: qnProd, qty, unit: qnUnit, payMethod: pm, hasPhoto: old ? old.hasPhoto : false };
       if (SITES_OK) r.site = $("#qnSite").value && siteById($("#qnSite").value) ? $("#qnSite").value : "";
       const d = toDb(r); d.quarry_id = q.id; d.kovsh = kovsh; d.price_hint = price;
-      if (!old) { d.id = oqUuid(); pend = { tbl: "sales", d, label: `${q.name}: ${firm} · ${qnProd} ${qFmtQ(qty)} m³ · ${car}`, reset: "firm" }; if (!navigator.onLine) throw new Error("offline"); }
+      if (!old) { d.id = oqUuid(); pend = { tbl: "sales", d, label: `${q.name}: ${firm} · ${qnProd} ${qFmtQ(qty)} ${qnUnit} · ${car}`, reset: "firm" }; if (!navigator.onLine) throw new Error("offline"); }
       let res;
       if (old) { delete d.batch; res = await sb.from("sales").update(d).eq("id", old.id).select("*, sale_money(price,total)").single(); }
       else res = await sb.from("sales").insert(d).select("*, sale_money(price,total)").single();
@@ -7677,9 +7827,9 @@ async function qnSave(print){
       const old = qnEdit && qnEdit.t === "person" ? qSales.find(x => x.id === qnEdit.id) : null;
       let wb = old ? old.waybill : "";
       if (print && !wb) wb = qPersonNextWb(q.id);
-      const d = { quarry_id: q.id, date, time: old ? old.time : nowTime(), product: qnProd, kovsh, qty, unit: "m³", price, pay: qnPay, car,
+      const d = { quarry_id: q.id, date, time: old ? old.time : nowTime(), product: qnProd, kovsh, qty, unit: qnUnit, price, pay: qnPay, car,
         driver: $("#qnDriver").value.trim(), waybill: wb, note: $("#qnNote").value.trim() };
-      if (!old) { d.id = oqUuid(); pend = { tbl: "quarry_sales", d, label: `${q.name}: ${qnProd} ${qFmtQ(qty)} m³ · ${car}${qnPay === "debt" ? " · qarzga" : ""}`, reset: "person" }; if (!navigator.onLine) throw new Error("offline"); }
+      if (!old) { d.id = oqUuid(); pend = { tbl: "quarry_sales", d, label: `${q.name}: ${qnProd} ${qFmtQ(qty)} ${qnUnit} · ${car}${qnPay === "debt" ? " · qarzga" : ""}`, reset: "person" }; if (!navigator.onLine) throw new Error("offline"); }
       const res = old ? await sb.from("quarry_sales").update(d).eq("id", old.id).select("*").single() : await sb.from("quarry_sales").insert(d).select("*").single();
       if (res.error) throw res.error;
       const x = res.data, it = { id: x.id, quarry: x.quarry_id, date: x.date, time: x.time, product: x.product, kovsh: x.kovsh == null ? null : Number(x.kovsh), qty: Number(x.qty), unit: x.unit,
@@ -7724,7 +7874,7 @@ async function qPrintPersonById(id){
 function qItems(qid, from, to){
   const inR = d => (!from || d >= from) && (!to || d <= to);
   const fr = qFirmRows().filter(r => (!qid || r.quarry === qid) && inR(r.date || "")).map(r => ({ t: "firm", id: r.id, quarry: r.quarry, date: r.date, time: r.time, product: r.product,
-    kovsh: r.kovsh, qty: r.qty, price: r.price, total: r.total, firm: r.firm, waybill: r.waybill, pm: r.payMethod, car: r.car, driver: r.driver, note: r.note, created: r.created, createdBy: r.createdBy, key: gk(r) }));
+    kovsh: r.kovsh, qty: r.qty, unit: r.unit, price: r.price, total: r.total, firm: r.firm, waybill: r.waybill, pm: r.payMethod, car: r.car, driver: r.driver, note: r.note, created: r.created, createdBy: r.createdBy, key: gk(r) }));
   const pr = qSales.filter(x => (!qid || x.quarry === qid) && inR(x.date || "")).map(x => ({ t: "person", ...x }));
   return [...fr, ...pr].sort((a, b) => (b.date + (b.time || "") + (b.created || "")).localeCompare(a.date + (a.time || "") + (a.created || "")));
 }
@@ -7735,24 +7885,24 @@ function qItemCard(it, opts = {}){
     : `👤 Jismoniy shaxs · ${it.pay === "debt" ? `<span class="pill debt">Qarzga</span>` : `<span class="pill zero">Naqd</span>`}${it.waybill ? ` <span class="dim">· № ${esc(it.waybill)}</span>` : ""}`;
   const sk = it.t + ":" + it.id;
   return `<div class="kar-item${it.t === "person" && it.pay === "debt" ? " is-debt" : ""}${opts.sel && qlSel.has(sk) ? " sel" : ""}">
-    ${opts.sel ? `<label class="ki-sel" title="Birga chop etish uchun belgilash"><input type="checkbox" data-qlsel="${sk}"${qlSel.has(sk) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}<div class="ki-main"><div class="ki-top"><b>${esc(it.product)}</b> · <b class="num">${qFmtQ(it.qty)} m³</b>${it.kovsh ? ` <span class="dim">(${qFmtQ(it.kovsh)} kovsh)</span>` : ""} · <span class="plate">${esc(it.car)}</span></div>
+    ${opts.sel ? `<label class="ki-sel" title="Birga chop etish uchun belgilash"><input type="checkbox" data-qlsel="${sk}"${qlSel.has(sk) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}<div class="ki-main"><div class="ki-top"><b>${esc(it.product)}</b> · <b class="num">${qFmtQ(it.qty)} ${qU(it)}</b>${it.kovsh ? ` <span class="dim">(${qFmtQ(it.kovsh)} kovsh)</span>` : ""} · <span class="plate">${esc(it.car)}</span></div>
       <div class="ki-who">${who}</div>
       <div class="ki-meta dim">${opts.date ? `${fmtDate(it.date)} ` : ""}${esc(it.time || "")}${opts.quarry ? ` · ⛏ ${esc(qName(it.quarry))}` : ""}${it.driver ? ` · ${esc(it.driver)}` : ""}${it.createdBy ? ` · ✍ ${esc(qWho(it.createdBy))}` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</div></div>
-    <div class="ki-sum">${money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? (() => { const qq = qById(it.quarry); return qq && qq.kovsh > 0 ? `1 kovsh: ${fmt(it.price * qq.kovsh)}` : fmt(it.price) + " × m³"; })() : ""}</small>` : "<b>•••</b>"}</div>
+    <div class="ki-sum">${money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? (() => { const qq = qById(it.quarry); return qU(it) === "tonna" ? `1 tonna: ${fmt(it.price)}` : qq && qq.kovsh > 0 ? `1 kovsh: ${fmt(it.price * qq.kovsh)}` : fmt(it.price) + " × m³"; })() : ""}</small>` : "<b>•••</b>"}</div>
     <div class="ki-act">${it.t === "firm" ? `<button type="button" class="sm" data-qprint="${esc(it.key)}">Yuk xati</button>` : `<button type="button" class="sm" data-qpprint="${it.id}">Yuk xati</button>`}${qCanEdit(it) ? `<button type="button" class="sm" data-qedit="${it.t}:${it.id}">Tahrirlash</button>${it.t !== "firm" || PRIV() ? `<button type="button" class="sm ghost danger" data-qdel="${it.t}:${it.id}">O'chirish</button>` : ""}` : ""}</div>
   </div>`;
 }
 function renderQToday(){
   const q = qnQuarry(); if (!q) return;
   const list = qItems(q.id, today(), today());
-  const tot = list.reduce((s, x) => s + (x.total || 0), 0), m3 = list.reduce((s, x) => s + (x.qty || 0), 0);
-  $("#qnToday").innerHTML = list.length ? `<p class="kar-sum">Bugun: <b>${list.length}</b> ta mashina · <b class="num">${qFmtQ(m3)} m³</b>${qMoney() ? ` · <b class="num">${fmt(tot)}</b> so'm` : ""}</p>${list.map(it => qItemCard(it)).join("")}`
+  const tot = list.reduce((s, x) => s + (x.total || 0), 0), qq = qQty(list);
+  $("#qnToday").innerHTML = list.length ? `<p class="kar-sum">Bugun: <b>${list.length}</b> ta mashina · <b class="num">${qQtyTxt(qq)}</b>${qMoney() ? ` · <b class="num">${fmt(tot)}</b> so'm` : ""}</p>${list.map(it => qItemCard(it)).join("")}`
     : `<p class="hint">Bugun hali yuklash yozilmagan.</p>`;
 }
 function qStartEdit(t, id){
   const it = t === "firm" ? rows.find(r => r.id === id) : qSales.find(x => x.id === id); if (!it) return;
   if (curPage !== "q-new") showPage("q-new");
-  qnEdit = { t, id };
+  qnEdit = { t, id }; qnUnit = qU(it);
   $("#qnQ").value = it.quarry; qnProd = it.product; qnOther = !((qById(it.quarry) || {}).products || []).some(p => same(p, it.product)); renderQNew();
   qnWho = t; if (t === "person") qnPay = it.pay;
   $("#qnKovsh").value = it.kovsh ? String(it.kovsh) : ""; $("#qnQty").value = String(it.qty); $("#qnCar").value = it.car || ""; $("#qnDriver").value = it.driver || "";
@@ -7763,7 +7913,7 @@ function qStartEdit(t, id){
 }
 async function qDelete(t, id){
   const it = t === "firm" ? rows.find(r => r.id === id) : qSales.find(x => x.id === id); if (!it) return;
-  if (!confirm(`O'chirilsinmi?\n\n${it.product} · ${qFmtQ(it.qty)} m³ · ${it.car}${t === "firm" ? " · " + it.firm : ""}`)) return;
+  if (!confirm(`O'chirilsinmi?\n\n${it.product} · ${qFmtQ(it.qty)} ${qU(it)} · ${it.car}${t === "firm" ? " · " + it.firm : ""}`)) return;
   const { error } = await sb.from(t === "firm" ? "sales" : "quarry_sales").delete().eq("id", id);
   if (error) { toast(error.message); return; }
   if (t === "firm") rows = rows.filter(r => r.id !== id); else qSales = qSales.filter(x => x.id !== id);
@@ -7949,9 +8099,9 @@ function renderQList(){
   $$("#qlChips [data-qp]").forEach(c => c.classList.toggle("on", c.dataset.qp === qlPreset));
   const [f, t] = qlRange(); if (qlPreset) { $("#qlFrom").value = f; $("#qlTo").value = t; }
   const D = qlData(), money = qMoney();
-  const m3 = D.items.reduce((s, x) => s + x.qty, 0), sum = D.items.reduce((s, x) => s + (x.total || 0), 0);
+  const qq = qQty(D.items), sum = D.items.reduce((s, x) => s + (x.total || 0), 0);
   $("#qlBody").innerHTML = (PRIV() && !money ? `<p class="hint">🔒 Summalar yopiq. <button type="button" class="sm primary" data-qunlock>Parol bilan ochish</button></p>` : "")
-    + `<p class="kar-sum">Topildi: <b>${D.items.length}</b> ta yuklash · <b class="num">${qFmtQ(m3)} m³</b>${money ? ` · <b class="num">${fmt(sum)}</b> so'm` : ""}${D.cash.length ? ` · kassa yozuvlari: <b>${D.cash.length}</b>` : ""}</p>`
+    + `<p class="kar-sum">Topildi: <b>${D.items.length}</b> ta yuklash · <b class="num">${qQtyTxt(qq)}</b>${money ? ` · <b class="num">${fmt(sum)}</b> so'm` : ""}${D.cash.length ? ` · kassa yozuvlari: <b>${D.cash.length}</b>` : ""}</p>`
     + (D.items.length ? `<div class="kar-selrow"><label class="chk"><input type="checkbox" id="qlSelAll"${D.items.length && D.items.every(it => qlSel.has(it.t + ":" + it.id)) ? " checked" : ""}> Hammasini belgilash</label>
         <span class="selbar" id="qlSelBar" hidden><b>Belgilangan: <span id="qlSelN">0</span></b><button type="button" class="sm primary" id="qlSelPrint">🖨 Birga chop etish</button><button type="button" class="sm ghost" id="qlSelClear">Bekor qilish</button></span></div>` : "")
     + D.items.map(it => qItemCard(it, { date: true, quarry: !D.qid, sel: true })).join("")
@@ -7978,13 +8128,14 @@ function qCompute(qid, from, to){
   const inQ = x => (qid ? x.quarry === qid : qVisible(true).some(q => q.id === x.quarry));
   const inR = d => (!from || d >= from) && (!to || d <= to);
   const fr = qFirmRows().filter(r => inQ(r) && inR(r.date || "")), ps = qSales.filter(x => inQ(x) && inR(x.date)), cs = qCash.filter(x => inQ(x) && inR(x.date));
-  const sum = (a, f) => a.reduce((s, x) => s + (Number(f(x)) || 0), 0);
+  const sum = (a, f) => a.reduce((s, x) => s + (Number(f(x)) || 0), 0), isT = x => qU(x) === "tonna";
   const R = { fr, ps, cs,
-    firmSum: sum(fr, x => x.total), firmM3: sum(fr, x => x.qty),
-    perCash: sum(ps.filter(x => x.pay === "cash"), x => x.total), perDebt: sum(ps.filter(x => x.pay === "debt"), x => x.total), perM3: sum(ps, x => x.qty),
+    firmSum: sum(fr, x => x.total), firmM3: sum(fr, x => isT(x) ? 0 : x.qty), firmT: sum(fr, x => isT(x) ? x.qty : 0),
+    perT: sum(ps, x => isT(x) ? x.qty : 0),
+    perCash: sum(ps.filter(x => x.pay === "cash"), x => x.total), perDebt: sum(ps.filter(x => x.pay === "debt"), x => x.total), perM3: sum(ps, x => isT(x) ? 0 : x.qty),
     debtBack: sum(cs.filter(x => x.kind === "debt_back"), x => x.amount), firmCash: sum(cs.filter(x => x.kind === "firm_cash"), x => x.amount),
     expense: sum(cs.filter(x => x.kind === "expense"), x => x.amount), salary: sum(cs.filter(x => x.kind === "salary"), x => x.amount), kitob: sum(cs.filter(x => x.kind === "kitob"), x => x.amount) };
-  R.sales = R.firmSum + R.perCash + R.perDebt; R.m3 = R.firmM3 + R.perM3;
+  R.sales = R.firmSum + R.perCash + R.perDebt; R.m3 = R.firmM3 + R.perM3; R.t = R.firmT + R.perT;
   R.cashIn = R.perCash + R.debtBack + R.firmCash; R.cashOut = R.expense + R.salary + R.kitob;
   R.profit = R.sales - R.expense - R.salary;
   return R;
@@ -7996,17 +8147,19 @@ function qReport(){
   const R = qCompute(qid, from, to), before = qCompute(qid, "", qPrevDay(from));
   R.open = before.cashIn - before.cashOut; R.close = R.open + R.cashIn - R.cashOut;
   // mahsulotlar bo'yicha
-  const prod = new Map(); const add = (p, k, q, s, kind) => { const x = prod.get(p.toLowerCase()) || { name: p, kovsh: 0, m3: 0, sum: 0, firm: 0, per: 0 }; x.kovsh += k || 0; x.m3 += q; x.sum += s; x[kind] += q; prod.set(p.toLowerCase(), x); };
-  R.fr.forEach(r => add(r.product, r.kovsh, r.qty, r.total, "firm")); R.ps.forEach(x => add(x.product, x.kovsh, x.qty, x.total, "per"));
-  R.prods = [...prod.values()].sort((a, b) => b.m3 - a.m3);
-  const firms = new Map(); R.fr.forEach(r => { const k = r.firm.toLowerCase(); const x = firms.get(k) || { name: r.firm, n: 0, m3: 0, sum: 0 }; x.n++; x.m3 += r.qty; x.sum += r.total; firms.set(k, x); });
+  const prod = new Map(); const add = (r, kind) => { const p = r.product, u = qU(r) === "tonna" ? "t" : "m3", q = Number(r.qty) || 0;
+    const x = prod.get(p.toLowerCase()) || { name: p, kovsh: 0, m3: 0, t: 0, sum: 0, firm: { m3: 0, t: 0 }, per: { m3: 0, t: 0 } };
+    x.kovsh += r.kovsh || 0; x[u] += q; x.sum += r.total || 0; x[kind][u] += q; prod.set(p.toLowerCase(), x); };
+  R.fr.forEach(r => add(r, "firm")); R.ps.forEach(x => add(x, "per"));
+  R.prods = [...prod.values()].sort((a, b) => (b.m3 + b.t) - (a.m3 + a.t));
+  const firms = new Map(); R.fr.forEach(r => { const k = r.firm.toLowerCase(); const x = firms.get(k) || { name: r.firm, n: 0, m3: 0, t: 0, sum: 0 }; x.n++; x[qU(r) === "tonna" ? "t" : "m3"] += r.qty; x.sum += r.total; firms.set(k, x); });
   R.firms = [...firms.values()].sort((a, b) => b.sum - a.sum);
   const cats = new Map(); R.cs.filter(x => x.kind === "expense").forEach(x => cats.set(x.category || "Boshqa", (cats.get(x.category || "Boshqa") || 0) + x.amount));
   R.cats = [...cats].sort((a, b) => b[1] - a[1]);
   const sal = new Map(); R.cs.filter(x => x.kind === "salary").forEach(x => sal.set(x.person, (sal.get(x.person) || 0) + x.amount));
   R.sal = [...sal].sort((a, b) => b[1] - a[1]);
   R.debts = qDebts(qid, to).filter(d => Math.abs(d.left) > 0.5);
-  R.hist = qPrevMonths(mon, 6).map(m => { const [a, b] = qMonthRange(m), x = qCompute(qid, a, b); return { m, sales: x.sales, m3: x.m3, exp: x.expense + x.salary, profit: x.profit, kitob: x.kitob }; });
+  R.hist = qPrevMonths(mon, 6).map(m => { const [a, b] = qMonthRange(m), x = qCompute(qid, a, b); return { m, sales: x.sales, m3: x.m3, t: x.t, exp: x.expense + x.salary, profit: x.profit, kitob: x.kitob }; });
   R.mon = mon; R.qid = qid; R.from = from; R.to = to;
   return R;
 }
@@ -8021,7 +8174,7 @@ function renderQRep(){
   const kpi = (l, v, s, cls) => `<div class="acc-kpi ${cls || ""}"><span>${l}</span><b class="num">${v}</b><small>${s}</small></div>`;
   $("#qrBody").innerHTML = `<h2 class="kar-h">⛏ ${esc(qn)} — ${qMonLbl(R.mon)}</h2>
     <div class="acc-kpis kar-kpis">
-      ${kpi("Sotildi", qFmtQ(R.m3) + " m³", `${R.fr.length + R.ps.length} ta mashina`)}
+      ${kpi("Sotildi", qQtyTxt(R), `${R.fr.length + R.ps.length} ta mashina`)}
       ${kpi("Sotuv summasi", fmt(R.sales), "so'm · firma + jismoniy")}
       ${kpi("Xarajat va maosh", fmt(R.expense + R.salary), "so'm", "k-debt")}
       ${kpi("Foyda", fmt(R.profit), "so'm · sotuv − xarajat − maosh", R.profit >= 0 ? "k-profit" : "k-debt")}
@@ -8043,11 +8196,11 @@ function renderQRep(){
         <tr class="tot"><td>Oy oxiridagi qoldiq</td><td class="r num">${fmt(R.close)}</td></tr></table></div>
     </div>
     <h3 class="kar-h3">📦 Mahsulotlar bo'yicha</h3>
-    <div class="tbl kar-tbl"><table><thead><tr><th>Mahsulot</th><th class="r">Kovsh</th><th class="r">Jami, m³</th><th class="r">Firmalarga, m³</th><th class="r">Jismoniy, m³</th><th class="r">Summa, so'm</th></tr></thead><tbody>
-      ${R.prods.map(p => `<tr><td><b>${esc(p.name)}</b></td><td class="r num">${p.kovsh ? qFmtQ(p.kovsh) : "—"}</td><td class="r num"><b>${qFmtQ(p.m3)}</b></td><td class="r num">${qFmtQ(p.firm)}</td><td class="r num">${qFmtQ(p.per)}</td><td class="r num">${fmt(p.sum)}</td></tr>`).join("") || `<tr><td colspan="6" class="empty">Bu oy sotuv yo'q</td></tr>`}
+    <div class="tbl kar-tbl"><table><thead><tr><th>Mahsulot</th><th class="r">Kovsh</th><th class="r">Jami</th><th class="r">Firmalarga</th><th class="r">Jismoniy</th><th class="r">Summa, so'm</th></tr></thead><tbody>
+      ${R.prods.map(p => `<tr><td><b>${esc(p.name)}</b></td><td class="r num">${p.kovsh ? qFmtQ(p.kovsh) : "—"}</td><td class="r num"><b>${qQtyTxt(p)}</b></td><td class="r num">${qQtyTxt(p.firm)}</td><td class="r num">${qQtyTxt(p.per)}</td><td class="r num">${fmt(p.sum)}</td></tr>`).join("") || `<tr><td colspan="6" class="empty">Bu oy sotuv yo'q</td></tr>`}
     </tbody></table></div>
     <div class="kar-cols">
-      <div class="kar-box"><h3>🏢 Firmalar</h3>${R.firms.length ? `<table class="kar-kv">${R.firms.map(f => `<tr><td>${esc(f.name)} <span class="dim">· ${f.n} ta, ${qFmtQ(f.m3)} m³</span></td><td class="r num">${fmt(f.sum)}</td></tr>`).join("")}</table>` : `<p class="hint">Bu oy firmalarga sotilmagan.</p>`}</div>
+      <div class="kar-box"><h3>🏢 Firmalar</h3>${R.firms.length ? `<table class="kar-kv">${R.firms.map(f => `<tr><td>${esc(f.name)} <span class="dim">· ${f.n} ta, ${qQtyTxt(f)}</span></td><td class="r num">${fmt(f.sum)}</td></tr>`).join("")}</table>` : `<p class="hint">Bu oy firmalarga sotilmagan.</p>`}</div>
       <div class="kar-box"><h3>🧾 Xarajatlar (turi bo'yicha)</h3>${R.cats.length ? `<table class="kar-kv">${R.cats.map(([c, v]) => `<tr><td>${esc(c)}</td><td class="r num">${fmt(v)}</td></tr>`).join("")}<tr class="tot"><td>Jami</td><td class="r num">${fmt(R.expense)}</td></tr></table>` : `<p class="hint">Xarajat yozilmagan.</p>`}
         ${R.sal.length ? `<h3>👷 Maoshlar</h3><table class="kar-kv">${R.sal.map(([p, v]) => `<tr><td>${esc(p)}</td><td class="r num">${fmt(v)}</td></tr>`).join("")}<tr class="tot"><td>Jami</td><td class="r num">${fmt(R.salary)}</td></tr></table>` : ""}</div>
     </div>
@@ -8056,8 +8209,8 @@ function renderQRep(){
       ${R.debts.map(d => `<tr><td><span class="plate">${esc(d.car)}</span></td><td class="r num">${fmt(d.debt)}</td><td class="r num">${fmt(d.back)}</td><td class="r num"><b>${fmt(d.left)}</b></td><td>${fmtDate(d.last)}</td></tr>`).join("")}
       <tr class="tot"><td>Jami</td><td></td><td></td><td class="r num"><b>${fmt(R.debts.reduce((s, d) => s + d.left, 0))}</b></td><td></td></tr></tbody></table></div>` : `<p class="hint">Qarzdor yo'q.</p>`}
     <h3 class="kar-h3">📈 Oxirgi 6 oy</h3>
-    <div class="tbl kar-tbl"><table><thead><tr><th>Oy</th><th class="r">Sotildi, m³</th><th class="r">Sotuv</th><th class="r">Xarajat va maosh</th><th class="r">Foyda</th><th class="r">Kitobga</th></tr></thead><tbody>
-      ${R.hist.map(h => `<tr${h.m === R.mon ? ' class="on"' : ""}><td>${qMonLbl(h.m)}</td><td class="r num">${qFmtQ(h.m3)}</td><td class="r num">${fmt(h.sales)}</td><td class="r num">${fmt(h.exp)}</td><td class="r num"><b>${fmt(h.profit)}</b></td><td class="r num">${fmt(h.kitob)}</td></tr>`).join("")}
+    <div class="tbl kar-tbl"><table><thead><tr><th>Oy</th><th class="r">Sotildi</th><th class="r">Sotuv</th><th class="r">Xarajat va maosh</th><th class="r">Foyda</th><th class="r">Kitobga</th></tr></thead><tbody>
+      ${R.hist.map(h => `<tr${h.m === R.mon ? ' class="on"' : ""}><td>${qMonLbl(h.m)}</td><td class="r num">${qQtyTxt(h)}</td><td class="r num">${fmt(h.sales)}</td><td class="r num">${fmt(h.exp)}</td><td class="r num"><b>${fmt(h.profit)}</b></td><td class="r num">${fmt(h.kitob)}</td></tr>`).join("")}
     </tbody></table></div>`;
 }
 $("#qrQ").addEventListener("change", renderQRep);
@@ -8093,22 +8246,24 @@ $("#qrXl").addEventListener("click", () => {
   if (typeof XLSX === "undefined") { toast("Excel yozuvchi yuklanmadi"); return; }
   if (!qMoney()) { toast("Avval hisob-kitobni oching"); return; }
   const R = qReport(), qn = R.qid ? qName(R.qid) : "Barcha karyerlar", wb = XLSX.utils.book_new();
+  const hasT = R.t > 0 || R.hist.some(h => h.t > 0), tc = v => hasT ? [qXlN(v)] : [], th = l => hasT ? [l] : [];
   XLSX.utils.book_append_sheet(wb, qXlSheet(`${qn} — ${qMonLbl(R.mon)}`, [
-    { h: "Umumiy", head: ["Ko'rsatkich", "Summa, so'm"], rows: [["Sotildi, m³", qXlN(R.m3)], ["Firmalarga sotuv", qXlN(R.firmSum)], ["Jismoniy shaxslarga — naqd", qXlN(R.perCash)], ["Jismoniy shaxslarga — qarzga", qXlN(R.perDebt)],
+    { h: "Umumiy", head: ["Ko'rsatkich", "Summa, so'm"], rows: [["Sotildi, m³", qXlN(R.m3)], ...(hasT ? [["Sotildi, tonna", qXlN(R.t)]] : []), ["Firmalarga sotuv", qXlN(R.firmSum)], ["Jismoniy shaxslarga — naqd", qXlN(R.perCash)], ["Jismoniy shaxslarga — qarzga", qXlN(R.perDebt)],
       ["Jami sotuv", qXlN(R.sales)], ["Xarajatlar", qXlN(R.expense)], ["Ishchilarga maosh", qXlN(R.salary)], ["Foyda (sotuv − xarajat − maosh)", qXlN(R.profit)], ["Kitobga yuborildi", qXlN(R.kitob)]] },
     { h: "Kassa (naqd pul)", head: ["", "Summa, so'm"], rows: [["Oy boshidagi qoldiq", qXlN(R.open)], ["+ Jismoniy shaxslardan naqd", qXlN(R.perCash)], ["+ Qaytgan qarzlar", qXlN(R.debtBack)], ["+ Firmalardan naqd", qXlN(R.firmCash)],
       ["− Xarajatlar", qXlN(R.expense)], ["− Ishchilarga maosh", qXlN(R.salary)], ["− Yuborilgan pul (Kitob, Qarshi …)", qXlN(R.kitob)]], tot: ["Oy oxiridagi qoldiq", qXlN(R.close)] },
-    { h: "Mahsulotlar", head: ["Mahsulot", "Kovsh", "Jami, m³", "Firmalarga, m³", "Jismoniy, m³", "Summa, so'm"], rows: R.prods.map(p => [p.name, qXlN(p.kovsh), qXlN(p.m3), qXlN(p.firm), qXlN(p.per), qXlN(p.sum)]) },
-    { h: "Firmalar", head: ["Firma", "Yuklash", "m³", "Summa, so'm"], rows: R.firms.map(f => [f.name, f.n, qXlN(f.m3), qXlN(f.sum)]) },
+    { h: "Mahsulotlar", head: ["Mahsulot", "Kovsh", "Jami, m³", ...th("Jami, tonna"), "Firmalarga, m³", ...th("Firmalarga, tonna"), "Jismoniy, m³", ...th("Jismoniy, tonna"), "Summa, so'm"],
+      rows: R.prods.map(p => [p.name, qXlN(p.kovsh), qXlN(p.m3), ...tc(p.t), qXlN(p.firm.m3), ...tc(p.firm.t), qXlN(p.per.m3), ...tc(p.per.t), qXlN(p.sum)]) },
+    { h: "Firmalar", head: ["Firma", "Yuklash", "m³", ...th("tonna"), "Summa, so'm"], rows: R.firms.map(f => [f.name, f.n, qXlN(f.m3), ...tc(f.t), qXlN(f.sum)]) },
     { h: "Xarajatlar turi bo'yicha", head: ["Turi", "Summa, so'm"], rows: R.cats.map(([c, v]) => [c, qXlN(v)]), tot: ["Jami", qXlN(R.expense)] },
     ...(R.sal.length ? [{ h: "Maoshlar", head: ["Ishchi", "Summa, so'm"], rows: R.sal.map(([p, v]) => [p, qXlN(v)]), tot: ["Jami", qXlN(R.salary)] }] : []),
-    { h: "Oxirgi 6 oy", head: ["Oy", "Sotildi, m³", "Sotuv", "Xarajat va maosh", "Foyda", "Yuborilgan pul"], rows: R.hist.map(h => [qMonLbl(h.m), qXlN(h.m3), qXlN(h.sales), qXlN(h.exp), qXlN(h.profit), qXlN(h.kitob)]) }
+    { h: "Oxirgi 6 oy", head: ["Oy", "Sotildi, m³", ...th("Sotildi, tonna"), "Sotuv", "Xarajat va maosh", "Foyda", "Yuborilgan pul"], rows: R.hist.map(h => [qMonLbl(h.m), qXlN(h.m3), ...tc(h.t), qXlN(h.sales), qXlN(h.exp), qXlN(h.profit), qXlN(h.kitob)]) }
   ]), "Hisobot");
   const its = qItems(R.qid, R.from, R.to).filter(it => R.qid || qVisible(true).some(q => q.id === it.quarry)).reverse();
-  XLSX.utils.book_append_sheet(wb, qXlSheet(`Yuklashlar — ${qMonLbl(R.mon)}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "m³", "Kimga", "Narx (1 m³)", "Summa, so'm", "To'lov", "Yuk xati №", "Yozdi", "Izoh"],
-    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), it.t === "firm" ? it.firm : "Jismoniy shaxs", qXlN(it.price), qXlN(it.total),
+  XLSX.utils.book_append_sheet(wb, qXlSheet(`Yuklashlar — ${qMonLbl(R.mon)}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "Miqdor", "Birlik", "Kimga", "Narx (1 birlik)", "Summa, so'm", "To'lov", "Yuk xati №", "Yozdi", "Izoh"],
+    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), qU(it), it.t === "firm" ? it.firm : "Jismoniy shaxs", qXlN(it.price), qXlN(it.total),
       it.t === "firm" ? (PM[it.pm] || "") : it.pay === "debt" ? "Qarzga" : "Naqd", it.waybill || "", qWho(it.createdBy), it.note || ""]),
-    tot: ["Jami", "", "", "", "", qXlN(its.reduce((s, x) => s + (x.kovsh || 0), 0)), qXlN(its.reduce((s, x) => s + x.qty, 0)), "", "", qXlN(its.reduce((s, x) => s + (x.total || 0), 0))] }]), "Yuklashlar");
+    tot: ["Jami", "", "", "", "", qXlN(its.reduce((s, x) => s + (x.kovsh || 0), 0)), qQtyTxt(qQty(its)), "", "", "", qXlN(its.reduce((s, x) => s + (x.total || 0), 0))] }]), "Yuklashlar");
   const cs = R.cs.slice().sort((a, b) => (a.date + a.created).localeCompare(b.date + b.created));
   XLSX.utils.book_append_sheet(wb, qXlSheet(`Kassa yozuvlari — ${qMonLbl(R.mon)}`, [{ head: ["Sana", "Karyer", "Turi", "Kim / nima", "Summa, so'm", "Izoh", "Yozdi"],
     rows: cs.map(x => [fmtDate(x.date), qName(x.quarry), QC_KINDS[x.kind], x.car || x.category || x.person || x.firm, qXlN(x.amount), x.note, qWho(x.createdBy)]) }]), "Kassa");
@@ -8119,8 +8274,8 @@ $("#qrXl").addEventListener("click", () => {
 $("#qlXl").addEventListener("click", () => {
   if (typeof XLSX === "undefined") { toast("Excel yozuvchi yuklanmadi"); return; }
   const D = qlData(), money = qMoney(), wb = XLSX.utils.book_new(), its = D.items.slice().reverse();
-  XLSX.utils.book_append_sheet(wb, qXlSheet(`Karyer yuklashlari ${fmtDate(D.from) || "boshidan"} — ${fmtDate(D.to) || "bugungacha"}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "m³", "Kimga", ...(money ? ["Narx (1 m³)", "Summa, so'm"] : []), "To'lov", "Yuk xati №", "Izoh"],
-    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), it.t === "firm" ? it.firm : "Jismoniy shaxs", ...(money ? [qXlN(it.price), qXlN(it.total)] : []),
+  XLSX.utils.book_append_sheet(wb, qXlSheet(`Karyer yuklashlari ${fmtDate(D.from) || "boshidan"} — ${fmtDate(D.to) || "bugungacha"}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "Miqdor", "Birlik", "Kimga", ...(money ? ["Narx (1 birlik)", "Summa, so'm"] : []), "To'lov", "Yuk xati №", "Izoh"],
+    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), qU(it), it.t === "firm" ? it.firm : "Jismoniy shaxs", ...(money ? [qXlN(it.price), qXlN(it.total)] : []),
       it.t === "firm" ? (PM[it.pm] || "") : it.pay === "debt" ? "Qarzga" : "Naqd", it.waybill || "", it.note || ""]) }]), "Yuklashlar");
   if (D.cash.length) XLSX.utils.book_append_sheet(wb, qXlSheet("Kassa yozuvlari", [{ head: ["Sana", "Karyer", "Turi", "Kim / nima", "Summa, so'm", "Izoh"],
     rows: D.cash.slice().reverse().map(x => [fmtDate(x.date), qName(x.quarry), QC_KINDS[x.kind], x.car || x.category || x.person || x.firm, qXlN(x.amount), x.note]) }]), "Kassa");
@@ -8141,12 +8296,12 @@ function renderQSetup(){
     const top = Object.entries(c).sort((a, b) => b[1] - a[1])[0]; $("#qsOwner").value = top ? top[0] : (ref.sellers[0] || ""); }
   $("#qsSave").textContent = qsEdit ? "O'zgarishni saqlash" : "Karyerni qo'shish"; $("#qsCancel").hidden = !qsEdit;
   const row = q => `<tr class="${q.active ? "" : "site-off"}"><td><b>${esc(q.name)}</b>${q.active ? "" : ` <span class="pill closed">arxivda</span>`}</td><td>${esc(q.owner || "—")}</td>
-    <td>${q.staff.map(id => esc(qWho(id) || "?")).join(", ") || `<span class="warn-t">belgilanmagan</span>`}</td><td class="r num">${qFmtQ(q.kovsh)}</td><td>${esc(q.products.join(", "))}</td>
+    <td>${q.staff.map(id => esc(qWho(id) || "?")).join(", ") || `<span class="warn-t">belgilanmagan</span>`}</td><td class="r num">${qUnits(q).includes("m³") ? qFmtQ(q.kovsh) : "—"}</td><td>${qUnits(q).join(" / ")}</td><td>${esc(q.products.join(", "))}</td>
     <td class="r nw">${VIEWING() ? "" : `<button type="button" class="sm ghost" data-qsed="${q.id}">Tahrirlash</button> <button type="button" class="sm ghost" data-qsarc="${q.id}">${q.active ? "📦 Arxivga olish" : "Arxivdan qaytarish"}</button>`}</td></tr>`;
   const list = quarries.slice().sort((a, b) => (b.active - a.active) || a.name.localeCompare(b.name));
   $("#qsCats").innerHTML = qCatBase().map((c, i) => `<span class="kar-cat">${esc(c)}${VIEWING() ? "" : `<button type="button" class="pr-x" data-qcat-del="${i}" title="Olib tashlash" aria-label="${esc(c)} — olib tashlash">×</button>`}</span>`).join("") || `<span class="hint">Ro'yxat bo'sh.</span>`;
   $("#qsCatForm").hidden = VIEWING();
-  $("#qsList").innerHTML = list.length ? `<div class="tbl kar-tbl"><table><thead><tr><th>Karyer</th><th>Qaysi firmaga qarashli</th><th>Ish yurituvchi</th><th class="r">1 kovsh, m³</th><th>Mahsulotlar</th><th></th></tr></thead><tbody>${list.map(row).join("")}</tbody></table></div>`
+  $("#qsList").innerHTML = list.length ? `<div class="tbl kar-tbl"><table><thead><tr><th>Karyer</th><th>Qaysi firmaga qarashli</th><th>Ish yurituvchi</th><th class="r">1 kovsh, m³</th><th>Birlik</th><th>Mahsulotlar</th><th></th></tr></thead><tbody>${list.map(row).join("")}</tbody></table></div>`
     : `<p class="empty">Hali karyer qo'shilmagan.</p>`;
 }
 $("#qsForm").addEventListener("submit", async e => {
@@ -8160,9 +8315,12 @@ $("#qsForm").addEventListener("submit", async e => {
   const d = { name, owner, kovsh, products: products.length ? products : ["Qum", "Sheben", "Sechka"], staff, own_blank: $("#qsOwnBlank").checked };
   if (Q_KITOB_OK !== false) { d.cash_kitob = $("#qsKitob").checked; d.cash_send = $("#qsSend").value.split(/[,;]/).map(x => x.trim()).filter(Boolean); }
   if (Q_FMT_OK !== false) d.wb_format = $("#qsFmt").value || "a5_eq";
+  if (Q_UNITS_OK !== false) d.units = ($("#qsUnits").value || "m³").split(",");
   $("#qsSave").disabled = true;
   let { error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d);
   if (error && "cash_kitob" in d && /cash_kitob|cash_send/.test(error.message || "")) { Q_KITOB_OK = false; delete d.cash_kitob; delete d.cash_send; toast("«Kitobga» sozlamasi uchun bazani yangilang (yangilash-3.sql)");
+    ({ error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d)); }
+  if (error && d.units && /units/.test(error.message || "")) { Q_UNITS_OK = false; const want = d.units.join(); delete d.units; if (want !== "m³") toast("Tonnani yoqish uchun bazani yangilang (7-yangilash-4.sql)");
     ({ error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d)); }
   if (error && d.wb_format && /wb_format/.test(error.message || "")) { Q_FMT_OK = false; delete d.wb_format; toast("Blank turini saqlash uchun bazani yangilang (yangilash.sql)");
     ({ error } = qsEdit ? await sb.from("quarries").update(d).eq("id", qsEdit) : await sb.from("quarries").insert(d)); }
@@ -8177,7 +8335,7 @@ $("#qsCancel").addEventListener("click", () => { qsEdit = null; $("#qsForm").res
 $("#qsList").addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.qsed) { const q = qById(b.dataset.qsed); if (!q) return; qsEdit = q.id;
-    $("#qsName").value = q.name; $("#qsOwner").value = q.owner; $("#qsKovsh").value = String(q.kovsh); $("#qsProds").value = q.products.join(", "); $("#qsOwnBlank").checked = q.ownBlank; $("#qsKitob").checked = !!q.cashKitob; $("#qsSend").value = (q.cashSend || []).join(", "); $("#qsFmt").value = qwbFmt(q.wbFormat) ? q.wbFormat : "a5_eq";
+    $("#qsName").value = q.name; $("#qsOwner").value = q.owner; $("#qsKovsh").value = String(q.kovsh); $("#qsProds").value = q.products.join(", "); $("#qsUnits").value = qUnits(q).join(","); if (!$("#qsUnits").value) $("#qsUnits").value = "m³"; $("#qsOwnBlank").checked = q.ownBlank; $("#qsKitob").checked = !!q.cashKitob; $("#qsSend").value = (q.cashSend || []).join(", "); $("#qsFmt").value = qwbFmt(q.wbFormat) ? q.wbFormat : "a5_eq";
     renderQSetup(); $("#qsForm").scrollIntoView({ block: "start", behavior: "smooth" }); }
   if (b.dataset.qsarc) { const q = qById(b.dataset.qsarc); if (!q) return;
     if (q.active && !confirm(`«${q.name}» karyeri arxivga olinsinmi?\n\nIsh yurituvchilar unga yoza olmaydi, ro'yxatlarda chiqmaydi. Yozuvlari va hisoboti saqlanib qoladi — kerak bo'lsa, arxivdan qaytarish mumkin.`)) return;
@@ -8471,7 +8629,7 @@ function renderDash(){
     <div class="dash-two">
       <div class="dash-card"><h2>Eng katta qarzdorlar</h2>${debts.length ? debts.slice(0, 6).map(x => `<div class="dash-li"><span><b>${esc(x.firm)}</b><small>${x.site ? esc(siteLbl(x.site)) + " · " : ""}${x.last ? "oxirgi to'lov " + fmtDate(x.last) : "to'lov yo'q"}</small></span><b class="num neg">${fmt(-x.v)}</b></div>`).join("") : `<p class="hint">Qarzdor firma yo'q.</p>`}
         <button type="button" class="sm ghost" data-goto="money">Hisob-kitob →</button></div>
-      <div class="dash-card"><h2>Karyerlar — ${qMonLbl(mon)}</h2>${Q.length ? Q.map(x => `<div class="dash-li"><span><b>${esc(x.q.name)}</b><small>${qFmtQ(x.R.m3)} m³ · ${x.n} yuklash</small></span><span class="r"><small>sotuv</small><b class="num">${fmt(x.R.sales)}</b></span><span class="r"><small>foyda</small><b class="num ok-t">${fmt(x.R.profit)}</b></span></div>`).join("") : `<p class="hint">Bu oyda karyerlarda yozuv yo'q.</p>`}
+      <div class="dash-card"><h2>Karyerlar — ${qMonLbl(mon)}</h2>${Q.length ? Q.map(x => `<div class="dash-li"><span><b>${esc(x.q.name)}</b><small>${qQtyTxt(x.R)} · ${x.n} yuklash</small></span><span class="r"><small>sotuv</small><b class="num">${fmt(x.R.sales)}</b></span><span class="r"><small>foyda</small><b class="num ok-t">${fmt(x.R.profit)}</b></span></div>`).join("") : `<p class="hint">Bu oyda karyerlarda yozuv yo'q.</p>`}
         ${pageOk("q-stats") ? `<button type="button" class="sm ghost" data-goto="q-stats">Karyerlar statistikasi →</button>` : ""}</div>
     </div>
     ${warn.length ? `<div class="dash-warn"><h2>Diqqat talab qiladi</h2><ul>${warn.map(w => `<li>${w}</li>`).join("")}</ul></div>` : ""}
@@ -8521,9 +8679,10 @@ function qsRange(){
 function qsAgg(list){
   const prods = new Map(), cats = new Map(), firms = new Map();
   list.forEach(({ R }) => {
-    R.fr.forEach(r => { const k = fkey(r.product), x = prods.get(k) || { name: r.product, m3: 0, sum: 0 }; x.m3 += r.qty; x.sum += r.total || 0; prods.set(k, x);
-      const f = fkey(r.firm), y = firms.get(f) || { name: r.firm, m3: 0, sum: 0, n: 0 }; y.m3 += r.qty; y.sum += r.total || 0; y.n++; firms.set(f, y); });
-    R.ps.forEach(r => { const k = fkey(r.product), x = prods.get(k) || { name: r.product, m3: 0, sum: 0 }; x.m3 += r.qty; x.sum += r.total || 0; prods.set(k, x); });
+    const u = r => qU(r) === "tonna" ? "t" : "m3";
+    R.fr.forEach(r => { const k = fkey(r.product), x = prods.get(k) || { name: r.product, m3: 0, t: 0, sum: 0 }; x[u(r)] += r.qty; x.sum += r.total || 0; prods.set(k, x);
+      const f = fkey(r.firm), y = firms.get(f) || { name: r.firm, m3: 0, t: 0, sum: 0, n: 0 }; y[u(r)] += r.qty; y.sum += r.total || 0; y.n++; firms.set(f, y); });
+    R.ps.forEach(r => { const k = fkey(r.product), x = prods.get(k) || { name: r.product, m3: 0, t: 0, sum: 0 }; x[u(r)] += r.qty; x.sum += r.total || 0; prods.set(k, x); });
     R.cs.filter(c => c.kind === "expense").forEach(c => cats.set(c.category || "Boshqa", (cats.get(c.category || "Boshqa") || 0) + c.amount));
   });
   return { prods: [...prods.values()].sort((a, b) => b.sum - a.sum), cats: [...cats].sort((a, b) => b[1] - a[1]), firms: [...firms.values()].sort((a, b) => b.sum - a.sum) };
@@ -8532,7 +8691,7 @@ function qsData(){
   const [from, to] = qsRange(), qid = $("#qsQ").value;
   const QS = quarries.filter(q => (!qid || q.id === qid) && (q.active || qSales.some(x => x.quarry === q.id) || qFirmRows().some(r => r.quarry === q.id)));
   const list = QS.map(q => { const R = qCompute(q.id, from, to); return { q, R, n: R.fr.length + R.ps.length, debt: dashSum(qDebts(q.id, to).filter(d => d.left > 0.5), d => d.left) }; });
-  const T = list.reduce((t, { R, n, debt }) => { ["sales", "m3", "expense", "salary", "profit", "cashIn", "perCash", "perDebt", "firmSum", "debtBack", "firmCash", "kitob"].forEach(k => t[k] = (t[k] || 0) + R[k]); t.n = (t.n || 0) + n; t.debt = (t.debt || 0) + debt; return t; }, {});
+  const T = list.reduce((t, { R, n, debt }) => { ["sales", "m3", "t", "expense", "salary", "profit", "cashIn", "perCash", "perDebt", "firmSum", "debtBack", "firmCash", "kitob"].forEach(k => t[k] = (t[k] || 0) + R[k]); t.n = (t.n || 0) + n; t.debt = (t.debt || 0) + debt; return t; }, {});
   const endM = (to || today()).slice(0, 7), hist = qPrevMonths(endM, 6).map(m => { const [a, b] = qMonthRange(m); const x = QS.reduce((t, q) => { const R = qCompute(q.id, a, b); t.s += R.sales; t.p += R.profit; return t; }, { s: 0, p: 0 }); return { m, ...x }; });
   return { from, to, list, T, hist, ...qsAgg(list) };
 }
@@ -8547,7 +8706,7 @@ function renderQStats(){
   const kpi = (l, v, sub, cls) => `<div class="kpi ${cls || ""}"><span>${l}</span><b class="num">${v}</b>${sub ? `<small>${sub}</small>` : ""}</div>`;
   $("#qsBody").innerHTML = (PRIV() && !money ? `<p class="hint">🔒 Summalar yopiq. <button type="button" class="sm primary" data-qunlock>Parol bilan ochish</button></p>` : "") + `
     <div class="dash-kpis three">
-      ${kpi("Sotildi", qFmtQ(T.m3) + " m³", `${T.n} ta yuklash`)}
+      ${kpi("Sotildi", qQtyTxt(T), `${T.n} ta yuklash`)}
       ${kpi("Sotuv summasi", m$(T.sales), `firmalarga ${m$(T.firmSum)} · jismoniy ${m$(T.perCash + T.perDebt)}`)}
       ${kpi("Kassaga tushgan naqd", m$(T.cashIn), `qarz qaytdi ${m$(T.debtBack)} · firmadan ${m$(T.firmCash)}`)}
       ${kpi("Xarajat va maosh", m$(T.expense + T.salary), `xarajat ${m$(T.expense)} · maosh ${m$(T.salary)}`, "k-our")}
@@ -8555,14 +8714,14 @@ function renderQStats(){
       ${kpi("Mashinalar qarzi", m$(T.debt), `kitobga yuborildi ${m$(T.kitob)}`, "k-debt")}
     </div>
     <div class="dash-card"><h2>Karyerlarni solishtirish — ${fmtDate(D.from) || "boshidan"} … ${fmtDate(D.to)}</h2>
-      <div class="tbl kar-tbl"><table><thead><tr><th>Karyer</th><th class="r">Sotildi, m³</th><th class="r">Yuklash</th><th class="r">Sotuv</th><th class="r">Naqd tushum</th><th class="r">Xarajat</th><th class="r">Maosh</th><th class="r">Foyda</th><th class="r">Mashinalar qarzi</th></tr></thead><tbody>
-      ${D.list.map(({ q, R, n, debt }) => `<tr><td><b>${esc(q.name)}</b>${q.active ? "" : ` <span class="pill closed">arxivda</span>`}</td><td class="r num">${qFmtQ(R.m3)}</td><td class="r num">${n}</td><td class="r num">${m$(R.sales)}</td><td class="r num">${m$(R.cashIn)}</td><td class="r num">${m$(R.expense)}</td><td class="r num">${m$(R.salary)}</td><td class="r num"><b class="ok-t">${m$(R.profit)}</b></td><td class="r num neg">${m$(debt)}</td></tr>`).join("")}
-      </tbody><tfoot><tr><td>Jami</td><td class="r num">${qFmtQ(T.m3)}</td><td class="r num">${T.n}</td><td class="r num">${m$(T.sales)}</td><td class="r num">${m$(T.cashIn)}</td><td class="r num">${m$(T.expense)}</td><td class="r num">${m$(T.salary)}</td><td class="r num">${m$(T.profit)}</td><td class="r num">${m$(T.debt)}</td></tr></tfoot></table></div></div>
+      <div class="tbl kar-tbl"><table><thead><tr><th>Karyer</th><th class="r">Sotildi</th><th class="r">Yuklash</th><th class="r">Sotuv</th><th class="r">Naqd tushum</th><th class="r">Xarajat</th><th class="r">Maosh</th><th class="r">Foyda</th><th class="r">Mashinalar qarzi</th></tr></thead><tbody>
+      ${D.list.map(({ q, R, n, debt }) => `<tr><td><b>${esc(q.name)}</b>${q.active ? "" : ` <span class="pill closed">arxivda</span>`}</td><td class="r num">${qQtyTxt(R)}</td><td class="r num">${n}</td><td class="r num">${m$(R.sales)}</td><td class="r num">${m$(R.cashIn)}</td><td class="r num">${m$(R.expense)}</td><td class="r num">${m$(R.salary)}</td><td class="r num"><b class="ok-t">${m$(R.profit)}</b></td><td class="r num neg">${m$(debt)}</td></tr>`).join("")}
+      </tbody><tfoot><tr><td>Jami</td><td class="r num">${qQtyTxt(T)}</td><td class="r num">${T.n}</td><td class="r num">${m$(T.sales)}</td><td class="r num">${m$(T.cashIn)}</td><td class="r num">${m$(T.expense)}</td><td class="r num">${m$(T.salary)}</td><td class="r num">${m$(T.profit)}</td><td class="r num">${m$(T.debt)}</td></tr></tfoot></table></div></div>
     <div class="dash-two">
       <div class="dash-card"><h2>Sotuv va foyda — 6 oy</h2>
         <div class="dash-bars pair">${D.hist.map(h => `<div class="db-col" title="${qMonLbl(h.m)}: sotuv ${fmt(h.s)}, foyda ${fmt(h.p)}"><div class="db-pair"><i class="db-b" style="height:${money ? Math.max(0, h.s) / hMax * 100 : 0}%"></i><i class="db-g" style="height:${money ? Math.max(0, h.p) / hMax * 100 : 0}%"></i></div><span>${MON3[+h.m.slice(5) - 1]}</span></div>`).join("")}</div>
         <p class="hint"><i class="lg db-b"></i> sotuv <i class="lg db-g"></i> foyda</p></div>
-      <div class="dash-card"><h2>Mahsulotlar bo'yicha</h2>${D.prods.length ? D.prods.map(p => `<div class="qs-prod"><div><b>${esc(p.name)}</b><span class="num">${qFmtQ(p.m3)} m³ · ${m$(p.sum)}</span></div><i style="width:${money ? p.sum / pMax * 100 : 0}%"></i></div>`).join("") : `<p class="hint">Sotuv yo'q.</p>`}
+      <div class="dash-card"><h2>Mahsulotlar bo'yicha</h2>${D.prods.length ? D.prods.map(p => `<div class="qs-prod"><div><b>${esc(p.name)}</b><span class="num">${qQtyTxt(p)} · ${m$(p.sum)}</span></div><i style="width:${money ? p.sum / pMax * 100 : 0}%"></i></div>`).join("") : `<p class="hint">Sotuv yo'q.</p>`}
         <h2 class="kar-h">Kimga sotildi</h2>
         <div class="dash-li"><span>Firmalarga (yuk xati bilan)</span><b class="num">${m$(T.firmSum)}</b></div>
         <div class="dash-li"><span>Jismoniy shaxslarga — naqd</span><b class="num">${m$(T.perCash)}</b></div>
@@ -8570,7 +8729,7 @@ function renderQStats(){
     </div>
     <div class="dash-two">
       <div class="dash-card"><h2>Xarajatlar turlari bo'yicha</h2>${D.cats.length ? D.cats.map(([c, v]) => `<div class="dash-li"><span>${esc(c)}</span><b class="num">${m$(v)}</b></div>`).join("") : `<p class="hint">Xarajat yozilmagan.</p>`}</div>
-      <div class="dash-card"><h2>Eng ko'p olgan firmalar</h2>${D.firms.length ? D.firms.slice(0, 8).map(f => `<div class="dash-li"><span><b>${esc(f.name)}</b><small>${f.n} ta yuk xati · ${qFmtQ(f.m3)} m³</small></span><b class="num">${m$(f.sum)}</b></div>`).join("") : `<p class="hint">Firmaga sotuv yo'q.</p>`}</div>
+      <div class="dash-card"><h2>Eng ko'p olgan firmalar</h2>${D.firms.length ? D.firms.slice(0, 8).map(f => `<div class="dash-li"><span><b>${esc(f.name)}</b><small>${f.n} ta yuk xati · ${qQtyTxt(f)}</small></span><b class="num">${m$(f.sum)}</b></div>`).join("") : `<p class="hint">Firmaga sotuv yo'q.</p>`}</div>
     </div>`;
 }
 $("#qsChips").addEventListener("click", e => { const c = e.target.closest("[data-qsp]"); if (!c) return; qsPreset = c.dataset.qsp; renderQStats(); });
@@ -8578,11 +8737,11 @@ $("#qsChips").addEventListener("click", e => { const c = e.target.closest("[data
 $("#qsQ").addEventListener("change", renderQStats);
 $("#qsXl").addEventListener("click", () => {
   if (typeof XLSX === "undefined") return; const D = qsData();
-  const aoa = [[`Karyerlar statistikasi: ${fmtDate(D.from) || "boshidan"} — ${fmtDate(D.to)}`], [], ["Karyer", "Sotildi, m³", "Yuklash", "Sotuv", "Naqd tushum", "Xarajat", "Maosh", "Foyda", "Mashinalar qarzi"]];
-  D.list.forEach(({ q, R, n, debt }) => aoa.push([q.name, R.m3, n, R.sales, R.cashIn, R.expense, R.salary, R.profit, debt]));
-  aoa.push(["Jami", D.T.m3, D.T.n, D.T.sales, D.T.cashIn, D.T.expense, D.T.salary, D.T.profit, D.T.debt], [], ["Mahsulot", "m³", "Summa"]);
-  D.prods.forEach(p => aoa.push([p.name, p.m3, p.sum])); aoa.push([], ["Xarajat turi", "Summa"]); D.cats.forEach(([c, v]) => aoa.push([c, v]));
-  const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(aoa); ws["!cols"] = [{ wch: 28 }, { wch: 12 }, { wch: 10 }, { wch: 16 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 16 }];
+  const aoa = [[`Karyerlar statistikasi: ${fmtDate(D.from) || "boshidan"} — ${fmtDate(D.to)}`], [], ["Karyer", "Sotildi, m³", "Sotildi, tonna", "Yuklash", "Sotuv", "Naqd tushum", "Xarajat", "Maosh", "Foyda", "Mashinalar qarzi"]];
+  D.list.forEach(({ q, R, n, debt }) => aoa.push([q.name, R.m3, R.t, n, R.sales, R.cashIn, R.expense, R.salary, R.profit, debt]));
+  aoa.push(["Jami", D.T.m3, D.T.t, D.T.n, D.T.sales, D.T.cashIn, D.T.expense, D.T.salary, D.T.profit, D.T.debt], [], ["Mahsulot", "m³", "tonna", "Summa"]);
+  D.prods.forEach(p => aoa.push([p.name, p.m3, p.t, p.sum])); aoa.push([], ["Xarajat turi", "Summa"]); D.cats.forEach(([c, v]) => aoa.push([c, v]));
+  const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(aoa); ws["!cols"] = [{ wch: 28 }, { wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 16 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 16 }];
   XLSX.utils.book_append_sheet(wb, ws, "Karyerlar");
   saveFile(`Karyerlar statistikasi ${D.from || ""}_${D.to || ""}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 });
@@ -9120,7 +9279,23 @@ $("#intFirmList").addEventListener("click", async e => {
 });
 
 /* ---------- Arxivda belgilab ichkiga o'tkazish ---------- */
-function arcSelBar(){ const el = $("#arcSelBar"); if (!el) return; el.hidden = !arcSel.size; $("#arcSelN").textContent = arcSel.size; }
+function arcSelBar(){ const el = $("#arcSelBar"); if (!el) return; el.hidden = !arcSel.size; $("#arcSelN").textContent = arcSel.size;
+  const a = $("#arcToSite"); if (a) a.hidden = !SITES_OK; const b = $("#arcToInt"); if (b) b.hidden = !INT_OK; }
+document.addEventListener("click", e => {
+  if (!e.target.closest("#arcToSite")) return;
+  const keys = [...arcSel].filter(k => groupItems(k).length); if (!keys.length) return;
+  const firms = [...new Set(keys.map(k => (groupItems(k)[0] || {}).firm).filter(Boolean))];
+  const d = $("#lpDlg"); $("#lpSel").innerHTML = siteOptions("", { firm: firms.length === 1 ? firms[0] : "", empty: "— qaysi loyihaga —" }) + `<option value="__none">Loyiha belgilanmagan</option>`;
+  $("#lpInfo").textContent = `${keys.length} ta yuk xati${firms.length === 1 ? " · " + firms[0] : firms.length ? ` · ${firms.length} ta firma` : ""}. Tanlangan loyihaga o'tadi, hisob-kitob o'sha loyiha bo'yicha qayta hisoblanadi.`;
+  let done = false; const fin = () => { if (!done) { done = true; d.close(); } };
+  $("#lpCancel").onclick = fin; d.oncancel = e2 => { e2.preventDefault(); fin(); };
+  $("#lpSel").onchange = ev => { siteSelNew(ev.target, "", id => { if (id && firms.length === 1) lpExtraAdd(firms[0], id); }); };
+  $("#lpF").onsubmit = async e2 => { e2.preventDefault(); const raw = $("#lpSel").value, sid = raw === "__none" ? "" : raw;
+    if (raw !== "__none" && !siteById(sid)) { toast("Qaysi loyihaga o'tkazishni tanlang"); return; }
+    try { await moveGroupsToSite(keys, sid); } catch(err) { toast("O'tkazib bo'lmadi: " + err.message); return; }
+    fin(); arcSel.clear(); arcSelBar(); await reloadAll(true); toast(`${keys.length} ta yuk xati «${siteLbl(sid)}»ga o'tkazildi`); };
+  d.showModal();
+});
 document.addEventListener("change", e => {
   const c = e.target.closest("[data-arcsel]");
   if (c) { if (c.checked) arcSel.add(c.dataset.arcsel); else arcSel.delete(c.dataset.arcsel); c.closest("tr").classList.toggle("sel", c.checked); arcSelBar(); }
