@@ -956,6 +956,7 @@ body:not(.locked) .money-hide{display:none!important}
 .kar-filters .f{flex:1 1 150px}
 .kar-filters .f.grow{flex:2 1 220px}
 .kar-kpis{margin-top:6px}
+.kar-kpis .acc-kpi b{white-space:normal;overflow:visible;line-height:1.25}   /* m³ va tonna birga sig'ishi uchun */
 .acc-kpi.k-profit b{color:var(--ok)}
 .kar-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 .kar-box{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
@@ -1392,7 +1393,8 @@ body.side-single .side-h::after{display:none}
       <div class="f c3"><label for="qnDriver">Haydovchi <span class="dim">— ixtiyoriy</span></label><input id="qnDriver" list="qDrvList" placeholder="Familiya Ism"></div>
 
       <div class="f c12"><label>Kimga sotildi *</label><div class="kar-seg kar-who" id="qnWho" role="group" aria-label="Kimga">
-        <button type="button" data-who="person">👤 Jismoniy shaxs</button><button type="button" data-who="firm">🏢 Firma</button></div></div>
+        <button type="button" data-who="person">👤 Jismoniy shaxs</button><button type="button" data-who="firm">🏢 Firma</button><button type="button" data-who="own">🏠 O'zimizga <small>(narxsiz)</small></button></div>
+        <span class="hint" id="qnOwnHint" hidden>Karyerdan o'zimizga kelgan yuk: narx so'ralmaydi, faqat qancha ketgani (m³ yoki tonna) yoziladi. Hisobotda «O'zimizga» bo'lib alohida chiqadi, sotuv summasiga qo'shilmaydi.</span></div>
 
       <div class="c12 kar-firm" id="qnFirmBox" hidden>
         <div class="entry-sub">
@@ -1409,8 +1411,8 @@ body.side-single .side-h::after{display:none}
       </div>
 
       <div class="f c3" id="qnKPriceBox"><label for="qnKPrice">Narxi (1 kovsh), so'm *</label><input id="qnKPrice" class="num" inputmode="decimal" placeholder="masalan, 350 000"><span class="hint" id="qnKPHint"></span></div>
-      <div class="f c3"><label for="qnPrice">Narxi (1 <span id="qnPUnit">m³</span>), so'm <span class="dim" id="qnPAuto">— avtomatik</span></label><input id="qnPrice" class="num" inputmode="decimal" placeholder="0"></div>
-      <div class="f c3"><label for="qnSum">Summa, so'm</label><input id="qnSum" class="num" inputmode="decimal" placeholder="0"></div>
+      <div class="f c3" id="qnPriceBox"><label for="qnPrice">Narxi (1 <span id="qnPUnit">m³</span>), so'm <span class="dim" id="qnPAuto">— avtomatik</span></label><input id="qnPrice" class="num" inputmode="decimal" placeholder="0"></div>
+      <div class="f c3" id="qnSumBox"><label for="qnSum">Summa, so'm</label><input id="qnSum" class="num" inputmode="decimal" placeholder="0"></div>
       <div class="f c3"><label for="qnDate">Sana</label><input type="date" id="qnDate"></div>
       <div class="f c12"><label for="qnNote">Izoh</label><input id="qnNote" placeholder="ixtiyoriy"></div>
       <div class="c12 kar-act">
@@ -1490,7 +1492,7 @@ body.side-single .side-h::after{display:none}
   <section class="panel kar-panel" id="qListPanel" data-page="q-list">
     <div class="kar-filters">
       <div class="f" id="qlQBox"><label for="qlQ">Karyer</label><select id="qlQ"></select></div>
-      <div class="f"><label for="qlType">Turi</label><select id="qlType"><option value="">Hammasi</option><option value="firm">Firmaga</option><option value="person">Jismoniy shaxsga</option><option value="debt">Faqat qarzga</option><option value="cash">Kassa yozuvlari</option></select></div>
+      <div class="f"><label for="qlType">Turi</label><select id="qlType"><option value="">Hammasi</option><option value="firm">Firmaga</option><option value="person">Jismoniy shaxsga</option><option value="own">O'zimizga (narxsiz)</option><option value="debt">Faqat qarzga</option><option value="cash">Kassa yozuvlari</option></select></div>
       <div class="f"><label for="qlFrom">Sanadan</label><input type="date" id="qlFrom"></div>
       <div class="f"><label for="qlTo">Sanagacha</label><input type="date" id="qlTo"></div>
       <div class="f grow"><label for="qlSearch">Qidirish</label><input type="search" id="qlSearch" placeholder="Mashina, firma, mahsulot, izoh"></div>
@@ -4567,7 +4569,7 @@ async function qPersonKey(id){
     it.waybill = wb;
   }
   const q = qById(it.quarry) || {}, key = "kx:" + it.id;
-  KX_ITEMS[key] = [{ id: it.id, batch: key, kind: "karyer", quarry: it.quarry, date: it.date, time: it.time, seller: q.owner || "", firm: "Jismoniy shaxs", waybill: it.waybill,
+  KX_ITEMS[key] = [{ id: it.id, batch: key, kind: "karyer", quarry: it.quarry, date: it.date, time: it.time, seller: q.owner || "", firm: it.pay === "own" ? "O'zimizga (ichki)" : "Jismoniy shaxs", waybill: it.waybill,
     giver: qWho(it.createdBy), receiver: "", driver: it.driver, phone: "", car: it.car, note: it.note, loadAddr: (q.name || "") + " karyeri", unloadAddr: "",
     product: it.product, qty: it.qty, unit: it.unit || "m³", kovsh: it.kovsh, created: it.created }];
   return key;
@@ -7605,6 +7607,8 @@ const qU = x => /^(t|т)/i.test(String((x && x.unit) || "").trim()) ? "tonna" : 
 const qUnits = q => (q && Array.isArray(q.units) && q.units.length ? q.units : ["m³"]);
 // miqdorlarni birlik bo'yicha alohida qo'shish: { m3, t }
 const qQty = list => list.reduce((o, x) => { o[qU(x) === "tonna" ? "t" : "m3"] += Number(x.qty) || 0; return o; }, { m3: 0, t: 0 });
+const qIsOwn = x => !!x && x.pay === "own";
+const qWhoTxt = it => it.t === "firm" ? it.firm : qIsOwn(it) ? "O'zimizga" : "Jismoniy shaxs";
 const qQtyTxt = o => [o.m3 || !o.t ? qFmtQ(o.m3) + " m³" : "", o.t ? qFmtQ(o.t) + " tonna" : ""].filter(Boolean).join(" · ");
 const qWho = id => { const p = profilesById[id] || (typeof users !== "undefined" ? users.find(u => u.id === id) : null); return p ? (p.full_name || p.login) : (me && id === me.id ? (me.full_name || me.login) : ""); };
 const qFirmRows = () => rows.filter(r => r.kind === "karyer" && r.quarry);
@@ -7701,7 +7705,8 @@ function renderQNew(){
 function qnWhoUi(){
   $$("#qnWho [data-who]").forEach(b => b.classList.toggle("on", b.dataset.who === qnWho));
   $$("#qnPay [data-pay]").forEach(b => b.classList.toggle("on", b.dataset.pay === qnPay));
-  $("#qnFirmBox").hidden = qnWho !== "firm"; $("#qnPersonBox").hidden = qnWho !== "person";
+  $("#qnFirmBox").hidden = qnWho !== "firm"; $("#qnPersonBox").hidden = qnWho !== "person"; $("#qnOwnHint").hidden = qnWho !== "own";
+  if (typeof qnUnitUi === "function") qnUnitUi();
   $("#qnSavePrint").textContent = "Saqlash va yuk xatini chiqarish";
   $("#qnTitle").textContent = qnEdit ? "Yuklashni tahrirlash" : "Yangi yuklash";
   $("#qnCancel").hidden = !qnEdit;
@@ -7710,7 +7715,9 @@ function qnWhoUi(){
 function qnUnitUi(){
   const t = qnUnit === "tonna";
   $$("#qnUnit [data-unit]").forEach(b => b.classList.toggle("on", b.dataset.unit === qnUnit));
-  $("#qnKovshBox").hidden = t; $("#qnKPriceBox").hidden = t; $("#qnKHint").hidden = t;
+  const own = qnWho === "own";
+  $("#qnKovshBox").hidden = t; $("#qnKPriceBox").hidden = t || own; $("#qnKHint").hidden = t;
+  $("#qnPriceBox").hidden = own; $("#qnSumBox").hidden = own;
   $("#qnQtyLbl").textContent = t ? "Og'irligi, tonna" : "Hajmi, m³";
   $("#qnPUnit").textContent = t ? "tonna" : "m³"; $("#qnPAuto").textContent = t ? "*" : "— avtomatik";
 }
@@ -7731,7 +7738,7 @@ function qnCalc(from){
   else if (from === "price") { const P0 = parseNum($("#qnPrice").value); $("#qnKPrice").value = P0 > 0 && K ? fmt(r2(P0 * K)) : ""; }
   else if (from === "sum") { const sm = parseNum($("#qnSum").value), P0 = Q > 0 && sm > 0 ? sm / Q : 0; $("#qnPrice").value = P0 ? String(r2(P0)) : ""; $("#qnKPrice").value = P0 && K ? fmt(r2(P0 * K)) : ""; }
   else if (!parseNum($("#qnKPrice").value) && parseNum($("#qnPrice").value) > 0 && K) $("#qnKPrice").value = fmt(r2(parseNum($("#qnPrice").value) * K));
-  const P = qnExactPrice();
+  const P = qnWho === "own" ? 0 : qnExactPrice();
   if (from !== "sum") $("#qnSum").value = Q > 0 && P > 0 ? fmt(Q * P) : "";
   $("#qnKPHint").textContent = P > 0 ? `1 m³ = ${fmt(P)} so'm · 1 kovsh = ${qFmtQ(K)} m³` : `1 kovsh = ${qFmtQ(K)} m³`;
   $("#qnTotal").innerHTML = Q > 0 ? `<b>${esc(qnProd)}</b> · ${qFmtQ(Q)} ${U}${k > 0 ? ` (${qFmtQ(k)} kovsh)` : ""}${P > 0 ? ` · <b class="num">${fmt(Q * P)}</b> so'm` : ""}` : "";
@@ -7765,7 +7772,7 @@ $("#qnFirm").addEventListener("change", async () => {
   qnPriceGuess();
 });
 function qnPriceGuess(){
-  if (qnEdit || $("#qnPrice").value || $("#qnKPrice").value) return;
+  if (qnEdit || qnWho === "own" || $("#qnPrice").value || $("#qnKPrice").value) return;
   const q = qnQuarry(); if (!q) return;
   let last = null;
   if (qnWho === "firm") { const f = $("#qnFirm").value.trim(); if (!f) return;
@@ -7785,13 +7792,13 @@ $("#qnSavePrint").addEventListener("click", () => qnSave(true));
 async function qnSave(print){
   if (VIEWING()) { toast("Ko'rish rejimi — o'zgartirib bo'lmaydi"); return; }
   const q = qnQuarry(); if (!q) { toast("Karyerni tanlang"); return; }
-  const qty = parseNum($("#qnQty").value), price = qnExactPrice(), car = $("#qnCar").value.trim().toUpperCase().replace(/\s+/g, " ");
+  const qty = parseNum($("#qnQty").value), price = qnWho === "own" ? 0 : qnExactPrice(), car = $("#qnCar").value.trim().toUpperCase().replace(/\s+/g, " ");
   const kovsh = qnUnit === "tonna" ? null : (parseNum($("#qnKovsh").value) || null), date = $("#qnDate").value || today();
   const bad = (m, sel) => { toast(m); if (sel) $(sel).focus(); };
   if (!qnProd) return bad(qnOther ? "Mahsulot nomini yozing" : "Mahsulotni tanlang", qnOther ? "#qnProdIn" : null);
   if (!(qty > 0)) return qnUnit === "tonna" ? bad("Og'irligini (tonna) yozing", "#qnQty") : bad("Hajmini (m³) yoki kovsh sonini yozing", "#qnKovsh");
   if (!car) return bad("Mashina raqamini yozing", "#qnCar");
-  if (!(price > 0)) return qnUnit === "tonna" ? bad("Narxini yozing — 1 tonna qanchaga sotildi", "#qnPrice") : bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
+  if (qnWho !== "own" && !(price > 0)) return qnUnit === "tonna" ? bad("Narxini yozing — 1 tonna qanchaga sotildi", "#qnPrice") : bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
   if (qnUnit === "tonna" && Q_UNITS_OK === false) return bad("Tonnada yozish uchun bazani yangilang (7-yangilash-4.sql)");
   const btns = [$("#qnSave"), $("#qnSavePrint")]; btns.forEach(b => b.disabled = true);
   let pend = null;   // internet uzilsa — shu yozuv navbatga qo'yiladi
@@ -7827,15 +7834,15 @@ async function qnSave(print){
       const old = qnEdit && qnEdit.t === "person" ? qSales.find(x => x.id === qnEdit.id) : null;
       let wb = old ? old.waybill : "";
       if (print && !wb) wb = qPersonNextWb(q.id);
-      const d = { quarry_id: q.id, date, time: old ? old.time : nowTime(), product: qnProd, kovsh, qty, unit: qnUnit, price, pay: qnPay, car,
+      const d = { quarry_id: q.id, date, time: old ? old.time : nowTime(), product: qnProd, kovsh, qty, unit: qnUnit, price, pay: qnWho === "own" ? "own" : qnPay, car,
         driver: $("#qnDriver").value.trim(), waybill: wb, note: $("#qnNote").value.trim() };
-      if (!old) { d.id = oqUuid(); pend = { tbl: "quarry_sales", d, label: `${q.name}: ${qnProd} ${qFmtQ(qty)} ${qnUnit} · ${car}${qnPay === "debt" ? " · qarzga" : ""}`, reset: "person" }; if (!navigator.onLine) throw new Error("offline"); }
+      if (!old) { d.id = oqUuid(); pend = { tbl: "quarry_sales", d, label: `${q.name}: ${qnProd} ${qFmtQ(qty)} ${qnUnit} · ${car}${qnWho === "own" ? " · o'zimizga" : qnPay === "debt" ? " · qarzga" : ""}`, reset: "person" }; if (!navigator.onLine) throw new Error("offline"); }
       const res = old ? await sb.from("quarry_sales").update(d).eq("id", old.id).select("*").single() : await sb.from("quarry_sales").insert(d).select("*").single();
       if (res.error) throw res.error;
       const x = res.data, it = { id: x.id, quarry: x.quarry_id, date: x.date, time: x.time, product: x.product, kovsh: x.kovsh == null ? null : Number(x.kovsh), qty: Number(x.qty), unit: x.unit,
         price: Number(x.price), total: Number(x.total), pay: x.pay, car: x.car, driver: x.driver, waybill: x.waybill, note: x.note, created: x.created_at, createdBy: x.created_by };
       if (old) qSales[qSales.indexOf(old)] = it; else qSales.push(it);
-      toast(old ? "Tuzatildi" : `Saqlandi${qnPay === "debt" ? " — qarzga yozildi" : ""}`);
+      toast(old ? "Tuzatildi" : `Saqlandi${qnWho === "own" ? " — o'zimizga yozildi" : qnPay === "debt" ? " — qarzga yozildi" : ""}`);
       qnReset(); renderQNew();
       if (print) qPrintPerson(it);
     }
@@ -7844,7 +7851,8 @@ async function qnSave(print){
       oqAdd(pend);
       qnReset(); if (pend.reset === "firm") { $("#qnFirm").value = ""; $("#qnWb").value = ""; } renderQNew();
       if (print) toast("📴 Internet yo'q — yozuv navbatda. Chop etish internet qaytgach, ro'yxatdan.");
-    } else toast("Saqlab bo'lmadi: " + (err.message || err));
+    } else if (qnWho === "own" && /pay/i.test(err.message || "") && /check|constraint/i.test(err.message || "")) toast("«O'zimizga» uchun bazani yangilang (8-yangilash-5.sql)");
+    else toast("Saqlab bo'lmadi: " + (err.message || err));
   }
   finally { btns.forEach(b => b.disabled = false); }
 }
@@ -7855,7 +7863,7 @@ function qPersonNextWb(qid){
 function qPrintPerson(it){
   const q = qById(it.quarry) || {}, key = "kx:" + it.id;
   if (typeof qwbOpen === "function") { qPersonKey(it.id).then(k => { if (k) qwbOpen([k]); }); return; }
-  KX_ITEMS[key] = [{ id: it.id, batch: key, kind: "karyer", quarry: it.quarry, date: it.date, time: it.time, seller: q.owner || "", firm: "Jismoniy shaxs", waybill: it.waybill,
+  KX_ITEMS[key] = [{ id: it.id, batch: key, kind: "karyer", quarry: it.quarry, date: it.date, time: it.time, seller: q.owner || "", firm: it.pay === "own" ? "O'zimizga (ichki)" : "Jismoniy shaxs", waybill: it.waybill,
     giver: qWho(it.createdBy), receiver: "", driver: it.driver, phone: "", car: it.car, note: it.note, loadAddr: (q.name || "") + " karyeri", unloadAddr: "",
     product: it.product, qty: it.qty, unit: it.unit || "m³", created: it.created }];
   openWaybill(key);
@@ -7882,13 +7890,14 @@ const qCanEdit = it => !VIEWING() && (PRIV() || it.createdBy === me.id);
 function qItemCard(it, opts = {}){
   const money = qMoney();
   const who = it.t === "firm" ? `🏢 <b>${esc(it.firm)}</b> <span class="dim">· № ${esc(it.waybill || "—")} · ${PM[it.pm] || ""}</span>`
+    : it.pay === "own" ? `🏠 <b>O'zimizga</b> <span class="pill zero">narxsiz</span>${it.waybill ? ` <span class="dim">· № ${esc(it.waybill)}</span>` : ""}`
     : `👤 Jismoniy shaxs · ${it.pay === "debt" ? `<span class="pill debt">Qarzga</span>` : `<span class="pill zero">Naqd</span>`}${it.waybill ? ` <span class="dim">· № ${esc(it.waybill)}</span>` : ""}`;
   const sk = it.t + ":" + it.id;
   return `<div class="kar-item${it.t === "person" && it.pay === "debt" ? " is-debt" : ""}${opts.sel && qlSel.has(sk) ? " sel" : ""}">
     ${opts.sel ? `<label class="ki-sel" title="Birga chop etish uchun belgilash"><input type="checkbox" data-qlsel="${sk}"${qlSel.has(sk) ? " checked" : ""} aria-label="Belgilash"></label>` : ""}<div class="ki-main"><div class="ki-top"><b>${esc(it.product)}</b> · <b class="num">${qFmtQ(it.qty)} ${qU(it)}</b>${it.kovsh ? ` <span class="dim">(${qFmtQ(it.kovsh)} kovsh)</span>` : ""} · <span class="plate">${esc(it.car)}</span></div>
       <div class="ki-who">${who}</div>
       <div class="ki-meta dim">${opts.date ? `${fmtDate(it.date)} ` : ""}${esc(it.time || "")}${opts.quarry ? ` · ⛏ ${esc(qName(it.quarry))}` : ""}${it.driver ? ` · ${esc(it.driver)}` : ""}${it.createdBy ? ` · ✍ ${esc(qWho(it.createdBy))}` : ""}${it.note ? ` · ${esc(it.note)}` : ""}</div></div>
-    <div class="ki-sum">${money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? (() => { const qq = qById(it.quarry); return qU(it) === "tonna" ? `1 tonna: ${fmt(it.price)}` : qq && qq.kovsh > 0 ? `1 kovsh: ${fmt(it.price * qq.kovsh)}` : fmt(it.price) + " × m³"; })() : ""}</small>` : "<b>•••</b>"}</div>
+    <div class="ki-sum">${qIsOwn(it) ? `<b>—</b><small>narxsiz</small>` : money ? `<b class="num">${fmt(it.total)}</b><small>${it.price ? (() => { const qq = qById(it.quarry); return qU(it) === "tonna" ? `1 tonna: ${fmt(it.price)}` : qq && qq.kovsh > 0 ? `1 kovsh: ${fmt(it.price * qq.kovsh)}` : fmt(it.price) + " × m³"; })() : ""}</small>` : "<b>•••</b>"}</div>
     <div class="ki-act">${it.t === "firm" ? `<button type="button" class="sm" data-qprint="${esc(it.key)}">Yuk xati</button>` : `<button type="button" class="sm" data-qpprint="${it.id}">Yuk xati</button>`}${qCanEdit(it) ? `<button type="button" class="sm" data-qedit="${it.t}:${it.id}">Tahrirlash</button>${it.t !== "firm" || PRIV() ? `<button type="button" class="sm ghost danger" data-qdel="${it.t}:${it.id}">O'chirish</button>` : ""}` : ""}</div>
   </div>`;
 }
@@ -7904,7 +7913,7 @@ function qStartEdit(t, id){
   if (curPage !== "q-new") showPage("q-new");
   qnEdit = { t, id }; qnUnit = qU(it);
   $("#qnQ").value = it.quarry; qnProd = it.product; qnOther = !((qById(it.quarry) || {}).products || []).some(p => same(p, it.product)); renderQNew();
-  qnWho = t; if (t === "person") qnPay = it.pay;
+  qnWho = t === "person" && it.pay === "own" ? "own" : t; if (t === "person" && it.pay !== "own") qnPay = it.pay;
   $("#qnKovsh").value = it.kovsh ? String(it.kovsh) : ""; $("#qnQty").value = String(it.qty); $("#qnCar").value = it.car || ""; $("#qnDriver").value = it.driver || "";
   $("#qnPrice").value = it.price ? String(it.price) : ""; $("#qnDate").value = it.date || today(); $("#qnNote").value = it.note || "";
   if (t === "firm") { $("#qnFirm").value = it.firm; $("#qnWb").value = it.waybill || ""; $("#qnPm").value = it.payMethod || "bank"; pmMark($("#qnPm")); if (SITES_OK) $("#qnSite").value = it.site || ""; }
@@ -8085,7 +8094,8 @@ function qlData(){
   let items = type === "cash" ? [] : qItems(qid, from, to).filter(it => !qid || it.quarry === qid);
   if (!qid) items = items.filter(it => qVisible(true).some(q => q.id === it.quarry));
   if (type === "firm") items = items.filter(it => it.t === "firm");
-  if (type === "person") items = items.filter(it => it.t === "person");
+  if (type === "person") items = items.filter(it => it.t === "person" && !qIsOwn(it));
+  if (type === "own") items = items.filter(it => qIsOwn(it));
   if (type === "debt") items = items.filter(it => it.t === "person" && it.pay === "debt");
   if (s) items = items.filter(it => [it.car, it.firm, it.product, it.note, it.driver, it.waybill].some(v => String(v || "").toLowerCase().includes(s)));
   let cash = !type || type === "cash" ? qCash.filter(x => (!qid || x.quarry === qid) && qVisible(true).some(q => q.id === x.quarry) && (!from || x.date >= from) && (!to || x.date <= to)) : [];
@@ -8127,15 +8137,15 @@ $("#qlBody").addEventListener("click", e => {
 function qCompute(qid, from, to){
   const inQ = x => (qid ? x.quarry === qid : qVisible(true).some(q => q.id === x.quarry));
   const inR = d => (!from || d >= from) && (!to || d <= to);
-  const fr = qFirmRows().filter(r => inQ(r) && inR(r.date || "")), ps = qSales.filter(x => inQ(x) && inR(x.date)), cs = qCash.filter(x => inQ(x) && inR(x.date));
+  const fr = qFirmRows().filter(r => inQ(r) && inR(r.date || "")), allPs = qSales.filter(x => inQ(x) && inR(x.date)), ps = allPs.filter(x => !qIsOwn(x)), own = allPs.filter(qIsOwn), cs = qCash.filter(x => inQ(x) && inR(x.date));
   const sum = (a, f) => a.reduce((s, x) => s + (Number(f(x)) || 0), 0), isT = x => qU(x) === "tonna";
-  const R = { fr, ps, cs,
+  const R = { fr, ps, cs, own, ownV: qQty(own),
     firmSum: sum(fr, x => x.total), firmM3: sum(fr, x => isT(x) ? 0 : x.qty), firmT: sum(fr, x => isT(x) ? x.qty : 0),
     perT: sum(ps, x => isT(x) ? x.qty : 0),
     perCash: sum(ps.filter(x => x.pay === "cash"), x => x.total), perDebt: sum(ps.filter(x => x.pay === "debt"), x => x.total), perM3: sum(ps, x => isT(x) ? 0 : x.qty),
     debtBack: sum(cs.filter(x => x.kind === "debt_back"), x => x.amount), firmCash: sum(cs.filter(x => x.kind === "firm_cash"), x => x.amount),
     expense: sum(cs.filter(x => x.kind === "expense"), x => x.amount), salary: sum(cs.filter(x => x.kind === "salary"), x => x.amount), kitob: sum(cs.filter(x => x.kind === "kitob"), x => x.amount) };
-  R.sales = R.firmSum + R.perCash + R.perDebt; R.m3 = R.firmM3 + R.perM3; R.t = R.firmT + R.perT;
+  R.sales = R.firmSum + R.perCash + R.perDebt; R.m3 = R.firmM3 + R.perM3; R.t = R.firmT + R.perT; R.ownM3 = R.ownV.m3; R.ownT = R.ownV.t;
   R.cashIn = R.perCash + R.debtBack + R.firmCash; R.cashOut = R.expense + R.salary + R.kitob;
   R.profit = R.sales - R.expense - R.salary;
   return R;
@@ -8184,7 +8194,8 @@ function renderQRep(){
         <tr><td>Firmalarga (hisob-kitobga yozildi)</td><td class="r num">${fmt(R.firmSum)}</td></tr>
         <tr><td>Jismoniy shaxslarga — naqd</td><td class="r num">${fmt(R.perCash)}</td></tr>
         <tr><td>Jismoniy shaxslarga — qarzga</td><td class="r num">${fmt(R.perDebt)}</td></tr>
-        <tr class="tot"><td>Jami sotuv</td><td class="r num">${fmt(R.sales)}</td></tr></table></div>
+        <tr class="tot"><td>Jami sotuv</td><td class="r num">${fmt(R.sales)}</td></tr>
+        ${R.own.length ? `<tr><td>🏠 O'zimizga (narxsiz) — ${R.own.length} ta</td><td class="r num">${qQtyTxt(R.ownV)}</td></tr>` : ""}</table></div>
       <div class="kar-box"><h3>🗃 Kassa (naqd pul)</h3><table class="kar-kv">
         <tr><td>Oy boshidagi qoldiq</td><td class="r num">${fmt(R.open)}</td></tr>
         <tr><td>+ Jismoniy shaxslardan naqd</td><td class="r num">${fmt(R.perCash)}</td></tr>
@@ -8248,7 +8259,7 @@ $("#qrXl").addEventListener("click", () => {
   const R = qReport(), qn = R.qid ? qName(R.qid) : "Barcha karyerlar", wb = XLSX.utils.book_new();
   const hasT = R.t > 0 || R.hist.some(h => h.t > 0), tc = v => hasT ? [qXlN(v)] : [], th = l => hasT ? [l] : [];
   XLSX.utils.book_append_sheet(wb, qXlSheet(`${qn} — ${qMonLbl(R.mon)}`, [
-    { h: "Umumiy", head: ["Ko'rsatkich", "Summa, so'm"], rows: [["Sotildi, m³", qXlN(R.m3)], ...(hasT ? [["Sotildi, tonna", qXlN(R.t)]] : []), ["Firmalarga sotuv", qXlN(R.firmSum)], ["Jismoniy shaxslarga — naqd", qXlN(R.perCash)], ["Jismoniy shaxslarga — qarzga", qXlN(R.perDebt)],
+    { h: "Umumiy", head: ["Ko'rsatkich", "Summa, so'm"], rows: [["Sotildi, m³", qXlN(R.m3)], ...(hasT ? [["Sotildi, tonna", qXlN(R.t)]] : []), ...(R.own.length ? [["O'zimizga (narxsiz), m³", qXlN(R.ownM3)], ["O'zimizga (narxsiz), tonna", qXlN(R.ownT)]] : []), ["Firmalarga sotuv", qXlN(R.firmSum)], ["Jismoniy shaxslarga — naqd", qXlN(R.perCash)], ["Jismoniy shaxslarga — qarzga", qXlN(R.perDebt)],
       ["Jami sotuv", qXlN(R.sales)], ["Xarajatlar", qXlN(R.expense)], ["Ishchilarga maosh", qXlN(R.salary)], ["Foyda (sotuv − xarajat − maosh)", qXlN(R.profit)], ["Kitobga yuborildi", qXlN(R.kitob)]] },
     { h: "Kassa (naqd pul)", head: ["", "Summa, so'm"], rows: [["Oy boshidagi qoldiq", qXlN(R.open)], ["+ Jismoniy shaxslardan naqd", qXlN(R.perCash)], ["+ Qaytgan qarzlar", qXlN(R.debtBack)], ["+ Firmalardan naqd", qXlN(R.firmCash)],
       ["− Xarajatlar", qXlN(R.expense)], ["− Ishchilarga maosh", qXlN(R.salary)], ["− Yuborilgan pul (Kitob, Qarshi …)", qXlN(R.kitob)]], tot: ["Oy oxiridagi qoldiq", qXlN(R.close)] },
@@ -8261,8 +8272,8 @@ $("#qrXl").addEventListener("click", () => {
   ]), "Hisobot");
   const its = qItems(R.qid, R.from, R.to).filter(it => R.qid || qVisible(true).some(q => q.id === it.quarry)).reverse();
   XLSX.utils.book_append_sheet(wb, qXlSheet(`Yuklashlar — ${qMonLbl(R.mon)}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "Miqdor", "Birlik", "Kimga", "Narx (1 birlik)", "Summa, so'm", "To'lov", "Yuk xati №", "Yozdi", "Izoh"],
-    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), qU(it), it.t === "firm" ? it.firm : "Jismoniy shaxs", qXlN(it.price), qXlN(it.total),
-      it.t === "firm" ? (PM[it.pm] || "") : it.pay === "debt" ? "Qarzga" : "Naqd", it.waybill || "", qWho(it.createdBy), it.note || ""]),
+    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), qU(it), qWhoTxt(it), qXlN(it.price), qXlN(it.total),
+      it.t === "firm" ? (PM[it.pm] || "") : qIsOwn(it) ? "O'zimizga" : it.pay === "debt" ? "Qarzga" : "Naqd", it.waybill || "", qWho(it.createdBy), it.note || ""]),
     tot: ["Jami", "", "", "", "", qXlN(its.reduce((s, x) => s + (x.kovsh || 0), 0)), qQtyTxt(qQty(its)), "", "", "", qXlN(its.reduce((s, x) => s + (x.total || 0), 0))] }]), "Yuklashlar");
   const cs = R.cs.slice().sort((a, b) => (a.date + a.created).localeCompare(b.date + b.created));
   XLSX.utils.book_append_sheet(wb, qXlSheet(`Kassa yozuvlari — ${qMonLbl(R.mon)}`, [{ head: ["Sana", "Karyer", "Turi", "Kim / nima", "Summa, so'm", "Izoh", "Yozdi"],
@@ -8275,8 +8286,8 @@ $("#qlXl").addEventListener("click", () => {
   if (typeof XLSX === "undefined") { toast("Excel yozuvchi yuklanmadi"); return; }
   const D = qlData(), money = qMoney(), wb = XLSX.utils.book_new(), its = D.items.slice().reverse();
   XLSX.utils.book_append_sheet(wb, qXlSheet(`Karyer yuklashlari ${fmtDate(D.from) || "boshidan"} — ${fmtDate(D.to) || "bugungacha"}`, [{ head: ["Sana", "Vaqt", "Karyer", "Mashina", "Mahsulot", "Kovsh", "Miqdor", "Birlik", "Kimga", ...(money ? ["Narx (1 birlik)", "Summa, so'm"] : []), "To'lov", "Yuk xati №", "Izoh"],
-    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), qU(it), it.t === "firm" ? it.firm : "Jismoniy shaxs", ...(money ? [qXlN(it.price), qXlN(it.total)] : []),
-      it.t === "firm" ? (PM[it.pm] || "") : it.pay === "debt" ? "Qarzga" : "Naqd", it.waybill || "", it.note || ""]) }]), "Yuklashlar");
+    rows: its.map(it => [fmtDate(it.date), it.time || "", qName(it.quarry), it.car, it.product, it.kovsh ? qXlN(it.kovsh) : "", qXlN(it.qty), qU(it), qWhoTxt(it), ...(money ? [qXlN(it.price), qXlN(it.total)] : []),
+      it.t === "firm" ? (PM[it.pm] || "") : qIsOwn(it) ? "O'zimizga" : it.pay === "debt" ? "Qarzga" : "Naqd", it.waybill || "", it.note || ""]) }]), "Yuklashlar");
   if (D.cash.length) XLSX.utils.book_append_sheet(wb, qXlSheet("Kassa yozuvlari", [{ head: ["Sana", "Karyer", "Turi", "Kim / nima", "Summa, so'm", "Izoh"],
     rows: D.cash.slice().reverse().map(x => [fmtDate(x.date), qName(x.quarry), QC_KINDS[x.kind], x.car || x.category || x.person || x.firm, qXlN(x.amount), x.note]) }]), "Kassa");
   saveFile(`Karyer yuklashlari ${D.from || ""} — ${D.to || ""}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -8691,7 +8702,7 @@ function qsData(){
   const [from, to] = qsRange(), qid = $("#qsQ").value;
   const QS = quarries.filter(q => (!qid || q.id === qid) && (q.active || qSales.some(x => x.quarry === q.id) || qFirmRows().some(r => r.quarry === q.id)));
   const list = QS.map(q => { const R = qCompute(q.id, from, to); return { q, R, n: R.fr.length + R.ps.length, debt: dashSum(qDebts(q.id, to).filter(d => d.left > 0.5), d => d.left) }; });
-  const T = list.reduce((t, { R, n, debt }) => { ["sales", "m3", "t", "expense", "salary", "profit", "cashIn", "perCash", "perDebt", "firmSum", "debtBack", "firmCash", "kitob"].forEach(k => t[k] = (t[k] || 0) + R[k]); t.n = (t.n || 0) + n; t.debt = (t.debt || 0) + debt; return t; }, {});
+  const T = list.reduce((t, { R, n, debt }) => { ["sales", "m3", "t", "ownM3", "ownT", "expense", "salary", "profit", "cashIn", "perCash", "perDebt", "firmSum", "debtBack", "firmCash", "kitob"].forEach(k => t[k] = (t[k] || 0) + R[k]); t.n = (t.n || 0) + n; t.debt = (t.debt || 0) + debt; return t; }, {});
   const endM = (to || today()).slice(0, 7), hist = qPrevMonths(endM, 6).map(m => { const [a, b] = qMonthRange(m); const x = QS.reduce((t, q) => { const R = qCompute(q.id, a, b); t.s += R.sales; t.p += R.profit; return t; }, { s: 0, p: 0 }); return { m, ...x }; });
   return { from, to, list, T, hist, ...qsAgg(list) };
 }
@@ -8725,7 +8736,8 @@ function renderQStats(){
         <h2 class="kar-h">Kimga sotildi</h2>
         <div class="dash-li"><span>Firmalarga (yuk xati bilan)</span><b class="num">${m$(T.firmSum)}</b></div>
         <div class="dash-li"><span>Jismoniy shaxslarga — naqd</span><b class="num">${m$(T.perCash)}</b></div>
-        <div class="dash-li"><span>Jismoniy shaxslarga — qarzga</span><b class="num neg">${m$(T.perDebt)}</b></div></div>
+        <div class="dash-li"><span>Jismoniy shaxslarga — qarzga</span><b class="num neg">${m$(T.perDebt)}</b></div>
+        ${T.ownM3 || T.ownT ? `<div class="dash-li"><span>🏠 O'zimizga (narxsiz)</span><b class="num">${qQtyTxt({ m3: T.ownM3, t: T.ownT })}</b></div>` : ""}</div>
     </div>
     <div class="dash-two">
       <div class="dash-card"><h2>Xarajatlar turlari bo'yicha</h2>${D.cats.length ? D.cats.map(([c, v]) => `<div class="dash-li"><span>${esc(c)}</span><b class="num">${m$(v)}</b></div>`).join("") : `<p class="hint">Xarajat yozilmagan.</p>`}</div>
