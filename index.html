@@ -763,6 +763,12 @@ select.pm-set,input.pm-set{border-color:#3d9be9!important;color:#0d5ea8;font-wei
 .prod-sum td small{color:var(--muted)}
 .prod-sum .ps-sub{margin:14px 0 6px;font-size:14px}
 .prod-sum .ps-warn{color:var(--danger);font-size:12px;display:block}
+.prod-sum .calc-t thead th{background:var(--band-1);color:var(--band-ink)}
+.prod-sum .calc-t .pr{color:var(--accent)}
+.prod-sum .calc-t tr.np .np-cell{display:inline-block;min-width:70px;padding:0 6px;background:#fff36b;color:#3a3300;border-radius:3px;text-align:center}
+.prod-sum .calc-t tfoot td{background:var(--accent-soft)}
+.prod-sum .calc-t tfoot tr.debt td{color:var(--danger)}
+.prod-sum .calc-t td.dim{color:var(--muted);font-size:13px}
 /* dumaloq (pitsa) diagramma */
 .st-pie{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center}
 .st-pie svg{width:260px;height:260px;flex:none;max-width:100%}
@@ -4903,7 +4909,19 @@ $("#fFirm").addEventListener("input", updateBalance);
 
 let accFirm = "", pendingPayDel = null;
 // firma ichida: qaysi mahsulotdan jami qancha olingani va summasi
-let prodSumScope = "all", prodSumSite = "cur";
+// Firma hisob-kitobi jamlanmasi: mahsulot × narx bo'yicha qatorlar (narxsizlari alohida), to'lovlar va qolgan qarz.
+// Dasturdagi «📦 Mahsulotlar bo'yicha jami» va Excel'dagi «Hisob-kitob» varag'i shu bitta hisobdan foydalanadi.
+function calcLines(firm, items){
+  const order = productOrder(firm, items), m = new Map();
+  items.forEach(r => { if (!r.product) return;
+    const pr = Number(r.price) > 0 ? Number(r.price) : null, k = fkey(r.product) + "|" + (pr === null ? "-" : pr);
+    const x = m.get(k) || { name: String(r.product).trim(), unit: r.unit || "", price: pr, qty: 0, sum: 0, wb: new Set() };
+    x.qty += Number(r.qty) || 0; x.sum += pr === null ? 0 : (r.total || 0); x.wb.add(gk(r)); if (!x.unit && r.unit) x.unit = r.unit; m.set(k, x); });
+  const pos = n => { const i = order.findIndex(o => same(o, n)); return i < 0 ? 1e9 : i; };
+  const lines = [...m.values()].sort((a, b) => pos(a.name) - pos(b.name) || a.name.localeCompare(b.name) || (a.price === null) - (b.price === null) || (a.price || 0) - (b.price || 0));
+  return { lines, tot: lines.reduce((s, x) => s + x.sum, 0) };
+}
+let prodSumScope = "all", prodSumSite = "cur", psLast = null;
 function renderProdSum(){
   const box = $("#prodSum"); if (!box || !accFirm) return;
   const multi = SITES_OK && accSite !== undefined && firmSites(accFirm).length > 1;
@@ -4911,29 +4929,37 @@ function renderProdSum(){
   const S = prodSumSite === "all" ? undefined : accSite, cut = projNow(accFirm, S).cut, hasProj = S !== undefined && projCuts(accFirm, S).length > 0;
   if (!hasProj) prodSumScope = "all";
   const R = rows.filter(r => same(r.firm, accFirm) && inSite(r, S) && r.product && (prodSumScope === "all" || rowAt(r) > cut));
-  const m = new Map();
-  R.forEach(r => { const k = fkey(r.product), x = m.get(k) || { name: String(r.product).trim(), unit: r.unit || "", qty: 0, sum: 0, pq: 0, wb: new Set(), np: 0 };
-    const q = Number(r.qty) || 0; x.qty += q; x.sum += r.total || 0; x.wb.add(gk(r)); if (hasPrice(r)) x.pq += q; else x.np++; if (!x.unit && r.unit) x.unit = r.unit; m.set(k, x); });
-  const list = [...m.values()].sort((a, b) => b.sum - a.sum || a.name.localeCompare(b.name));
-  const tot = list.reduce((s, x) => s + x.sum, 0), wbAll = new Set(R.map(gk)).size;
-  const units = new Set(list.map(x => x.unit || "")), oneU = units.size === 1;
+  const { lines: list, tot } = calcLines(accFirm, R);
+  const Y = pays.filter(p => same(p.firm, accFirm) && inSite(p, S) && (prodSumScope === "all" || payAt(p) > cut)).sort((a, b) => (a.date || "").localeCompare(b.date || "") || (a.at || "").localeCompare(b.at || ""));
+  const paid = Y.reduce((s, p) => s + (p.amount || 0), 0), carry = prodSumScope === "cur" ? projNow(accFirm, S).carry : 0, rest = tot - paid - carry;
   const seg = hasProj ? `<span class="seg" role="group" aria-label="Davr"><button type="button" data-ps-scope="all" class="${prodSumScope === "all" ? "on" : ""}" aria-pressed="${prodSumScope === "all"}">Hammasi</button><button type="button" data-ps-scope="cur" class="${prodSumScope === "cur" ? "on" : ""}" aria-pressed="${prodSumScope === "cur"}">Joriy davr</button></span>` : "";
   const where = SITES_OK && S !== undefined && S !== null && (S !== "" || multi) ? ` <span class="hint">· 📍 ${esc(siteLbl(S))}</span>` : multi ? ` <span class="hint">· barcha loyihalar</span>` : "";
   const seg2 = multi ? `<span class="seg" role="group" aria-label="Loyiha"><button type="button" data-ps-site="cur" class="${prodSumSite === "cur" ? "on" : ""}" aria-pressed="${prodSumSite === "cur"}">Shu loyiha</button><button type="button" data-ps-site="all" class="${prodSumSite === "all" ? "on" : ""}" aria-pressed="${prodSumSite === "all"}">Barcha loyihalar</button></span>` : "";
   const bySite = multi && prodSumSite === "all" ? (() => { const sm = new Map(); R.forEach(r => { const k = r.site || ""; const x = sm.get(k) || { s: k, wb: new Set(), sum: 0 }; x.wb.add(gk(r)); x.sum += r.total || 0; sm.set(k, x); });
     const L = [...sm.values()].sort((a, b) => b.sum - a.sum); if (L.length < 2) return "";
     return `<h3 class="ps-sub">Loyihalar bo'yicha</h3><div class="tbl"><table><thead><tr><th>Loyiha (obyekt)</th><th class="r">Yuk xati</th><th class="r">Summa, so'm</th></tr></thead><tbody>${L.map(x => `<tr><td><button type="button" class="firm-link" data-ps-goto="${esc(x.s)}">📍 ${esc(siteLbl(x.s))}</button></td><td class="r num">${x.wb.size}</td><td class="r num"><b>${fmt(x.sum)}</b></td></tr>`).join("")}</tbody></table></div>`; })() : "";
-  box.innerHTML = `<div class="prod-sum-h"><h2>📦 Mahsulotlar bo'yicha jami${where}</h2><span class="ps-segs">${seg2}${seg}</span></div>` + (list.length
-    ? `<div class="tbl"><table><thead><tr><th>Mahsulot</th><th class="r">Yuk xati</th><th class="r">Jami miqdor</th><th class="r">O'rtacha narx</th><th class="r">Summa, so'm</th></tr></thead><tbody>${list.map(x => `<tr>
-        <td><b>${esc(x.name)}</b>${x.np ? `<span class="ps-warn">⚠ ${x.np} ta yozuvda narx yo'q</span>` : ""}</td>
-        <td class="r num">${x.wb.size}</td>
-        <td class="r num"><b>${fmt(x.qty)}</b>${x.unit ? ` <small>${esc(x.unit)}</small>` : ""}</td>
-        <td class="r num">${x.pq ? fmt(Math.round(x.sum / x.pq)) : "—"}</td>
-        <td class="r num"><b>${fmt(x.sum)}</b></td></tr>`).join("")}</tbody>
-      <tfoot><tr><td>JAMI</td><td class="r num">${wbAll}</td><td class="r num">${oneU ? `${fmt(list.reduce((s, x) => s + x.qty, 0))}${list[0].unit ? ` <small>${esc(list[0].unit)}</small>` : ""}` : ""}</td><td></td><td class="r num">${fmt(tot)}</td></tr></tfoot></table></div>`
+  const xbtn = list.length ? `<button type="button" class="sm" data-ps-xl>⬇ Excel</button>` : "";
+  box.innerHTML = `<div class="prod-sum-h"><h2>📦 Hisob-kitob jamlanmasi${where}</h2><span class="ps-segs">${seg2}${seg}${xbtn}</span></div>` + (list.length
+    ? `<div class="tbl"><table class="calc-t"><thead><tr><th class="r">№</th><th>Mahsulot</th><th class="r">Jami soni</th><th class="r">Narxi (so'm)</th><th class="r">Summasi (so'm)</th></tr></thead><tbody>${list.map((x, i) => `<tr${x.price === null ? ' class="np"' : ""}>
+        <td class="r num">${i + 1}</td>
+        <td><b>${esc(x.name)}</b>${x.price === null ? `<span class="ps-warn">⚠ narxi qo'yilmagan · ${x.wb.size} ta yuk xati</span>` : ""}</td>
+        <td class="r num">${fmt(x.qty)}${x.unit ? ` <small>${esc(x.unit)}</small>` : ""}</td>
+        <td class="r num">${x.price === null ? `<span class="np-cell">—</span>` : `<span class="pr">${fmt(x.price)}</span>`}</td>
+        <td class="r num">${x.price === null ? "-" : fmt(x.sum)}</td></tr>`).join("")}</tbody>
+      <tfoot><tr><td></td><td>JAMI summa</td><td></td><td></td><td class="r num">${fmt(tot)}</td></tr></tfoot></table></div>
+      <h3 class="ps-sub">To'lovlar</h3><div class="tbl"><table class="calc-t"><thead><tr><th>Sana</th><th>Izoh</th><th class="r">Summa (so'm)</th></tr></thead><tbody>${Y.length ? Y.map(p => `<tr><td class="num">${p.date ? fmtDate(p.date) : "sanasiz"}</td><td class="dim">${esc([splitUsed(accFirm, S) ? PM[p.method === "cash" ? "cash" : "bank"] : "", p.note || ""].filter(Boolean).join(" — "))}</td><td class="r num"><span class="pr">${fmt(p.amount)}</span></td></tr>`).join("") : `<tr><td colspan="3" class="hint">${prodSumScope === "cur" ? "Joriy davrda to'lov yo'q." : "Hali to'lov yo'q."}</td></tr>`}</tbody>
+      <tfoot>${carry ? `<tr><td colspan="2">${carry > 0 ? "Oldingi davrdan avans" : "Oldingi davrdan qarz"}</td><td class="r num">${fmt(Math.abs(carry))}</td></tr>` : ""}<tr><td colspan="2">Jami to'langan</td><td class="r num">${fmt(paid)}</td></tr>
+      <tr class="${rest > 0.5 ? "debt" : ""}"><td colspan="2">${rest < -0.5 ? "Avans (ortiqcha to'langan)" : "Qolgan qarz"}</td><td class="r num">${fmt(Math.abs(rest))}</td></tr></tfoot></table></div>`
     : `<p class="hint">${prodSumScope === "cur" ? "Joriy davrda hali yuk xati yo'q." : S !== undefined && multi ? "Bu loyihada hali yuk xati yo'q." : "Bu firmaga hali mahsulot berilmagan."}</p>`) + bySite;
+  psLast = { firm: accFirm, items: R, pays: Y, carry, where: SITES_OK && S !== undefined && S !== null && (S !== "" || multi) ? siteLbl(S) : "", cur: prodSumScope === "cur" };
 }
 $("#prodSum").addEventListener("click", e => {
+  if (e.target.closest("[data-ps-xl]") && psLast) {
+    if (typeof XLSX === "undefined") { toast("Excel yozuvchi yuklanmadi"); return; }
+    const L = psLast, wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, buildCalcSheet([{ firm: L.firm, items: L.items, pays: L.pays, carry: L.carry, sub: [L.where && "📍 " + L.where, L.cur && "joriy davr"].filter(Boolean).join(" · ") }]), "Hisob-kitob");
+    saveFile(`${safeName(L.firm)} hisob-kitob.xlsx`, xlsxBytes(wb), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); toast("Excel fayl yuklab olindi"); return;
+  }
   const g = e.target.closest("[data-ps-goto]"); if (g) { accSite = g.dataset.psGoto; prodSumSite = "cur"; pendingPayDel = null; renderAccounts(); return; }
   const s = e.target.closest("[data-ps-site]"); if (s) { prodSumSite = s.dataset.psSite; renderProdSum(); return; }
   const b = e.target.closest("[data-ps-scope]"); if (!b) return; prodSumScope = b.dataset.psScope; renderProdSum(); });
@@ -5865,6 +5891,80 @@ function buildFirmSheet(firm, items, opts = {}){
   ws["!rows"][1] = { hpt: 18 }; ws["!rows"][2] = { hpt: 9 }; ws["!rows"][3] = { hpt: twoRow ? 24 : 36 }; if (twoRow) ws["!rows"][4] = { hpt: 24 };
   return { ws, prods, totals, prices, sums, all, paid, anchors };
 }
+// «Hisob-kitob» varag'i: har bir firma uchun Mahsulot | Jami soni | Narxi | Summasi, JAMI summa, To'lovlar, Jami to'langan, Qolgan qarz
+function buildCalcSheet(blocks){
+  const ws = {}, merges = [], put = (r, c, cell) => { ws[addr(r, c)] = cell; }, rowsH = [];
+  const thin = { style: "thin", color: { rgb: "8EA9C1" } }, border = { top: thin, bottom: thin, left: thin, right: thin };
+  const F = (extra = {}) => ({ name: "Arial", sz: 10, ...extra });
+  const st = {
+    title: { font: F({ sz: 13, bold: true }), alignment: { horizontal: "left", vertical: "center" } },
+    sub: { font: F({ italic: true, color: { rgb: "5A6A76" } }), alignment: { horizontal: "left", vertical: "center" } },
+    head: { font: F({ bold: true, color: { rgb: "FFFFFF" } }), fill: { patternType: "solid", fgColor: { rgb: "1F3864" } }, alignment: { horizontal: "center", vertical: "center", wrapText: true }, border },
+    no: { font: F(), alignment: { horizontal: "center", vertical: "center" }, border },
+    txt: { font: F(), alignment: { horizontal: "left", vertical: "center", wrapText: true }, border },
+    ctr: { font: F(), alignment: { horizontal: "center", vertical: "center" }, border },
+    qty: { font: F(), alignment: { horizontal: "right", vertical: "center" }, border, numFmt: "#,##0.##;-#,##0.##;0" },
+    price: { font: F({ color: { rgb: "0000FF" } }), alignment: { horizontal: "right", vertical: "center" }, border, numFmt: "#,##0" },
+    nop: { font: F(), fill: { patternType: "solid", fgColor: { rgb: "FFFF00" } }, alignment: { horizontal: "right", vertical: "center" }, border },
+    sum: { font: F(), alignment: { horizontal: "right", vertical: "center" }, border, numFmt: "#,##0" },
+    dash: { font: F(), alignment: { horizontal: "right", vertical: "center" }, border },
+    totL: { font: F({ bold: true }), fill: { patternType: "solid", fgColor: { rgb: "DDEBF7" } }, alignment: { horizontal: "left", vertical: "center" }, border },
+    totV: { font: F({ bold: true }), fill: { patternType: "solid", fgColor: { rgb: "DDEBF7" } }, alignment: { horizontal: "right", vertical: "center" }, border, numFmt: "#,##0" },
+    sec: { font: F({ sz: 11, bold: true }), alignment: { horizontal: "left", vertical: "center" } }
+  };
+  const totRow = (r, label, f, v) => { put(r, 0, { t: "s", v: "", s: st.totL }); put(r, 1, { t: "s", v: label, s: st.totL }); put(r, 2, { t: "s", v: "", s: st.totL }); put(r, 3, { t: "s", v: "", s: st.totL }); put(r, 4, { t: "n", f, v, s: st.totV }); };
+  let r = 0;
+  blocks.forEach((b, bi) => {
+    if (bi) r += 2;
+    const { lines, tot } = calcLines(b.firm, b.items);
+    put(r, 0, { t: "s", v: `${String(b.firm || "Firma ko'rsatilmagan").trim()} — hisob-kitob`, s: st.title }); merges.push({ s: { r, c: 0 }, e: { r, c: 4 } }); rowsH[r] = { hpt: 22 }; r++;
+    if (b.sub) { put(r, 0, { t: "s", v: b.sub, s: st.sub }); merges.push({ s: { r, c: 0 }, e: { r, c: 4 } }); r++; }
+    ["№", "Mahsulot", "Jami soni", "Narxi (so'm)", "Summasi (so'm)"].forEach((h, c) => put(r, c, { t: "s", v: h, s: st.head })); rowsH[r] = { hpt: 22 }; r++;
+    const f0 = r;
+    lines.forEach((x, i) => {
+      put(r, 0, { t: "n", v: i + 1, s: st.no });
+      put(r, 1, { t: "s", v: x.name + (x.price === null ? " (narxsiz)" : ""), s: st.txt });
+      put(r, 2, { t: "n", v: Math.round(x.qty * 100) / 100, s: st.qty });
+      if (x.price === null) { put(r, 3, { t: "s", v: "", s: st.nop }); put(r, 4, { t: "s", v: "-", s: st.dash }); }
+      else {
+        put(r, 3, { t: "n", v: x.price, s: st.price });
+        // summa yuk xatlaridagi summaga teng bo'lsa formula (soni × narxi), aks holda yozilgan summa
+        put(r, 4, Math.abs(x.qty * x.price - x.sum) < 1 ? { t: "n", f: `${addr(r, 2)}*${addr(r, 3)}`, v: x.sum, s: st.sum } : { t: "n", v: x.sum, s: st.sum });
+      }
+      r++;
+    });
+    const rTot = r++;
+    totRow(rTot, "JAMI summa", lines.length ? `SUM(${addr(f0, 4)}:${addr(rTot - 1, 4)})` : "0", tot);
+    if (!b.pays) return;
+    r++;
+    put(r, 1, { t: "s", v: "To'lovlar", s: st.sec }); rowsH[r] = { hpt: 20 }; r++;
+    const notes = b.pays.some(p => p.note) || splitUsed(b.firm);
+    put(r, 0, { t: "s", v: "", s: st.head }); put(r, 1, { t: "s", v: "Sana", s: st.head }); put(r, 2, { t: "s", v: "", s: st.head }); put(r, 3, { t: "s", v: notes ? "Izoh" : "", s: st.head }); put(r, 4, { t: "s", v: "Summa (so'm)", s: st.head });
+    merges.push({ s: { r, c: 1 }, e: { r, c: 2 } }); r++;
+    const p0 = r;
+    b.pays.forEach(p => {
+      put(r, 0, { t: "s", v: "", s: st.no });
+      put(r, 1, p.date ? { t: "n", v: dateSerial(p.date), z: "dd.mm.yyyy", s: { ...st.ctr, numFmt: "dd.mm.yyyy" } } : { t: "s", v: "sanasiz", s: st.ctr });
+      put(r, 2, { t: "s", v: "", s: st.ctr }); merges.push({ s: { r, c: 1 }, e: { r, c: 2 } });
+      put(r, 3, { t: "s", v: notes ? [splitUsed(b.firm) ? PM[p.method === "cash" ? "cash" : "bank"] : "", p.note || ""].filter(Boolean).join(" — ") : "", s: st.txt });
+      put(r, 4, { t: "n", v: p.amount || 0, s: st.price });
+      r++;
+    });
+    const paid = b.pays.reduce((s, p) => s + (p.amount || 0), 0), carry = b.carry || 0;
+    let rCarry = -1;
+    if (carry) { rCarry = r++; totRow(rCarry, carry > 0 ? "Oldingi davrdan avans" : "Oldingi davrdan qarz", String(Math.abs(carry)), Math.abs(carry)); }
+    const rPaid = r++;
+    totRow(rPaid, "Jami to'langan", b.pays.length ? `SUM(${addr(p0, 4)}:${addr(rPaid - 1 - (rCarry >= 0 ? 1 : 0), 4)})` : "0", paid);
+    const rest = tot - paid - carry, rRest = r++;
+    const cc = rCarry >= 0 ? (carry > 0 ? "-" : "+") + addr(rCarry, 4) : "", neg = x => x ? (x[0] === "-" ? "+" : "-") + x.slice(1) : "";
+    totRow(rRest, rest < -0.5 ? "Avans (ortiqcha to'langan)" : "Qolgan qarz", rest < -0.5 ? `${addr(rPaid, 4)}-${addr(rTot, 4)}${neg(cc)}` : `${addr(rTot, 4)}-${addr(rPaid, 4)}${cc}`, Math.abs(rest));
+  });
+  ws["!ref"] = `A1:E${Math.max(r, 1)}`;
+  ws["!merges"] = merges;
+  ws["!cols"] = [{ wch: 5 }, { wch: 38 }, { wch: 13 }, { wch: 16 }, { wch: 18 }];
+  ws["!rows"] = rowsH;
+  return ws;
+}
 function buildSummarySheet(perFirm){
   const ws = {}, put = (r, c, cell) => { ws[addr(r, c)] = cell; };
   const prods = [];
@@ -6007,6 +6107,10 @@ function workbookOf(items, opts = {}){
     perFirm.push({ firm: f || "Firma ko'rsatilmagan", ...res });
   });
   if (firms.length > 1) { XLSX.utils.book_append_sheet(wb, buildSummarySheet(perFirm), sheetNameOf("Jami", used)); anchors.push([]); }
+  if (items.some(r => r.product)) {
+    const blocks = firms.map(f => ({ firm: f, items: items.filter(r => same(r.firm, f)), pays: opts.noPays ? null : pays.filter(p => same(p.firm, f)).sort((a, b) => (a.date || "").localeCompare(b.date || "") || (a.at || "").localeCompare(b.at || "")) }));
+    XLSX.utils.book_append_sheet(wb, buildCalcSheet(blocks), sheetNameOf("Hisob-kitob", used)); anchors.push([]);
+  }
   const fs = opts.fares && PRIV() ? buildFareSheet(items) : null;
   if (fs) { XLSX.utils.book_append_sheet(wb, fs, sheetNameOf("Yo'lkira", used)); anchors.push([]); }
   return { wb, firms, perFirm, anchors };
