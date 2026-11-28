@@ -81,7 +81,10 @@ button.wb:hover{background:var(--accent);color:var(--accent-ink)}
 .lines-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
 .lines-head h2{margin:0}
 #lines{display:grid;gap:8px}
-.line{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,1.4fr) minmax(0,1.4fr) minmax(0,1.8fr) minmax(0,1.6fr) 36px;gap:10px;align-items:end}
+.line{display:grid;grid-template-columns:minmax(0,3.4fr) minmax(0,1.2fr) minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,1.7fr) minmax(0,1.6fr) minmax(0,1.5fr) 36px;gap:10px;align-items:end}
+.l-otk label .dim{font-weight:400}
+.items .otk{display:block;font-size:12px;color:var(--muted)}
+.wb-otk{font-size:calc(10pt*var(--g-qty,var(--k)));font-weight:400;margin-top:.6mm}
 .line input{background:var(--surface)}
 .line + .line label{display:none}
 .l-sum{text-align:right;padding-bottom:9px;font-size:14px;color:var(--muted)}
@@ -509,7 +512,7 @@ button.sm.conf.has{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,
 @media (max-width:820px){.bq-head{grid-template-columns:1fr 1fr}.bq-head .w2{grid-column:span 2}#betonPanel .acc-head .seg{margin-left:0}}
 /* Hisob-kitob qulfi */
 body.locked .money{display:none!important}
-body.locked .line{grid-template-columns:minmax(0,4fr) minmax(0,1.4fr) minmax(0,1.4fr) 36px}
+body.locked .line{grid-template-columns:minmax(0,3.4fr) minmax(0,1.2fr) minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,1.7fr) 36px}
 body.locked .bt-ihead,body.locked .bt-irow{grid-template-columns:1.4fr 1fr 1fr 32px}
 body.locked .kpis{grid-template-columns:repeat(2,1fr)}
 .head-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
@@ -1455,7 +1458,7 @@ body.side-single .side-h::after{display:none}
         <button type="button" data-unit="m³">📦 m³ (kub)</button><button type="button" data-unit="tonna">⚖️ tonna</button></div></div>
       <div class="f c3" id="qnKovshBox"><label for="qnKovsh">Kovsh soni</label><input id="qnKovsh" class="num" inputmode="decimal" placeholder="masalan, 2"></div>
       <div class="f c3"><label for="qnQty"><span id="qnQtyLbl">Hajmi, m³</span> * <span class="dim" id="qnKHint"></span></label><input id="qnQty" class="num" inputmode="decimal" placeholder="0"></div>
-      <div class="f c3"><label for="qnCar">Mashina raqami *</label><input id="qnCar" list="qCarList" placeholder="70 A 123 BC" autocapitalize="characters"></div>
+      <div class="f c3"><label for="qnCar">Mashina raqami <span id="qnCarReq">*</span></label><input id="qnCar" list="qCarList" placeholder="70 A 123 BC" autocapitalize="characters"></div>
       <div class="f c3"><label for="qnDriver">Haydovchi <span class="dim">— ixtiyoriy</span></label><input id="qnDriver" list="qDrvList" placeholder="Familiya Ism"></div>
 
       <div class="f c12"><label>Kimga sotildi *</label><div class="kar-seg kar-who" id="qnWho" role="group" aria-label="Kimga">
@@ -3518,6 +3521,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 // ichki hisob, kirim va ombor holati (pastdagi «🔁 ICHKI HISOB» bo'limida ishlatiladi)
+let OTK_OK = null;
 let irows = [], INT_OK = null, ownFirms = [], stockDef = "", purch = [], supPrices = [], supPays = [], INV_OK = null;
 let intType = "place", intEdit = null, intPreset = "month", kirEdit = null, kirPreset = "month";
 const arcSel = new Set();
@@ -3696,7 +3700,7 @@ const fromDb = s => {
     waybill: s.waybill || "", giver: s.giver || "", receiver: s.receiver || "", driver: s.driver || "", phone: s.phone || "", car: s.car || "", note: s.note || "",
     loadAddr: s.load_addr || "", unloadAddr: s.unload_addr || "", product: s.product, qty: Number(s.qty), unit: s.unit || "",
     hasPhoto: !!s.has_photo, created: s.created_at, createdBy: s.created_by, payMethod: s.pay_method || "bank", site: s.site_id || "", quarry: s.quarry_id || "", kovsh: s.kovsh == null ? null : Number(s.kovsh),
-    internal: !!s.internal, fromPlace: s.from_place || "", toPlace: s.to_place || "",
+    internal: !!s.internal, fromPlace: s.from_place || "", toPlace: s.to_place || "", otkNo: s.otk_no || "", otkDate: s.otk_date || "",
     price: m && m.price != null ? Number(m.price) : null, total: m ? Number(m.total || 0) : 0 };
 };
 const toDb = (r, withCreated) => {
@@ -3710,6 +3714,8 @@ const toDb = (r, withCreated) => {
   // obyekt faqat berilganda yoziladi (aks holda eski qiymat o'zgarmaydi); baza yangilanmagan bo'lsa yuborilmaydi
   if (SITES_OK && "site" in r) d.site_id = r.site && siteById(r.site) ? r.site : null;
   if (typeof INT_OK !== "undefined" && INT_OK && "fromPlace" in r) d.from_place = r.fromPlace || "";
+  // OTK raqami va sanasi — faqat yuk xati formasidan berilganda (baza yangilanmagan bo'lsa yuborilmaydi)
+  if (OTK_OK !== false && "otkNo" in r) { d.otk_no = String(r.otkNo || "").trim(); d.otk_date = r.otkDate || null; }
   return d;
 };
 async function fetchAll(table, select, build){
@@ -3731,7 +3737,7 @@ async function reloadAll(silent){
       fetchAll("refs", "*", q => q.order("id")),
       fetchAll("settings", "*", q => q.order("key"))
     ]);
-    { const all = sales.map(fromDb); if (typeof INT_OK !== "undefined") { INT_OK = !sales.length ? INT_OK !== false : "internal" in sales[0]; irows = all.filter(r => r.internal); } rows = all.filter(r => !r.internal); }
+    { OTK_OK = !sales.length ? OTK_OK !== false : "otk_no" in sales[0]; const all = sales.map(fromDb); if (typeof INT_OK !== "undefined") { INT_OK = !sales.length ? INT_OK !== false : "internal" in sales[0]; irows = all.filter(r => r.internal); } rows = all.filter(r => !r.internal); }
     // obyektlar ro'yxati (baza hali yangilanmagan bo'lsa — jim o'tkazib yuboriladi)
     try { sites = (await fetchAll("sites", "*", q => q.order("created_at"))).map(x => ({ id: x.id, region: x.region, name: x.name, active: x.active !== false })); SITES_OK = true; }
     catch(e) { sites = []; SITES_OK = false; }
@@ -3809,9 +3815,13 @@ async function refetchRow(data){
   const { data: full } = await sb.from("sales").select("*, sale_money(price,total)").eq("id", data.id).single();
   return fromDb(full || data);
 }
+// baza hali 12-yangilash-9.sql bilan yangilanmagan bo'lsa — OTK siz qayta yuboriladi
+const otkErr = (error, d) => { if (!error || !("otk_no" in d) || !/otk_/.test(error.message || "")) return false;
+  OTK_OK = false; delete d.otk_no; delete d.otk_date; toast("OTK raqami saqlanmadi — bazani yangilang (12-yangilash-9.sql)"); return true; };
 async function addRow(r){
   const d = toDb(r, PRIV());
-  const { data, error } = await sb.from("sales").insert(d).select("*").single();
+  let { data, error } = await sb.from("sales").insert(d).select("*").single();
+  if (otkErr(error, d)) ({ data, error } = await sb.from("sales").insert(d).select("*").single());
   if (error) throw error;
   const row = await refetchRow(data); rows.push(row);
   return row.id;
@@ -3826,7 +3836,8 @@ async function updateRow(id, r){
   // Formada yo'q maydonlar (tasdiqlangan rasm belgisi, beton turi) eski qiymatida qoladi
   const cur = rows.find(x => x.id === id) || {};
   const d = toDb({ kind: cur.kind, hasPhoto: cur.hasPhoto, payMethod: cur.payMethod, ...r }); delete d.batch;
-  const { data, error } = await sb.from("sales").update(d).eq("id", id).select("*").single();
+  let { data, error } = await sb.from("sales").update(d).eq("id", id).select("*").single();
+  if (otkErr(error, d)) ({ data, error } = await sb.from("sales").update(d).eq("id", id).select("*").single());
   if (error) throw error;
   const i = rows.findIndex(x => x.id === id); if (i > -1) rows[i] = await refetchRow(data);
 }
@@ -3929,6 +3940,8 @@ function renderRef(){
 }
 
 /* ---------- Mahsulot satrlari ---------- */
+// OTK: "№ 123, 20.11.2026" (bo'lmasa — bo'sh)
+const otkText = r => [r.otkNo ? "№ " + r.otkNo : "", r.otkDate ? String(r.otkDate).slice(0, 10).split("-").reverse().join(".") : ""].filter(Boolean).join(", ");
 let lineSeq = 0;
 function addLine(d = {}, focus){
   const n = ++lineSeq, el = document.createElement("div");
@@ -3937,12 +3950,16 @@ function addLine(d = {}, focus){
     <div class="f l-name"><label for="ln${n}">Mahsulot nomi <span class="req">*</span></label><input id="ln${n}" class="lp-name" list="prodList" placeholder="Yozing yoki tanlang"></div>
     <div class="f l-qty"><label for="lq${n}">Soni <span class="req">*</span></label><input id="lq${n}" class="lp-qty num" inputmode="decimal" placeholder="0"></div>
     <div class="f l-unit"><label for="lu${n}">Birlik</label><input id="lu${n}" class="lp-unit" list="unitList" placeholder="dona"></div>
+    <div class="f l-otk"><label for="lo${n}">OTK № <span class="dim">— ixtiyoriy</span></label><input id="lo${n}" class="lp-otk" placeholder="OTK raqami"></div>
+    <div class="f l-otkd"><label for="ld${n}">OTK sanasi</label><input id="ld${n}" class="lp-otkd" type="date"></div>
     <div class="f l-price money"><label for="lc${n}">Narxi, so'm</label><input id="lc${n}" class="lp-price num" inputmode="decimal" placeholder="ixtiyoriy"></div>
     <div class="l-sum num money" aria-label="Satr summasi"></div>
     <button type="button" class="ghost danger l-del" aria-label="Satrni olib tashlash">×</button>`;
   el.querySelector(".lp-name").value = d.product || "";
   el.querySelector(".lp-qty").value = d.qty ?? "";
   el.querySelector(".lp-unit").value = d.unit || "";
+  el.querySelector(".lp-otk").value = d.otkNo || "";
+  el.querySelector(".lp-otkd").value = d.otkDate || "";
   el.querySelector(".lp-price").value = hasPrice(d) ? d.price : "";
   $("#lines").appendChild(el);
   updateLineButtons(); calcTotal();
@@ -3986,7 +4003,7 @@ function readLines(){
     const pr = l.querySelector(".lp-price").value.trim();
     return { el: l, product: l.querySelector(".lp-name").value.trim(), qtyRaw: l.querySelector(".lp-qty").value.trim(),
              qty: parseNum(l.querySelector(".lp-qty").value), unit: l.querySelector(".lp-unit").value.trim(),
-             price: pr ? parseNum(pr) : null };
+             price: pr ? parseNum(pr) : null, otkNo: l.querySelector(".lp-otk").value.trim(), otkDate: l.querySelector(".lp-otkd").value };
   });
 }
 function calcTotal(){
@@ -4112,7 +4129,7 @@ $("#entry").addEventListener("submit", async e => {
     const base = old?.created ? Date.parse(old.created) || now : now;
     for (let i = 0; i < lines.length; i++){
       const l = lines[i];
-      const r = { ...head, product: l.product, qty: l.qty, unit: l.unit, price: l.price,
+      const r = { ...head, product: l.product, qty: l.qty, unit: l.unit, price: l.price, otkNo: l.otkNo, otkDate: l.otkDate,
                   total: l.price === null ? 0 : Math.round(l.qty*l.price*100)/100,
                   created: new Date(base + i).toISOString() };
       if (oldItems[i]) { await updateRow(oldItems[i].id, r); ids.push(oldItems[i].id); }
@@ -4267,7 +4284,7 @@ function render(){
         r.car ? `<span class="ship num">${esc(r.car)}</span>` : "",
         PRIV() && fares[r.batch] ? `<span class="ship money fare">Yo'lkira: <b class="num">${fmt(fares[r.batch])}</b> so'm</span>` : ""
       ].join("") || `<span class="dim">—</span>`;
-      const items = `<ul class="items">${g.items.map(it=>`<li><span>${esc(it.product)}</span><span class="q num">${fmt(it.qty)}${it.unit?" "+esc(it.unit):""}${hasPrice(it) && M() ? ` × ${fmt(it.price)}` : ""}</span></li>`).join("")}</ul>`;
+      const items = `<ul class="items">${g.items.map(it=>`<li><span>${esc(it.product)}${otkText(it) ? `<small class="otk">OTK ${esc(otkText(it))}</small>` : ""}</span><span class="q num">${fmt(it.qty)}${it.unit?" "+esc(it.unit):""}${hasPrice(it) && M() ? ` × ${fmt(it.price)}` : ""}</span></li>`).join("")}</ul>`;
       const anyP = g.items.some(hasPrice);
       const act = pendingDel===g.key
         ? `<div class="acts"><span class="hint">O'chirilsinmi?</span><button class="danger-solid sm" data-del-yes="${esc(g.key)}">Ha, o'chir</button><button class="sm" data-del-no>Yo'q</button></div>`
@@ -4407,7 +4424,7 @@ function waybillSheet(key){
     if (rows.length) h += `<table class="wb-req"><tbody>${rows.join("")}</tbody></table>`;
 
     h += `<table class="wb-table"><thead><tr><th class="c">№</th><th>Mahsulot nomi</th><th class="r">Miqdori</th></tr></thead><tbody>`;
-    items.forEach((r, i) => { h += `<tr><td class="c">${i + 1}</td><td>${esc(r.product)}</td><td class="r"><b>${fmt(r.qty)}</b>${r.unit ? ` <small>${esc(r.unit)}</small>` : ""}</td></tr>`; });
+    items.forEach((r, i) => { h += `<tr><td class="c">${i + 1}</td><td>${esc(r.product)}${otkText(r) ? `<div class="wb-otk">OTK ${esc(otkText(r))}</div>` : ""}</td><td class="r"><b>${fmt(r.qty)}</b>${r.unit ? ` <small>${esc(r.unit)}</small>` : ""}</td></tr>`; });
     h += `</tbody></table>`;
     if (notes.length) h += `<div class="wb-note"><span>Izoh:</span> ${notes.map(esc).join("; ")}</div>`;
 
@@ -5763,7 +5780,8 @@ function buildFirmSheet(firm, items, opts = {}){
   const prods = productOrder(firm, items);
   const hasPhone = items.some(x => x.phone);
   const split = !opts.noPays && splitUsed(firm);
-  const baseHeads = ["№", "Yuk xati raqami", "Sanasi", "Avtomobil raqami", "Haydovchi", ...(hasPhone ? ["Telefon raqami"] : []), ...(split ? ["To'lov turi"] : [])];
+  const hasOtk = items.some(x => otkText(x));
+  const baseHeads = ["№", "Yuk xati raqami", "Sanasi", "Avtomobil raqami", "Haydovchi", ...(hasPhone ? ["Telefon raqami"] : []), ...(split ? ["To'lov turi"] : []), ...(hasOtk ? ["OTK № va sanasi"] : [])];
   const P0 = 1 + baseHeads.length, last = P0 + prods.length - 1;   // B №, C yuk xati, D sana, E avto, F haydovchi, [G telefon], so'ng mahsulotlar
   const title = firm ? `${firm.trim().toUpperCase()}GA YUBORILGAN MATERIALLAR HISOBI` : "YUBORILGAN MATERIALLAR HISOBI";
   put(1, 1, { t: "s", v: title, s: XS.title });
@@ -5813,6 +5831,8 @@ function buildFirmSheet(firm, items, opts = {}){
     put(r, 5, { t: "s", v: h.driver || "", s: XS.text });
     if (hasPhone) put(r, 6, { t: "s", v: h.phone || "", s: XS.text });
     if (split) put(r, hasPhone ? 7 : 6, { t: "s", v: PM[h.payMethod === "cash" ? "cash" : "bank"], s: XS.text });
+    if (hasOtk) { const o = g.filter(x => otkText(x)), many = new Set(o.map(x => x.product.toLowerCase())).size > 1;
+      put(r, baseHeads.length, { t: "s", v: [...new Set(o.map(x => (many ? x.product + ": " : "") + otkText(x)))].join("; "), s: XS.text }); }
     prods.forEach((p, j) => put(r, P0 + j, { t: "n", v: g.filter(x => same(x.product, p)).reduce((s, x) => s + (x.qty || 0), 0), s: XS.qty }));
     if (anyPhoto) {
       put(r, photoCol, { t: "s", v: h.hasPhoto ? "" : "tasdiqlanmagan", s: h.hasPhoto ? XS.text : { ...XS.text, font: { name: "Times New Roman", sz: 10, italic: true, color: { rgb: "8A8A8A" } } } });
@@ -8197,6 +8217,7 @@ function qnWhoUi(){
   $$("#qnWho [data-who]").forEach(b => b.classList.toggle("on", b.dataset.who === qnWho));
   $$("#qnPay [data-pay]").forEach(b => b.classList.toggle("on", b.dataset.pay === qnPay));
   $("#qnFirmBox").hidden = qnWho !== "firm"; $("#qnPersonBox").hidden = qnWho !== "person"; $("#qnOwnHint").hidden = qnWho !== "own";
+  $("#qnCarReq").innerHTML = qnWho === "own" ? '<span class="dim">— ixtiyoriy</span>' : "*";
   if (typeof qnUnitUi === "function") qnUnitUi();
   $("#qnSavePrint").textContent = "Saqlash va yuk xatini chiqarish";
   $("#qnTitle").textContent = qnEdit ? "Yuklashni tahrirlash" : "Yangi yuklash";
@@ -8288,7 +8309,7 @@ async function qnSave(print){
   const bad = (m, sel) => { toast(m); if (sel) $(sel).focus(); };
   if (!qnProd) return bad(qnOther ? "Mahsulot nomini yozing" : "Mahsulotni tanlang", qnOther ? "#qnProdIn" : null);
   if (!(qty > 0)) return qnUnit === "tonna" ? bad("Og'irligini (tonna) yozing", "#qnQty") : bad("Hajmini (m³) yoki kovsh sonini yozing", "#qnKovsh");
-  if (!car) return bad("Mashina raqamini yozing", "#qnCar");
+  if (!car && qnWho !== "own") return bad("Mashina raqamini yozing", "#qnCar");
   if (qnWho !== "own" && !(price > 0)) return qnUnit === "tonna" ? bad("Narxini yozing — 1 tonna qanchaga sotildi", "#qnPrice") : bad("Narxini yozing — 1 kovsh qanchaga sotildi", "#qnKPrice");
   if (qnUnit === "tonna" && Q_UNITS_OK === false) return bad("Tonnada yozish uchun bazani yangilang (7-yangilash-4.sql)");
   const btns = [$("#qnSave"), $("#qnSavePrint")]; btns.forEach(b => b.disabled = true);
@@ -8342,7 +8363,8 @@ async function qnSave(print){
       oqAdd(pend);
       qnReset(); if (pend.reset === "firm") { $("#qnFirm").value = ""; $("#qnWb").value = ""; } renderQNew();
       if (print) toast("📴 Internet yo'q — yozuv navbatda. Chop etish internet qaytgach, ro'yxatdan.");
-    } else if (qnWho === "own" && /pay/i.test(err.message || "") && /check|constraint/i.test(err.message || "")) toast("«O'zimizga» uchun bazani yangilang (8-yangilash-5.sql)");
+    } else if (qnWho === "own" && !$("#qnCar").value.trim() && /car/i.test(err.message || "")) toast("Mashina raqamisiz yozish uchun bazani yangilang (12-yangilash-9.sql)");
+    else if (qnWho === "own" && /pay/i.test(err.message || "") && /check|constraint/i.test(err.message || "")) toast("«O'zimizga» uchun bazani yangilang (8-yangilash-5.sql)");
     else toast("Saqlab bo'lmadi: " + (err.message || err));
   }
   finally { btns.forEach(b => b.disabled = false); }
