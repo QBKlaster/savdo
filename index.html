@@ -1044,6 +1044,14 @@ body:not(.locked) .money-hide{display:none!important}
 .drv-det h3{font-size:14px;margin:4px 0 6px}
 .drv-det .tbl table{min-width:640px;font-size:13px;background:var(--surface)}
 .drv-det .tbl td,.drv-det .tbl th{padding:6px 8px}
+.drv-places{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:4px}
+.drv-places button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px;border-radius:12px;background:var(--surface);min-height:0}
+.drv-places button:hover{border-color:var(--accent)}
+.drv-places b{font-size:16px}
+.drv-places small{color:var(--muted);font-size:12px}
+.drv-place{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.drv-place:empty{display:none}
+.drv-place h2{margin:0;font-size:18px}
 .drv-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
 @media (max-width:820px){.kar-cols{grid-template-columns:1fr}.kar-firm .entry-sub .c2,.kar-firm .entry-sub .c3,.kar-firm .entry-sub .c5{grid-column:span 12}}
 @media (max-width:560px){.kar-item{grid-template-columns:1fr auto}.ki-act{grid-column:1/-1;justify-content:flex-start}.kar-act .btns{width:100%}.kar-act .btns button{flex:1 1 100%}.kar-seg button{flex:1 1 40%}}
@@ -1114,6 +1122,7 @@ body.side-single .side-h::after{display:none}
       <button type="button" data-page="new"><i aria-hidden="true">＋</i>Yangi yuk xati</button>
       <button type="button" data-page="beton"><i aria-hidden="true">🧱</i>Beton yuk xatlari</button>
       <button type="button" data-page="archive"><i aria-hidden="true">🗂</i>Arxiv</button>
+      <button type="button" data-page="drv" class="priv-only"><i aria-hidden="true">👤</i>Haydovchilar</button>
       <button type="button" data-page="money" class="priv-only"><i aria-hidden="true">💵</i>Hisob-kitob<span class="side-badge" id="sbUp" hidden></span></button>
       <button type="button" data-page="stats" class="priv-only"><i aria-hidden="true">📊</i>Statistika</button>
       <button type="button" data-page="calc" class="priv-only"><i aria-hidden="true">🧮</i>Kalkulyatsiya</button>
@@ -1139,7 +1148,6 @@ body.side-single .side-h::after{display:none}
     </div>
     <div class="side-grp" id="sgReys" hidden>
       <div class="side-h"><span aria-hidden="true">🚚</span> Haydovchilar</div>
-      <button type="button" data-page="drv"><i aria-hidden="true">👤</i>Haydovchilar ro'yxati</button>
       <button type="button" data-page="reys"><i aria-hidden="true">🛣</i>Reyslar va yoqilg'i</button>
     </div>
     <div class="side-grp" id="sgPay">
@@ -1634,15 +1642,16 @@ body.side-single .side-h::after{display:none}
     <div id="reysBody"></div>
   </section>
 
-  <!-- 👤 Haydovchilar ro'yxati (yuk xatlari, karyer, ichki va kirim yozuvlaridan avtomatik) -->
-  <section class="panel kar-panel priv-only" id="drvPanel" data-page="drv">
+  <!-- 👤 Haydovchilar: har bir obyekt va karyer bo'yicha alohida (yuk xatlari, karyer va ichki yozuvlardan avtomatik) -->
+  <section class="panel priv-only" id="drvPanel" data-page="drv">
+    <div class="drv-place" id="drvHead"></div>
     <div class="kar-filters">
       <div class="f grow"><label for="drvQ">Haydovchi: ism, telefon yoki mashina</label><input type="search" id="drvQ" placeholder="Masalan: Alisher, 90 123 45 67, 70A123BC" autocomplete="off"></div>
       <div class="f grow"><label for="drvAddr">Manzil</label><input type="search" id="drvAddr" placeholder="Yuklash yoki tushirish joyi, karyer, obyekt" list="drvAddrList" autocomplete="off"></div>
       <div class="f"><label for="drvFirm">Firma</label><input type="search" id="drvFirm" placeholder="Qaysi firmaga" list="drvFirmList" autocomplete="off"></div>
     </div>
     <div class="kar-filters" style="margin-top:8px">
-      <div class="f"><label for="drvSrc">Qayerdan</label><select id="drvSrc"><option value="">Hammasi</option><option value="wb">Yuk xatlari</option><option value="kar">Karyer</option><option value="int">Ichki yuk xatlari</option><option value="kir">Olingan mahsulotlar</option></select></div>
+      <div class="f"><label for="drvSrc">Turi</label><select id="drvSrc"><option value="">Hammasi</option><option value="wb">Yuk xatlari</option><option value="kar">Karyer</option><option value="int">Ichki yuk xatlari</option></select></div>
       <div class="f"><label for="drvFrom">Sanadan</label><input type="date" id="drvFrom"></div>
       <div class="f"><label for="drvTo">Sanagacha</label><input type="date" id="drvTo"></div>
       <div class="f"><label for="drvSort">Tartib</label><select id="drvSort"><option value="n">Ko'p reys qilgan</option><option value="last">Oxirgi reys</option><option value="name">Ism (A–Z)</option></select></div>
@@ -7140,6 +7149,7 @@ const PAGES = {
   new:   ["wb", "Yangi yuk xati", "Yuk xatini yozish va chop etish"],
   beton: ["wb", "Beton yuk xatlari", "Jadvalda tez kiritish yoki yuk xati rasmidan o'qish"],
   archive: ["wb", "Yuk xatlari arxivi", "Qidirish, filtrlash, Excel va zaxira"],
+  drv:   ["wb", "Haydovchilar", "Har bir obyekt va karyerdan yuk tashigan haydovchilar: qaysi firmalarga, qayerga; Excel"],
   money: ["wb", "Hisob-kitob", "Firmalar bilan to'lovlar va qarzdorlik"],
   stats: ["wb", "Statistika", "Oyma-oy savdo, mahsulotlar va xaridorlar bo'yicha"],
   refs:  ["wb", "Firmalar va mahsulotlar", "Ro'yxatlar va narxlar"],
@@ -7159,7 +7169,6 @@ const PAGES = {
   int:       ["inv", "Ichki yuk xatlari", "O'z firmalarimiz va joylarimiz (obyekt, karyer) o'rtasida — tashqi hisob-kitobga kirmaydi"],
   kirim:     ["inv", "Olingan mahsulotlar", "Kirim: kimdan, nima, qancha; yetkazib beruvchilar bilan hisob"],
   ombor:     ["inv", "Ombor qoldig'i", "Har obyekt va karyer bo'yicha: kirim, ichki harakat, sotuv va qoldiq"],
-  drv:       ["reys", "Haydovchilar ro'yxati", "Yuk xatlari, karyer, ichki va kirim yozuvlaridan avtomatik: kim, qaysi mashinada, qaysi firmalarga va qayerga tashigan"],
   reys:      ["reys", "Haydovchilar reysi", "«Reys hisobi» jadvalidan: reyslar, yoqilg'i, ta'mir, haydovchilar"],
   "p-objects": ["pay", "Obyektlar va xodimlar"],
   "p-advance": ["pay", "Avans berish"],
@@ -7226,6 +7235,7 @@ function showPage(id){
     if (P[0] === "inv" && typeof invOpen === "function") invOpen(id);
     if (id === "dash" && typeof dashOpen === "function") dashOpen();
     if (id === "audit" && typeof auOpen === "function") auOpen();
+    if (id === "drv" && typeof drvOpen === "function") drvOpen();
     scrollTo(0, 0);
   }
   try { localStorage.setItem("savdo-page-" + me.id, id); } catch(e) {}
@@ -8197,7 +8207,6 @@ function qRenderAll(){
 async function qOpen(id){
   if (Q_OK === null) await qLoad();
   if (id === "reys") { reysOpen(); return; }
-  if (id === "drv") { drvOpen(); return; }
   if (Q_OK === false) { $$(".kar-panel.pg-on").forEach(p => p.insertAdjacentHTML("afterbegin", `<div class="calc-need kar-need"><b>Karyerlar uchun bazani yangilash kerak.</b><p class="hint">Supabase → SQL Editor'da yangi <b>schema.sql</b> ni bir marta ishga tushiring, so'ng sahifani yangilang.</p></div>`)); return; }
   $$(".kar-need").forEach(x => x.remove());
   qRenderAll();
@@ -8913,7 +8922,7 @@ function setupKarMenu(){
   const show = id => { const b = $(`#side [data-page="${id}"]`); if (b) b.hidden = !pageOk(id); return !!b && !b.hidden; };
   const any = ["q-new", "q-cash", "q-stats", "q-workers", "q-list", "q-rep", "q-setup", "q-cam"].map(show).some(Boolean);
   $("#sgKar").hidden = !any;
-  $("#sgReys").hidden = ![show("drv"), show("reys")].some(Boolean);
+  $("#sgReys").hidden = !show("reys");
   if (Q_STAFF()) $("#sgWb").hidden = true;
 }
 
@@ -8963,9 +8972,11 @@ $("#reysXl").addEventListener("click", () => {
   saveFile(`Reys hisobi ${today()}.xlsx`, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 });
 
-/* ---------- 👤 Haydovchilar ro'yxati: yuk xatlari, karyer, ichki va kirim yozuvlaridan avtomatik (faqat ko'rish) ---------- */
-let drvOpenKey = "", drvPreset = "all";
-const DRV_SRC = { wb: "Yuk xati", kar: "Karyer", int: "Ichki", kir: "Kirim" };
+/* ---------- 👤 Haydovchilar: har bir obyekt/karyer bo'yicha, yuk xatlari, karyer va ichki yozuvlardan avtomatik (faqat ko'rish) ---------- */
+let drvOpenKey = "", drvPreset = "all", drvPlaceSel = null;
+const DRV_SRC = { wb: "Yuk xati", kar: "Karyer", int: "Ichki" };
+// qayerdan chiqqan (Ombor qoldig'idagi qoida bilan bir xil): yozuvdagi joy, karyer yoki asosiy ombor
+const drvPlaceName = k => k ? placeName(k) : "Joyi belgilanmagan";
 const drvNorm = s => String(s || "").toLowerCase().replace(/[ʻʼ`‘’´]/g, "'").replace(/[.,;]+/g, " ").replace(/\s+/g, " ").trim();
 const drvDigits = s => String(s || "").replace(/\D/g, "");
 const drvPlace = id => id && typeof placeName === "function" ? placeName(id) : "";
@@ -8978,18 +8989,16 @@ function drvTrips(){
     else { ["driver", "phone", "car", "from", "to"].forEach(f => { if (!t[f] && head[f]) t[f] = head[f]; }); }
     if (r.product) t.items.push({ p: r.product, q: Number(r.qty) || 0, u: r.unit || "" });
   };
+  const sd = typeof stockDef !== "undefined" ? stockDef || "" : "";
   (typeof rows !== "undefined" ? rows : []).forEach(r => add(r.kind === "karyer" && r.quarry ? "kar" : "wb", r.batch || r.id, r, {
-    date: r.date || "", waybill: r.waybill || "", driver: r.driver || "", phone: r.phone || "", car: r.car || "", firm: r.firm || "", seller: r.seller || "",
+    place: r.fromPlace || (r.kind === "karyer" && r.quarry ? "q:" + r.quarry : sd), date: r.date || "", waybill: r.waybill || "", driver: r.driver || "", phone: r.phone || "", car: r.car || "", firm: r.firm || "", seller: r.seller || "",
     from: r.loadAddr || (r.quarry && typeof qName === "function" ? qName(r.quarry) + " karyeri" : ""), to: r.unloadAddr || (r.site ? drvPlace("s:" + r.site) : "") }));
   (typeof irows !== "undefined" ? irows : []).forEach(r => add("int", r.batch || r.id, r, {
-    date: r.date || "", waybill: r.waybill || "", driver: r.driver || "", phone: r.phone || "", car: r.car || "", firm: r.firm || "", seller: r.seller || "",
+    place: r.fromPlace || sd, date: r.date || "", waybill: r.waybill || "", driver: r.driver || "", phone: r.phone || "", car: r.car || "", firm: r.firm || "", seller: r.seller || "",
     from: drvPlace(r.fromPlace) || r.loadAddr || "", to: drvPlace(r.toPlace) || r.unloadAddr || "" }));
   (typeof qSales !== "undefined" ? qSales : []).forEach(x => add("kar", "q" + x.id, x, {
-    date: x.date || "", waybill: x.waybill || "", driver: x.driver || "", phone: "", car: x.car || "", firm: x.pay === "own" ? "O'zimizga" : "Jismoniy shaxs", seller: "",
+    place: "q:" + x.quarry, date: x.date || "", waybill: x.waybill || "", driver: x.driver || "", phone: "", car: x.car || "", firm: x.pay === "own" ? "O'zimizga" : "Jismoniy shaxs", seller: "",
     from: typeof qName === "function" ? qName(x.quarry) + " karyeri" : "", to: "" }));
-  (typeof purch !== "undefined" ? purch : []).forEach(x => add("kir", x.batch || x.id, x, {
-    date: x.date || "", waybill: x.waybill || "", driver: x.driver || "", phone: "", car: x.car || "", firm: x.supplier || "", seller: "",
-    from: x.supplier || "", to: drvPlace(x.to) }));
   return T.filter(t => String(t.driver).trim() || drvDigits(t.phone).length >= 7 || String(t.car).trim());
 }
 // haydovchi kaliti: ism (yozilish farqlari tekislanadi); ism bo'lmasa — telefon, u ham bo'lmasa — mashina
@@ -9034,25 +9043,44 @@ function drvRange(){
 function drvData(){
   const q = drvNorm($("#drvQ").value), qd = drvDigits(q), qc = carKey(q), a = drvNorm($("#drvAddr").value), f = drvNorm($("#drvFirm").value), src = $("#drvSrc").value, [from, to] = drvRange();
   const all = drvTrips();
-  const trips = all.filter(t => (!src || t.src === src) && (!from || (t.date || "") >= from) && (!to || (t.date && t.date <= to))
+  const base = all.filter(t => (!src || t.src === src) && (!from || (t.date || "") >= from) && (!to || (t.date && t.date <= to))
     && (!a || drvNorm(t.from + " | " + t.to).includes(a)) && (!f || drvNorm(t.firm + " | " + t.seller).includes(f)));
+  const trips = drvPlaceSel === null ? base : base.filter(t => t.place === drvPlaceSel);
   let D = drvBuild(trips);
   if (q) { const phoneQ = qd.length >= 3 && !/\p{L}/u.test(q);
     D = D.filter(d => [...d.names.keys()].some(n => drvNorm(n).includes(q)) || (phoneQ && d.phoneL.some(p => drvDigits(p).includes(qd)))
       || (qc.length >= 2 && d.carL.some(c => carKey(c).includes(qc)))); }
   const so = $("#drvSort").value;
   D.sort(so === "name" ? (x, y) => (x.name || "яя").localeCompare(y.name || "яя") : so === "last" ? (x, y) => y.last.localeCompare(x.last) : (x, y) => y.trips.length - x.trips.length || y.last.localeCompare(x.last));
-  return { D, all, from, to };
+  return { D, all, base, from, to };
 }
 async function drvOpen(){
-  if (typeof INV_OK !== "undefined" && INV_OK === null && typeof invLoad === "function") { $("#drvBody").innerHTML = `<p class="hint">Yuklanmoqda…</p>`; try { await invLoad(); } catch(e) {} }
+  if (typeof Q_OK !== "undefined" && Q_OK === null && typeof qLoad === "function") { $("#drvBody").innerHTML = `<p class="hint">Yuklanmoqda…</p>`; try { await qLoad(); } catch(e) {} }
   renderDrv();
+}
+// har bir joy (obyekt/karyer) bo'yicha: haydovchi va reys soni
+function drvPlaces(D, base){
+  const P = new Map();
+  D.forEach(d => d.trips.forEach(t => { let p = P.get(t.place); if (!p) { p = { key: t.place, name: drvPlaceName(t.place), drv: new Set(), n: 0, last: "" }; P.set(t.place, p); }
+    p.drv.add(d.key); p.n++; if ((t.date || "") > p.last) p.last = t.date; }));
+  return [...P.values()].sort((a, b) => (a.key ? 0 : 1) - (b.key ? 0 : 1) || (a.key.startsWith("q:") ? 1 : 0) - (b.key.startsWith("q:") ? 1 : 0) || a.name.localeCompare(b.name));
 }
 function renderDrv(){
   if (curPage !== "drv") return;
   $$("#drvChips [data-dp]").forEach(c => c.classList.toggle("on", c.dataset.dp === drvPreset));
   const [rf, rt] = drvRange(); if (drvPreset) { $("#drvFrom").value = rf; $("#drvTo").value = rt; }
   const { D, all } = drvData();
+  if (drvPlaceSel === null) {
+    $("#drvHead").innerHTML = "";
+    const P = drvPlaces(D);
+    $("#drvBody").innerHTML = P.length ? `<p class="kar-sum">Obyekt yoki karyerni bosing — shu yerdan yuk tashigan haydovchilar chiqadi.</p><div class="drv-places">${P.map(p =>
+        `<button type="button" data-drvplace="${esc(p.key)}"><b>${p.key.startsWith("q:") ? "⛏" : p.key ? "🏭" : "❔"} ${esc(p.name)}</b><span><b class="num">${p.drv.size}</b> ta haydovchi · <span class="num">${p.n}</span> ta reys</span>${p.last ? `<small>Oxirgi reys: ${fmtDate(p.last)}</small>` : ""}</button>`).join("")}</div>`
+      : `<p class="empty">${all.length ? "Bu shartlar bo'yicha haydovchi topilmadi." : "Hali haydovchi yozilgan yuk xati yo'q. Yuk xatlarida haydovchi, telefon yoki mashina raqami yozilsa, ro'yxat o'zi shakllanadi."}</p>`;
+    $("#drvXl").textContent = "⬇ Excel (barcha joylar)";
+    return;
+  }
+  $("#drvHead").innerHTML = `<button type="button" class="sm" data-drvback>← Barcha obyekt va karyerlar</button><h2>${drvPlaceSel.startsWith("q:") ? "⛏" : "🏭"} ${esc(drvPlaceName(drvPlaceSel))}</h2>`;
+  $("#drvXl").textContent = "⬇ Excel";
   { const opt = v => `<option value="${esc(v)}">`, uq = arr => [...new Map(arr.filter(Boolean).map(v => [drvNorm(v), v])).values()].sort((x, y) => x.localeCompare(y));
     $("#drvAddrList").innerHTML = uq(all.flatMap(t => [t.from, t.to])).slice(0, 500).map(opt).join("");
     $("#drvFirmList").innerHTML = uq(all.map(t => t.firm)).slice(0, 500).map(opt).join(""); }
@@ -9082,28 +9110,36 @@ function drvXl(D, fname){
   if (typeof XLSX === "undefined") { toast("Excel yozuvchi yuklanmadi"); return; }
   if (!D.length) { toast("Yuklab olinadigan ma'lumot yo'q"); return; }
   const [from, to] = drvRange(), per = `${fmtDate(from) || "boshidan"} — ${fmtDate(to) || "bugungacha"}`, wb = XLSX.utils.book_new();
-  const flt = [["Qidiruv", $("#drvQ").value], ["Manzil", $("#drvAddr").value], ["Firma", $("#drvFirm").value]].filter(x => x[1].trim()).map(x => `${x[0]}: ${x[1].trim()}`).join("; ");
+  const flt = [...(drvPlaceSel !== null ? [["Joy", drvPlaceName(drvPlaceSel)]] : []), ["Qidiruv", $("#drvQ").value], ["Manzil", $("#drvAddr").value], ["Firma", $("#drvFirm").value]].filter(x => x[1].trim()).map(x => `${x[0]}: ${x[1].trim()}`).join("; ");
   const ttl = t => t + ` (${per})` + (flt ? ` · ${flt}` : "");
   XLSX.utils.book_append_sheet(wb, qXlSheet(ttl("Haydovchilar ro'yxati"), [{ head: ["№", "Haydovchi", "Telefon", "Mashina", "Reyslar soni", "Qaysi firmalarga (reys soni)", "Manzillar", "Birinchi reys", "Oxirgi reys"],
     rows: D.map((d, i) => [i + 1, d.name || "Ismi yozilmagan", d.phoneL.join(", "), d.carL.join(", "), d.trips.length, d.firms.map(f => `${f.firm} (${f.n})`).join("; "), d.addrs.join("; "), fmtDate(d.first) || "", fmtDate(d.last) || ""]) }]), "Haydovchilar");
   XLSX.utils.book_append_sheet(wb, qXlSheet(ttl("Haydovchilar va firmalar"), [{ head: ["Haydovchi", "Telefon", "Mashina", "Firma", "Reyslar soni", "Miqdor", "Manzillar", "Birinchi reys", "Oxirgi reys"],
     rows: D.flatMap(d => d.firms.map(f => [d.name || "Ismi yozilmagan", d.phoneL.join(", "), d.carL.join(", "), f.firm, f.n, drvQtyTxt(f.qty), [...f.addrs].join("; "), fmtDate(f.first) || "", fmtDate(f.last) || ""])) }]), "Firmalar bo'yicha");
-  XLSX.utils.book_append_sheet(wb, qXlSheet(ttl("Barcha reyslar"), [{ head: ["Sana", "Haydovchi", "Telefon", "Mashina", "Turi", "Yuk xati №", "Kimdan", "Firma (kimga)", "Yuklash joyi", "Tushirish joyi", "Mahsulot va miqdor"],
-    rows: D.flatMap(d => d.trips.map(t => [fmtDate(t.date) || "", d.name || "Ismi yozilmagan", t.phone || d.phoneL[0] || "", t.car, DRV_SRC[t.src], t.waybill, t.seller, t.firm, t.from, t.to, drvItemsTxt(t)])) }]), "Reyslar");
+  XLSX.utils.book_append_sheet(wb, qXlSheet(ttl("Barcha reyslar"), [{ head: ["Sana", "Qayerdan (obyekt/karyer)", "Haydovchi", "Telefon", "Mashina", "Turi", "Yuk xati №", "Kimdan", "Firma (kimga)", "Yuklash joyi", "Tushirish joyi", "Mahsulot va miqdor"],
+    rows: D.flatMap(d => d.trips.map(t => [fmtDate(t.date) || "", drvPlaceName(t.place), d.name || "Ismi yozilmagan", t.phone || d.phoneL[0] || "", t.car, DRV_SRC[t.src], t.waybill, t.seller, t.firm, t.from, t.to, drvItemsTxt(t)])) }]), "Reyslar");
+  if (drvPlaceSel === null && D.length > 1) {
+    const P = new Map(); D.forEach(d => d.trips.forEach(t => { const k = t.place + "|" + d.key; let x = P.get(k);
+      if (!x) { x = { pl: drvPlaceName(t.place), d, n: 0, firms: new Map() }; P.set(k, x); } x.n++; drvInc(x.firms, t.firm || "—"); }));
+    XLSX.utils.book_append_sheet(wb, qXlSheet(ttl("Obyekt va karyerlar bo'yicha haydovchilar"), [{ head: ["Qayerdan (obyekt/karyer)", "Haydovchi", "Telefon", "Mashina", "Reyslar soni", "Qaysi firmalarga (reys soni)"],
+      rows: [...P.values()].sort((a, b) => a.pl.localeCompare(b.pl) || b.n - a.n).map(x => [x.pl, x.d.name || "Ismi yozilmagan", x.d.phoneL.join(", "), x.d.carL.join(", "), x.n, [...x.firms.entries()].sort((a, b) => b[1] - a[1]).map(([f, n]) => `${f} (${n})`).join("; ")]) }]), "Joylar bo'yicha");
+  }
   saveFile(fname, new Uint8Array(XLSX.write(wb, { bookType: "xlsx", type: "array" })), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 }
+$("#drvHead").addEventListener("click", e => { if (e.target.closest("[data-drvback]")) { drvPlaceSel = null; drvOpenKey = ""; renderDrv(); } });
 $("#drvChips").addEventListener("click", e => { const c = e.target.closest("[data-dp]"); if (!c) return; drvPreset = c.dataset.dp; renderDrv(); });
 ["#drvFrom", "#drvTo"].forEach(s => $(s).addEventListener("change", () => { drvPreset = ""; renderDrv(); }));
 ["#drvSrc", "#drvSort"].forEach(s => $(s).addEventListener("change", renderDrv));
 { let tm = null; ["#drvQ", "#drvAddr", "#drvFirm"].forEach(s => $(s).addEventListener("input", () => { clearTimeout(tm); tm = setTimeout(renderDrv, 200); })); }
 $("#drvBody").addEventListener("click", e => {
+  const pb = e.target.closest("[data-drvplace]"); if (pb) { drvPlaceSel = pb.dataset.drvplace; drvOpenKey = ""; renderDrv(); scrollTo(0, 0); return; }
   const fb = e.target.closest("[data-drvfirm]"); if (fb) { e.stopPropagation(); $("#drvFirm").value = fb.dataset.drvfirm; renderDrv(); return; }
   const xb = e.target.closest("[data-drvxl]"); if (xb) { const d = drvData().D.find(x => x.key === xb.dataset.drvxl); if (d) drvXl([d], `Haydovchi — ${(d.name || d.carL[0] || "ismsiz").replace(/[\\/:*?"<>|]/g, " ")} ${today()}.xlsx`); return; }
   if (e.target.closest("a, .drv-det")) return;
   const r = e.target.closest("[data-drv]"); if (!r) return;
   drvOpenKey = drvOpenKey === r.dataset.drv ? "" : r.dataset.drv; renderDrv();
 });
-$("#drvXl").addEventListener("click", () => drvXl(drvData().D, `Haydovchilar ro'yxati ${today()}.xlsx`));
+$("#drvXl").addEventListener("click", () => drvXl(drvData().D, `Haydovchilar${drvPlaceSel !== null ? " — " + drvPlaceName(drvPlaceSel).replace(/[\\/:*?"<>|]/g, " ") : ""} ${today()}.xlsx`));
 
 $("#qsCats").addEventListener("click", async e => {
   const b = e.target.closest("[data-qcat-del]"); if (!b) return;
